@@ -16,7 +16,7 @@ export default class App extends React.Component {
         let previews = _.map(rs.resources, (resource:any) => {
             return <ZhihuPreview title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
         })
-        return (<div style={{width:'100%', backgroundColor: '#d6e4ff', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        return (<div style={{width:'100%', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             {previews}
         </div>)
     }

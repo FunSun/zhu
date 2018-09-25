@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2018-09-25
+### Added
+- 增加了便利的Input组件
+- 增加了UIStore, 来保存跨组件状态
+- 增加了添加通用blog的UI
+- ResourceStore增加了添加blog的action
+### Changed
+- App组件默认充满屏幕
+
 ## [1.0.0] - 2018-09-23
 ### Added
 - 添加了版本管理和changelog
