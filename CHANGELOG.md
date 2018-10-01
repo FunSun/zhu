@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2018-10-01
+### Added
+- 添加了LICENSE
+### Changed
+- 搜索结果的关键词显示为黄色背景的正常字体
+
 ## [1.1.0] - 2018-09-25
 ### Added
 - 增加了便利的Input组件

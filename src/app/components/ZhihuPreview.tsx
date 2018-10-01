@@ -18,6 +18,12 @@ const styles = {
             color: '#175199',
             textDecoration: 'none'
         }
+    }),
+    highlight: style({
+        "& em": {
+            backgroundColor: 'yellow',
+            fontStyle: 'normal'
+        }
     })
 
 }
@@ -42,7 +48,7 @@ export default class ZhihuPreview extends React.Component<ZhihuPreviewProps,{}> 
                     </h2>
                 </div>
                 <div style={{marginTop: 6, marginBottom: 10, color: '#1a1a1a', fontSize: 15}}>
-                    <div dangerouslySetInnerHTML={{'__html': this.props.desc}}></div>
+                    <div {...styles.highlight} dangerouslySetInnerHTML={{'__html': this.props.desc}}></div>
                 </div>
             </div>
         )
