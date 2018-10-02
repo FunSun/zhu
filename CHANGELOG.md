@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2018-10-02
+### Added
+- 增加了LinkPreview
+
 ## [1.2.0] - 2018-10-01
 ### Added
 - 添加了LICENSE
