@@ -1,4 +1,4 @@
-import { app } from "electron"
+import { app, BrowserWindow } from "electron"
 import { createMainWindow } from "./main-window"
 import * as log from "electron-log"
 const isDev = true
@@ -12,8 +12,9 @@ const appPath = app.getAppPath()
 
 // fires when Electron is ready to start
 app.on("ready", () => {
-  createMainWindow(appPath)
-
+  BrowserWindow.addDevToolsExtension("/home/quanbit/.config/chromium/Profile 1/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.3_0")  
+  BrowserWindow.addDevToolsExtension("/home/quanbit/.config/chromium/Profile 2/Extensions/pfgnfdagidkfgccljigdamigbcnndkod/0.9.19_0")
+  createMainWindow(appPath) as any
 })
 
 // fires when all windows are closed

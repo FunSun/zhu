@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2018-10-04
+### Added
+- 增加了Button和Modal通用组件
+- 增加了Previews下的多个状态无关
+- 增加了编辑标签的功能
+### Changed
+- 对一系列组件做了重构
+
+
 ## [1.3.0] - 2018-10-02
 ### Added
 - 增加了LinkPreview
