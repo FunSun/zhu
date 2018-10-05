@@ -8,7 +8,7 @@ import { css } from 'glamor'
 
 let appStyle = css({
     width:'100%',
-    height: '100%',
+    minHeight: '1000px',
     backgroundColor: '#d6e4ff'
 })
 

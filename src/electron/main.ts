@@ -13,7 +13,7 @@ const appPath = app.getAppPath()
 // fires when Electron is ready to start
 app.on("ready", () => {
   BrowserWindow.addDevToolsExtension("/home/quanbit/.config/chromium/Profile 1/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.3_0")  
-  BrowserWindow.addDevToolsExtension("/home/quanbit/.config/chromium/Profile 2/Extensions/pfgnfdagidkfgccljigdamigbcnndkod/0.9.19_0")
+  BrowserWindow.addDevToolsExtension("/workspace/src/archiver-view/extensions/mobx")
   createMainWindow(appPath) as any
 })
 

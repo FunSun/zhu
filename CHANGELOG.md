@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2018-10-05
+### Added
+- 增加了scroll到底部自动加载的功能
+### Fixed
+- 修复了scroll的时候背景着色异常的情况
+
 ## [1.4.0] - 2018-10-04
 ### Added
 - 增加了Button和Modal通用组件

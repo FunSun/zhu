@@ -49,6 +49,22 @@ const styles = {
 @observer
 export default class Heading extends React.Component {
 
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.onScroll, false)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll, false)
+    }
+
+    onScroll = () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            let rs = (this.props as any).resourceStore as ResourceStore
+            rs.loadMore()
+        }
+    }
+
     handleShowAddResourceModal() {
         let us = (this.props as any).uiStore as UIStore
         us.showAddBlogModal()

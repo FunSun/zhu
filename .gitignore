@@ -11,3 +11,4 @@ dev-app-update.yml
 .vscode/
 coverage/
 build/
+extensions

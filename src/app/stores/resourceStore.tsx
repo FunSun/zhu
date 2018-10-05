@@ -14,15 +14,28 @@ export interface Blog {
 
 export default class ResourceStore {
     @observable resources:any = []
+    prevQuery: string
+    offset: number
         
     reload = flow(function * (query: string):any {
         try {
-            let res = yield axios.get(encodeURI('http://localhost:8070/resources/search?q=' + query))
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
             this.resources = res.data
+            this.prevQuery = query
+            this.offset = res.data.length
         } catch(err) {
             console.log(err)
         }
+    })
 
+    loadMore = flow(function * ():any {
+        try {
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.prevQuery}&offset=${this.offset}`))
+            this.resources.push(...res.data)
+            this.offset += res.data.length
+        } catch(err) {
+            console.log(err)
+        }
     })
 
     addBlog = flow(function * (blog: Blog): any {
