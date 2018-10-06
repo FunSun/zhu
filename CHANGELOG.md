@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2018-10-06
+### Added
+- 增加了comment类型
+- 增了添加comment的面板
+
 ## [1.5.0] - 2018-10-05
 ### Added
 - 增加了scroll到底部自动加载的功能

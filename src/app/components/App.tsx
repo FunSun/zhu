@@ -2,6 +2,7 @@ import * as React from "react"
 import Heading from './Heading'
 import ResourceList from './ResourceList'
 import AddBlogModal from './AddBlogModal'
+import AddCommentModal from './AddCommentModal'
 import EditTagModal from './EditTagModal'
 
 import { css } from 'glamor'
@@ -18,6 +19,7 @@ export default class App extends React.Component {
             <Heading></Heading>
             <ResourceList></ResourceList>
             <AddBlogModal></AddBlogModal>
+            <AddCommentModal></AddCommentModal>
             <EditTagModal></EditTagModal>
         </div>)
     }

@@ -107,3 +107,11 @@ export function LinkPreview(props:LinkPreviewProps) {
 
     return <PreviewFramework onEdit={props.onEdit} favicon={favicon} title={title}></PreviewFramework>
 }
+
+interface CommentPreviewProps {
+    content: string
+    onEdit: () => void    
+}
+export function CommentPreview(props:CommentPreviewProps) {
+    return <PreviewFramework onEdit={props.onEdit} desc={props.content}></PreviewFramework>
+}

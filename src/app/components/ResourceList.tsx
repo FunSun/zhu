@@ -3,8 +3,7 @@ import { inject, observer } from "mobx-react"
 import ResourceStore from '../stores/resourceStore'
 import UIStore from '../stores/uiStore'
 import * as _ from 'lodash'
-import {ZhihuPreview, LinkPreview} from "./Previews"
-
+import {ZhihuPreview, LinkPreview, CommentPreview} from "./Previews"
 
 @inject('uiStore', 'resourceStore')
 @observer
@@ -27,6 +26,8 @@ export default class App extends React.Component {
                     return <ZhihuPreview onEdit={onEdit} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
                 case 'link':
                     return <LinkPreview onEdit={onEdit} title={resource.title} link={resource.from} favicon={resource.favicon}></LinkPreview>
+                case 'comment':
+                    return <CommentPreview onEdit={onEdit} content={resource.content}></CommentPreview>
             }
             return <ZhihuPreview onEdit={onEdit} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
         })

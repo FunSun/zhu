@@ -2,7 +2,8 @@ import * as React from "react"
 import { inject, observer } from "mobx-react"
 import ResourceStore from '../stores/resourceStore'
 import * as addIcon from '../assets/add-icon.svg'
-import { css } from 'glamor'
+import * as commentIcon from '../assets/comment.svg'
+import { css, style } from 'glamor'
 import UIStore from "../stores/uiStore"
 import Input from "./Input"
 
@@ -32,7 +33,7 @@ const styles = {
     }),
     right: css({
         flexGrown: 1,
-        width: 100,        
+        width: 300,
         margin: 'auto 0',
         paddingRight: 70
     }),
@@ -42,6 +43,15 @@ const styles = {
         backgroundColor: '#1890ff',
         display: 'flex',
         justifyContent: 'space-between'
+    }),
+    icon: css({
+        marginLeft: 36,
+        width: 26,
+        height: 26
+    }),
+    commentFix: css({
+        position: 'relative',
+        top: 3
     })
 }
 
@@ -70,6 +80,11 @@ export default class Heading extends React.Component {
         us.showAddBlogModal()
     }
 
+    handleShowAddCommentModal() {
+        let us = (this.props as any).uiStore as UIStore
+        us.showAddCommentModal()
+    }
+
     handleSubmit(val:string) {
         let rs = (this.props as any).resourceStore as ResourceStore
         rs.reload(val)
@@ -83,7 +98,8 @@ export default class Heading extends React.Component {
                 <Input {...styles.input} onSubmit={(val) => this.handleSubmit(val)}></Input>
             </div>
             <div {...styles.right}>
-                <span onClick={() => {this.handleShowAddResourceModal()}} {...styles}><img src={addIcon}></img></span>
+                <span {...styles.icon} {...styles.commentFix} onClick={() => {this.handleShowAddCommentModal()}} ><img src={commentIcon}></img></span>            
+                <span {...styles.icon} onClick={() => {this.handleShowAddResourceModal()}} ><img src={addIcon}></img></span>
             </div>
 
         </div>)

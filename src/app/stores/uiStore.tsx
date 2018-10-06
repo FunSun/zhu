@@ -3,6 +3,7 @@ import { observable, action } from 'mobx'
 export default class UIStore {
     @observable addBlogModalVisible: boolean = false
     @observable editTagModalVisible: boolean = false
+    @observable addCommentModalVisible: boolean = false    
     @observable editTagModalBuffer: any = {id: "", tags: []}
     
     @action
@@ -35,5 +36,15 @@ export default class UIStore {
     @action
     removeTag(tag:string) {
         this.editTagModalBuffer.tags.remove(tag)
+    }
+
+    @action
+    showAddCommentModal() {
+        this.addCommentModalVisible = true
+    }
+
+    @action
+    hideAddCommentModal() {
+        this.addCommentModalVisible = false        
     }
 }

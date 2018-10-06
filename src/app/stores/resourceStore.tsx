@@ -41,7 +41,30 @@ export default class ResourceStore {
     addBlog = flow(function * (blog: Blog): any {
         try {
             let body = [blog.from, blog.title, blog.tags.join("\n"), blog.content].join("\n")
-            let res = yield axios.post('http://localhost:8070/resources/blog', body)
+            yield axios.post('http://localhost:8070/resources/blog', body)
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    addComment = flow(function * (content:string): any {
+        try {
+            let body = {
+                content: content
+            }
+            yield axios.post('http://localhost:8070/resources/comment', body)
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    addArticle = flow(function * (title:string, content:string): any {
+        try {
+            let body = {
+                title: title,
+                content: content
+            }
+            yield axios.post('http://localhost:8070/resources/article', body)
         } catch(err) {
             console.log(err)
         }
