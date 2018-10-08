@@ -1,4 +1,5 @@
 import * as React from "react"
+import { parse } from '../pagex'
 import {css} from 'glamor'
 
 const frameStyle = css({
@@ -51,6 +52,7 @@ const frameStyle = css({
 
 interface PreviewFrameworkProps {
     onEdit: () => void
+    onClick?: () => void
     favicon?: React.ReactNode
     title?: React.ReactNode
     desc?: React.ReactNode
@@ -58,7 +60,7 @@ interface PreviewFrameworkProps {
 
 function PreviewFramework(props:PreviewFrameworkProps) {
     return (
-        <div {...frameStyle}>
+        <div {...frameStyle} >
             <div>
     
                 <h2>
@@ -68,7 +70,10 @@ function PreviewFramework(props:PreviewFrameworkProps) {
                     <span>
                         {props.title|| (<span></span>)}
                     </span>
+
                     <span className="edit" onClick={props.onEdit}>编辑</span>
+                    &nbsp;
+                    <span className="edit" onClick={props.onClick}>显示</span>                    
                 </h2>
             </div>
             <div className="desc">
@@ -114,4 +119,17 @@ interface CommentPreviewProps {
 }
 export function CommentPreview(props:CommentPreviewProps) {
     return <PreviewFramework onEdit={props.onEdit} desc={props.content}></PreviewFramework>
+}
+
+interface ArticlePreviewProps {
+    title: string
+    desc: string,
+    onEdit: () => void
+    onClick: () => void
+}
+
+export function ArticlePreview(props:ArticlePreviewProps) {
+    let title = props.title
+    let desc = (<div  dangerouslySetInnerHTML={{'__html': props.desc}}></div>)
+    return (<PreviewFramework onClick={props.onClick} onEdit={props.onEdit} title={title} desc={desc}></PreviewFramework>)
 }

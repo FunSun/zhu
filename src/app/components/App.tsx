@@ -4,6 +4,8 @@ import ResourceList from './ResourceList'
 import AddBlogModal from './AddBlogModal'
 import AddCommentModal from './AddCommentModal'
 import EditTagModal from './EditTagModal'
+import AddArticleModal from './AddArticleModal'
+import ArticleView from './ArticleView'
 
 import { css } from 'glamor'
 
@@ -21,6 +23,8 @@ export default class App extends React.Component {
             <AddBlogModal></AddBlogModal>
             <AddCommentModal></AddCommentModal>
             <EditTagModal></EditTagModal>
+            <AddArticleModal></AddArticleModal>
+            <ArticleView></ArticleView>
         </div>)
     }
 }

@@ -4,7 +4,10 @@ export default class UIStore {
     @observable addBlogModalVisible: boolean = false
     @observable editTagModalVisible: boolean = false
     @observable addCommentModalVisible: boolean = false    
+    @observable addArticleModalVisible: boolean = false
+    @observable articleViewVisible: boolean = false
     @observable editTagModalBuffer: any = {id: "", tags: []}
+    @observable articleViewBuffer: any = {title:"", content:""}
     
     @action
     showAddBlogModal() {
@@ -47,4 +50,26 @@ export default class UIStore {
     hideAddCommentModal() {
         this.addCommentModalVisible = false        
     }
+
+    @action
+    showAddArticleModal() {
+        this.addArticleModalVisible = true
+    }
+
+    @action
+    hideAddArticleModal() {
+        this.addArticleModalVisible = false        
+    }    
+
+    @action
+    showArticleView(resource:any) {
+        this.articleViewBuffer.title = resource.title
+        this.articleViewBuffer.content = resource.content
+        this.articleViewVisible = true
+    }
+
+    @action
+    hideArticleView() {
+        this.articleViewVisible = false        
+    }    
 }

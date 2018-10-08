@@ -3,7 +3,8 @@ import { inject, observer } from "mobx-react"
 import ResourceStore from '../stores/resourceStore'
 import * as addIcon from '../assets/add-icon.svg'
 import * as commentIcon from '../assets/comment.svg'
-import { css, style } from 'glamor'
+import * as articleIcon from '../assets/article.svg'
+import { css } from 'glamor'
 import UIStore from "../stores/uiStore"
 import Input from "./Input"
 
@@ -85,6 +86,11 @@ export default class Heading extends React.Component {
         us.showAddCommentModal()
     }
 
+    handleShowAddArticleModal() {
+        let us = (this.props as any).uiStore as UIStore
+        us.showAddArticleModal()
+    }
+
     handleSubmit(val:string) {
         let rs = (this.props as any).resourceStore as ResourceStore
         rs.reload(val)
@@ -98,7 +104,8 @@ export default class Heading extends React.Component {
                 <Input {...styles.input} onSubmit={(val) => this.handleSubmit(val)}></Input>
             </div>
             <div {...styles.right}>
-                <span {...styles.icon} {...styles.commentFix} onClick={() => {this.handleShowAddCommentModal()}} ><img src={commentIcon}></img></span>            
+                <span {...styles.icon} {...styles.commentFix} onClick={() => {this.handleShowAddCommentModal()}} ><img src={commentIcon}></img></span>
+                <span {...styles.icon} onClick={() => {this.handleShowAddArticleModal()}} ><img src={articleIcon}></img></span>
                 <span {...styles.icon} onClick={() => {this.handleShowAddResourceModal()}} ><img src={addIcon}></img></span>
             </div>
 
