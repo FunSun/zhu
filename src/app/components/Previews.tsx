@@ -1,15 +1,20 @@
 import * as React from "react"
-import { parse } from '../pagex'
+import { createMuiTheme } from '@material-ui/core/styles'
 import {css} from 'glamor'
+
+let theme = createMuiTheme()
 
 const frameStyle = css({
     backgroundColor: '#ffffff',
-    width: 700,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 16,
-    paddingBottom: 16,
-    margin: 8,
+    boxShadow: theme.shadows[1],
+    width: 800,
+    boxSizing: 'border-box',
+    marginBottom: 8,
+    "& .content": {
+        marginLeft: 24,
+        marginRight: 24,
+        marginTop: 16,
+    },
     "& a": {
         color: '#1a1a1a',
         textDecoration: 'none',
@@ -33,20 +38,25 @@ const frameStyle = css({
         backgroundColor: 'yellow',
         fontStyle: 'normal'
     },
-    "& .edit": {
-        float: 'right',
-        fontSize: 14,
-        marginRight: 30,
-        color: '#91d5ff',
-        "&:hover": {
-            cursor: 'pointer'
-        }
-    },
     "& .desc": {
         marginTop: 6,
         marginBottom: 10,
         color: '#1a1a1a',
         fontSize: 15
+    },
+    "& .actions": {
+        marginLeft: 16
+    },
+    '& .action': {
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        padding: 8,
+        height: 40,
+        margin:8,
+        marginLeft:8,
+        marginTop: 0,
+        color: theme.palette.secondary.main,
+        cursor: 'pointer'
     }
 })
 
@@ -61,7 +71,7 @@ interface PreviewFrameworkProps {
 function PreviewFramework(props:PreviewFrameworkProps) {
     return (
         <div {...frameStyle} >
-            <div>
+            <div className="content">
     
                 <h2>
                     <span className="favicon">
@@ -71,13 +81,14 @@ function PreviewFramework(props:PreviewFrameworkProps) {
                         {props.title|| (<span></span>)}
                     </span>
 
-                    <span className="edit" onClick={props.onEdit}>编辑</span>
-                    &nbsp;
-                    <span className="edit" onClick={props.onClick}>显示</span>                    
                 </h2>
-            </div>
-            <div className="desc">
+                <div className="desc">
                 {props.desc || <span></span>}
+            </div>
+            </div>
+            <div className="actions">
+                <span className="action" onClick={props.onEdit}>编辑</span>
+                <span className="action" onClick={props.onClick}>显示</span>                    
             </div>
         </div>
     )

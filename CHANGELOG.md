@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2018-10-09
+### Added
+- 使用material design
+
 ## [1.7.0] - 2018-10-08
 ### Added
 - 增加了测试
