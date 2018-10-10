@@ -58,11 +58,11 @@ export default class ResourceStore {
         }
     })
 
-    addArticle = flow(function * (title:string, content:string): any {
+    addArticle = flow(function * (content:string): any {
         try {
             let body = {
-                title: title,
-                content: content
+                    title: "",
+                    content: content
             }
             yield axios.post('http://localhost:8070/resources/article', body)
         } catch(err) {
@@ -70,6 +70,19 @@ export default class ResourceStore {
         }
     })
 
+    updateArticle = flow(function * (id:string, content:string): any {
+        try {
+            let body = {
+                    id: id,
+                    title: "",
+                    content: content
+            }
+            yield axios.post('http://localhost:8070/resources/article', body)
+        } catch(err) {
+            console.log(err)
+        }
+    })
+    
     updateTags = flow(function * (id: string, tags: string[]):any {
         try {
             let body = {id, tags}

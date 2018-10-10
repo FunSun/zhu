@@ -116,7 +116,7 @@ export default class extends React.Component {
 
   handleShowAddArticleModal() {
     let us = (this.props as any).uiStore as UIStore
-    us.showAddArticleModal()
+    us.showArticleEditor()
   }
 
   handleSubmit(val:string) {

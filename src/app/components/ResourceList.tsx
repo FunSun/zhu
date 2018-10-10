@@ -24,19 +24,20 @@ export default class App extends React.Component {
 
     render () {
         const rs = (this.props as any).resourceStore as ResourceStore
+        let us = (this.props as any).uiStore as UIStore
         let previews = _.map(rs.resources, (resource:any) => {
-            let onEdit = this.handleEdit.bind(this, resource.id, resource.tags)
+            let onLabel = this.handleEdit.bind(this, resource.id, resource.tags)
             switch (resource.type) {
                 case 'zhihu':
-                    return <ZhihuPreview onEdit={onEdit} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
+                    return <ZhihuPreview onLabel={onLabel} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
                 case 'link':
-                    return <LinkPreview onEdit={onEdit} title={resource.title} link={resource.from} favicon={resource.favicon}></LinkPreview>
+                    return <LinkPreview onLabel={onLabel} title={resource.title} link={resource.from} favicon={resource.favicon}></LinkPreview>
                 case 'comment':
-                    return <CommentPreview onEdit={onEdit} content={resource.content}></CommentPreview>
+                    return <CommentPreview created={resource.created} onLabel={onLabel} content={resource.content}></CommentPreview>
                 case 'article':
-                    return <ArticlePreview onClick={()=>{this.showView(resource, 'article')}} onEdit={onEdit} title={resource.title} desc={resource.highlight}></ArticlePreview>
+                    return <ArticlePreview onEdit={()=> {us.showArticleEditor(resource.id, resource.content)}} onClick={()=>{this.showView(resource, 'article')}} onLabel={onLabel} title={resource.title} content={resource.content} desc={resource.highlight}></ArticlePreview>
             }
-            return <ZhihuPreview onEdit={onEdit} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
+            return <ZhihuPreview onLabel={onLabel} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
         })
         return (<div style={{width:'100%', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             {previews}

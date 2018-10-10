@@ -4,10 +4,11 @@ export default class UIStore {
     @observable addBlogModalVisible: boolean = false
     @observable editTagModalVisible: boolean = false
     @observable addCommentModalVisible: boolean = false    
-    @observable addArticleModalVisible: boolean = false
+    @observable articleEditorVisible: boolean = false
+    @observable articleEditorBuffer: any = {id:"", content:""}
     @observable articleViewVisible: boolean = false
     @observable editTagModalBuffer: any = {id: "", tags: []}
-    @observable articleViewBuffer: any = {title:"", content:""}
+    @observable articleViewBuffer: any = {content:""}
     
     @action
     showAddBlogModal() {
@@ -21,7 +22,6 @@ export default class UIStore {
 
     @action
     showEditTagModal(id:string, tags: string[]) {
-        console.log(id, tags)
         this.editTagModalVisible = true
         this.editTagModalBuffer.id = id
         this.editTagModalBuffer.tags = tags
@@ -52,18 +52,24 @@ export default class UIStore {
     }
 
     @action
-    showAddArticleModal() {
-        this.addArticleModalVisible = true
+    showArticleEditor(id?:string, content?:string) {
+        if (id) {
+            this.articleEditorBuffer.id = id
+            this.articleEditorBuffer.content = content
+        } else {
+            this.articleEditorBuffer.id = ""
+            this.articleEditorBuffer.content = ""
+        }
+        this.articleEditorVisible = true
     }
 
     @action
-    hideAddArticleModal() {
-        this.addArticleModalVisible = false        
+    hideArticleEditor() {
+        this.articleEditorVisible = false        
     }    
 
     @action
     showArticleView(resource:any) {
-        this.articleViewBuffer.title = resource.title
         this.articleViewBuffer.content = resource.content
         this.articleViewVisible = true
     }

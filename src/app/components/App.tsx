@@ -1,10 +1,9 @@
 import * as React from "react"
-import Heading from './Heading'
 import ResourceList from './ResourceList'
 import AddBlogModal from './AddBlogModal'
 import AddCommentModal from './AddCommentModal'
 import EditTagModal from './EditTagModal'
-import AddArticleModal from './AddArticleModal'
+import AddArticleModal from './ArticleEditor'
 import ArticleView from './ArticleView'
 import AppBar from './AppBar'
 

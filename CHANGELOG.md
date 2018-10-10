@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2018-10-10
+### Added
+- comment增加了时间显示
+- 可以编辑文章
+- 采用ace使得编辑打到可用状态
+- 采用github flavour markdown的css样式渲染article页面
+
 ## [1.8.0] - 2018-10-09
 ### Added
 - 使用material design

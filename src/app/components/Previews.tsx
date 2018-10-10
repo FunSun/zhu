@@ -1,6 +1,8 @@
 import * as React from "react"
 import { createMuiTheme } from '@material-ui/core/styles'
 import {css} from 'glamor'
+import * as _ from 'lodash'
+
 
 let theme = createMuiTheme()
 
@@ -57,12 +59,25 @@ const frameStyle = css({
         marginTop: 0,
         color: theme.palette.secondary.main,
         cursor: 'pointer'
+    },
+    '& .time': {
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        padding: 8,
+        height: 40,
+        margin:8,
+        marginLeft:8,
+        marginTop: 0,
+        color: theme.palette.grey[500],
+        float: 'right'
     }
 })
 
 interface PreviewFrameworkProps {
-    onEdit: () => void
+    created?: number
+    onLabel: () => void
     onClick?: () => void
+    onEdit?: () => void
     favicon?: React.ReactNode
     title?: React.ReactNode
     desc?: React.ReactNode
@@ -87,8 +102,10 @@ function PreviewFramework(props:PreviewFrameworkProps) {
             </div>
             </div>
             <div className="actions">
+                <span className="action" onClick={props.onLabel}>标记</span>
+                <span className="action" onClick={props.onClick}>显示</span>
                 <span className="action" onClick={props.onEdit}>编辑</span>
-                <span className="action" onClick={props.onClick}>显示</span>                    
+                <span className="time">{props.created?(new Date(props.created).toLocaleString()):""}</span>
             </div>
         </div>
     )
@@ -98,7 +115,7 @@ function PreviewFramework(props:PreviewFrameworkProps) {
 interface FamousePreviewProps {
     title: string
     link: string
-    onEdit: () => void
+    onLabel: () => void
 }
 
 interface ZhihuPreviewProps extends  FamousePreviewProps {
@@ -108,7 +125,7 @@ interface ZhihuPreviewProps extends  FamousePreviewProps {
 export function ZhihuPreview(props:ZhihuPreviewProps) {
     let title = (<a  href={props.link} target='_blank'>{props.title}</a>)
     let desc = (<div dangerouslySetInnerHTML={{'__html': props.desc}}></div>)
-    return (<PreviewFramework onEdit={props.onEdit} title={title} desc={desc}></PreviewFramework>)
+    return (<PreviewFramework onLabel={props.onLabel} title={title} desc={desc}></PreviewFramework>)
 }
 
 
@@ -121,26 +138,34 @@ export function LinkPreview(props:LinkPreviewProps) {
     let favicon = (<img src={props.favicon}></img>)
     let title = (<a href={props.link} target='_blank'>{props.title}</a>)
 
-    return <PreviewFramework onEdit={props.onEdit} favicon={favicon} title={title}></PreviewFramework>
+    return <PreviewFramework onLabel={props.onLabel} favicon={favicon} title={title}></PreviewFramework>
 }
 
 interface CommentPreviewProps {
     content: string
-    onEdit: () => void    
+    created: string
+    onLabel: () => void
 }
 export function CommentPreview(props:CommentPreviewProps) {
-    return <PreviewFramework onEdit={props.onEdit} desc={props.content}></PreviewFramework>
+    return <PreviewFramework created={props.created} onLabel={props.onLabel} desc={props.content}></PreviewFramework>
 }
 
 interface ArticlePreviewProps {
     title: string
+    content: string
     desc: string,
-    onEdit: () => void
+    onLabel: () => void
     onClick: () => void
+    onEdit: () => void
 }
 
 export function ArticlePreview(props:ArticlePreviewProps) {
     let title = props.title
+    if (title ==="" && props.content.startsWith("# ")) {
+        let headline = _.split(props.content, '\n')[0]
+        title = _.trimStart(headline, '# ')
+    }
+    
     let desc = (<div  dangerouslySetInnerHTML={{'__html': props.desc}}></div>)
-    return (<PreviewFramework onClick={props.onClick} onEdit={props.onEdit} title={title} desc={desc}></PreviewFramework>)
+    return (<PreviewFramework onEdit={props.onEdit} onClick={props.onClick} onLabel={props.onLabel} title={title} desc={desc}></PreviewFramework>)
 }
