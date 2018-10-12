@@ -1,11 +1,8 @@
 import * as React from "react"
-import { inject, observer } from "mobx-react"
 import { css } from 'glamor'
-import UIStore from "../stores/uiStore"
 import Input from './Input'
 import Button from './Button'
 import Modal from './Modal'
-import ResourceStore from "../stores/resourceStore"
 
 const styles = {
     container: css({
@@ -37,35 +34,31 @@ const styles = {
     }),
 }
 
-@inject('uiStore', 'resourceStore')
-@observer
-export default class AddResourceModal extends React.Component {
+interface Props {
+    visible: boolean
+    onSubmit(resource:any):void
+    onClose():void
+}
+
+export default class AddBlogModal extends React.Component<Props> {
     state: {
         from: "",
         title: "",
         tags: "",
         content: ""
     }
-    constructor(props:any) {
-        super(props)
-    }
     handleSubmit() {
-        let rs = (this.props as any).resourceStore as ResourceStore
-        rs.addBlog({
+        this.props.onSubmit({
             from: this.state.from,
             title: this.state.title,
             tags: this.state.tags.split(','),
             content: this.state.content
         })
+        this.props.onClose()
     } 
-    handleClose() {
-        let us = (this.props as any).uiStore as UIStore
-        us.hideAddBlogModal()
-    }
     render () {
-        let us = (this.props as any).uiStore as UIStore
         return (
-            <Modal width={700} height={855} top={90} visible={us.addBlogModalVisible}  onClose={()=>{this.handleClose()}}>
+            <Modal width={700} height={855} top={90} visible={this.props.visible}  onClose={()=>{this.props.onClose}}>
                 <div {...styles.container}>
                     <div style={{height: 50}}></div>            
                     <Input {...styles.input} placeholder={'from'} onChange={(v)=> {this.setState({from: v})}}></Input>
@@ -80,7 +73,7 @@ export default class AddResourceModal extends React.Component {
                     <div {...styles.buttonArea}>
                         <Button type="primary" onClick={()=> {this.handleSubmit()}}>完成</Button>
                         <div style={{width: 40}}></div>                                        
-                        <Button onClick={()=> {this.handleClose()}}>放弃</Button>
+                        <Button onClick={()=> {this.props.onClose()}}>放弃</Button>
                     </div>
 
                 </div>                

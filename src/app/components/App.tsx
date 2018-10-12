@@ -1,12 +1,14 @@
 import * as React from "react"
-import ResourceList from './ResourceList'
-import AddBlogModal from './AddBlogModal'
-import AddCommentModal from './AddCommentModal'
-import EditTagModal from './EditTagModal'
-import AddArticleModal from './ArticleEditor'
-import ArticleView from './ArticleView'
-import AppBar from './AppBar'
-
+import {
+    BindingArticleEditor,
+    BindingAppBar,
+    BindingScrollToBottomDetector, 
+    BindingResourceList,
+    BindingAddBlogModal,
+    BindingAddCommentModal,
+    BindingArticleView,
+    BindingEditTagModal
+} from './bindings'
 import { css } from 'glamor'
 
 let appStyle = css({
@@ -18,13 +20,18 @@ let appStyle = css({
 export default class App extends React.Component {
     render() {
         return (<div {...appStyle} >
-            <AppBar></AppBar>
-            <ResourceList></ResourceList>
-            <AddBlogModal></AddBlogModal>
-            <AddCommentModal></AddCommentModal>
-            <EditTagModal></EditTagModal>
-            <AddArticleModal></AddArticleModal>
-            <ArticleView></ArticleView>
+            <div>
+                <BindingAppBar></BindingAppBar>
+                <BindingResourceList></BindingResourceList>
+            </div>
+            <div>
+                <BindingAddBlogModal></BindingAddBlogModal>
+                <BindingAddCommentModal></BindingAddCommentModal>
+                <BindingEditTagModal></BindingEditTagModal>
+                <BindingArticleEditor></BindingArticleEditor>
+                <BindingArticleView></BindingArticleView>
+            </div>
+            <BindingScrollToBottomDetector></BindingScrollToBottomDetector>
         </div>)
     }
 }

@@ -1,40 +1,57 @@
 import * as React from "react"
-import { inject, observer } from "mobx-react"
+
 import { css } from 'glamor'
-import UIStore from "../stores/uiStore"
 import Button from './Button'
 import Modal from './Modal'
-import ResourceStore from "../stores/resourceStore"
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import PageX from './PageX'
+
 import 'brace'
 import AceEditor from 'react-ace'
 import 'brace/mode/markdown'
 import 'brace/theme/chrome'
 import 'brace/keybinding/emacs'
+import 'brace/ext/language_tools'
 
+import * as _ from 'lodash'
+
+import * as fs from 'fs'
+
+const completer:any = {
+    getCompletions: (editor:any, session:any, pos:any, prefix:string, cb:any) => {
+        if (!_.startsWith(prefix, 'images')) {
+            cb(null, [])
+            return
+        }
+        fs.readdir("./build/images", (err, files)=> {
+            let completions = _.map(files, (file) => {
+                return {
+                    caption: file,
+                    value: 'images/' + file,
+                    meta: 'images'
+                }
+            })
+            cb(null, completions)
+        })
+    }
+}
+
+const completeShortcut = {
+    name: "autocomplete-alias",
+    exec: (editor:any) => { editor.execCommand("startAutocomplete")},
+    bindKey: "Ctrl-Q"
+}
 
 const styles = {
     container: css({
         fontSize: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
     }),
-    input: css({
-        width: 600,
-        borderColor: '#1890ff',
-        height: 35,
-        borderStyle: 'solid',
-        borderWidth: 1,
-        paddingLeft: 10,
-        paddingRight: 10
-    }),
-    textarea: css({
-        width: 900,
-        borderColor: '#1890ff',
+    widget: css({
+        width: 912,
         height: 720,
-        borderStyle: 'solid',
-        paddingLeft: 10,
-        paddingRight: 10
+        boxSizing: 'border-box',
+        margin: 'auto'
     }),
     buttonArea: css({
         display: 'flex',
@@ -42,50 +59,99 @@ const styles = {
     }),
 }
 
-class ArticleEditor extends React.Component<any> {
+interface ArticleEditorProps {
+    visible: boolean
+    rid: string,
+    content: string,
+    onAddArticle(content:string):void
+    onUpdateArticle(id:string, content:string):void
+    onClose():void
+}
+
+export default class ArticleEditor extends React.Component<ArticleEditorProps> {
     state = {
-        id: "",
-        content: ""
+        rid: "",
+        content: "",
+        value: 0
     }
 
     constructor(props:any) {
         super(props)
         this.state = {
-            id: props.rid,
-            content: props.content
+            rid: props.rid,
+            content: props.content,
+            value: 0
         }
     }
 
     componentWillReceiveProps(props:any) {
-        console.log(props)
         this.setState({
-            id: props.rid,
+            rid: props.rid,
             content: props.content
         })
     }
+
+    handleSubmit() {
+        let id = this.state.rid
+        let content = this.state.content
+        if (id !== "") {
+            this.props.onUpdateArticle(id, content)
+        } else {
+            this.props.onAddArticle(content)
+        }
+        
+        this.props.onClose()
+    } 
+    
+    handleSwitch = (event:any, value:number) => {
+        this.setState({ value })
+    }
+    
     render () {
-        console.log(this.state)
+        let widget: React.ReactElement<any>
+            if (this.state.value == 0) {
+                widget = (<AceEditor 
+                    mode="markdown" 
+                    theme="chrome" 
+                    onChange={(v)=>{this.setState({content:v})}} 
+                    editorProps={{$blockScrolling: true}} 
+                    value={this.state.content}
+                    fontSize={14}
+                    width={"900px"}
+                    height={"720px"}
+                    showPrintMargin={false}
+                    wrapEnabled={true}
+                    keyboardHandler="emacs"
+                    commands={[completeShortcut as any]}
+                    setOptions={{
+                        enableBasicAutocompletion: ([completer]) as any,
+                        enableLiveAutocompletion: false,
+                    }}
+                >
+                </AceEditor>)
+            } else {
+                widget = (<PageX content={this.props.content}></PageX>)
+            }
         return (
             <Modal width={960} height={855} top={90} visible={this.props.visible}  onClose={this.props.onClose}>
                 <div {...styles.container}>
-                    <div style={{height: 50}}></div>            
-                    <AceEditor 
-                        mode="markdown" 
-                        theme="chrome" 
-                        onChange={(v)=>{this.setState({content:v})}} 
-                        editorProps={{$blockScrolling: true}} 
-                        value={this.state.content}
-                        fontSize={14}
-                        width={"900px"}
-                        height={"720px"}
-                        showPrintMargin={false}
-                        wrapEnabled={true}
-                        keyboardHandler="emacs"
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleSwitch.bind(this)}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
                     >
-                    </AceEditor>
+                        <Tab label="编辑" />
+                        <Tab label="预览" />
+                    </Tabs>
+                    <div {...styles.widget}>
+                        {widget}
+                    </div>
+                    
                     <div style={{height: 30}}></div>
                     <div {...styles.buttonArea}>
-                        <Button type="primary" onClick={()=>{this.props.onSubmit(this.state.id, this.state.content)}}>完成</Button>
+                        <Button type="primary" onClick={()=>{this.handleSubmit()}}>完成</Button>
                         <div style={{width: 40}}></div>                                        
                         <Button onClick={this.props.onClose}>放弃</Button>
                     </div>
@@ -93,37 +159,5 @@ class ArticleEditor extends React.Component<any> {
                 </div>                
             </Modal>
         )
-    }
-}
-
-@inject('uiStore', 'resourceStore')
-@observer
-export default class ArticleEditorObserver extends React.Component {
-
-    handleSubmit(id?:string, content?:string) {
-        let rs = (this.props as any).resourceStore as ResourceStore
-        if (id) {
-            rs.updateArticle(id, content)
-        } else {
-            rs.addArticle(content)
-        }
-        
-        
-        this.handleClose()
-    } 
-    handleClose() {
-        let us = (this.props as any).uiStore as UIStore
-        us.hideArticleEditor()
-    }
-
-    render () {
-        let us = (this.props as any).uiStore as UIStore    
-        return (<ArticleEditor 
-            onSubmit={(id:any, v:any)=>{this.handleSubmit(id, v)}}
-            onClose={()=>{this.handleClose()}}
-            visible={us.articleEditorVisible}
-            content={us.articleEditorBuffer.content}
-            rid={us.articleEditorBuffer.id}>
-        </ArticleEditor>)
     }
 }

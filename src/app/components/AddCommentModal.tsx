@@ -1,10 +1,7 @@
 import * as React from "react"
-import { inject, observer } from "mobx-react"
 import { css } from 'glamor'
-import UIStore from "../stores/uiStore"
 import Button from './Button'
 import Modal from './Modal'
-import ResourceStore from "../stores/resourceStore"
 
 const styles = {
     container: css({
@@ -27,29 +24,23 @@ const styles = {
     }),
 }
 
-@inject('uiStore', 'resourceStore')
-@observer
-export default class AddResourceModal extends React.Component {
+interface Props {
+    visible: boolean
+    onSubmit(content:string):void
+    onClose():void
+}
+
+export default class AddResourceModal extends React.Component<Props> {
     state: {
         content: ""
     }
-    constructor(props:any) {
-        super(props)
-    }
     handleSubmit() {
-        let rs = (this.props as any).resourceStore as ResourceStore
-        rs.addComment(this.state.content)
-        let us = (this.props as any).uiStore as UIStore
-        us.hideAddCommentModal()
+        this.props.onSubmit(this.state.content)
+        this.props.onClose()
     } 
-    handleClose() {
-        let us = (this.props as any).uiStore as UIStore
-        us.hideAddCommentModal()
-    }
     render () {
-        let us = (this.props as any).uiStore as UIStore
         return (
-            <Modal width={700} height={755} top={140} visible={us.addCommentModalVisible}  onClose={()=>{this.handleClose()}}>
+            <Modal width={700} height={755} top={140} visible={this.props.visible}  onClose={this.props.onClose}>
                 <div {...styles.container}>
                     <div style={{height: 50}}></div>            
                     <textarea {...styles.textarea} onChange={(e)=>{this.setState({content:e.target.value})}}></textarea>
@@ -57,7 +48,7 @@ export default class AddResourceModal extends React.Component {
                     <div {...styles.buttonArea}>
                         <Button type="primary" onClick={()=> {this.handleSubmit()}}>完成</Button>
                         <div style={{width: 40}}></div>                                        
-                        <Button onClick={()=> {this.handleClose()}}>放弃</Button>
+                        <Button onClick={this.props.onClose}>放弃</Button>
                     </div>
 
                 </div>                

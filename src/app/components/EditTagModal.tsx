@@ -1,10 +1,7 @@
 import * as React from "react"
-import { inject, observer } from "mobx-react"
 import { css } from 'glamor'
-import UIStore from "../stores/uiStore"
 import Input from './Input'
 import Button from './Button'
-import ResourceStore from "../stores/resourceStore"
 import Modal from "./Modal"
 import * as _ from 'lodash'
 
@@ -51,31 +48,46 @@ const styles = {
     })
 }
 
-@inject('uiStore', 'resourceStore')
-@observer
-export default class AddResourceModal extends React.Component {
-    state: {}
-    constructor(props:any) {
+interface Props {
+    visible: boolean
+    tags: string[]
+    onSubmit(tags:string[]):void
+    onClose():void
+}
+
+export default class AddResourceModal extends React.Component<Props> {
+    state: {tags:string[]}
+    constructor(props:Props) {
         super(props)
+        this.state = {
+            tags: props.tags
+        }
+    }
+    componentWillReceiveProps(props:Props) {
+        this.setState({
+            tags: props.tags
+        })
     }
     handleSubmit() {
-        let us = (this.props as any).uiStore as UIStore    
-        let rs = (this.props as any).resourceStore as ResourceStore
-        rs.updateTags(us.editTagModalBuffer.id, us.editTagModalBuffer.tags)
+        this.props.onSubmit(this.state.tags)
     } 
-    handleClose() {
-        let us = (this.props as any).uiStore as UIStore
-        us.hideEditTagModal()
+    addTag(tag:string) {
+        this.setState({
+            tags: this.state.tags.push(tag)
+        })
+    }
+    removeTag(tag:string) {
+        this.setState({
+            tags: _.remove(this.state.tags, tag)
+        })
     }
     render () {
-        let us = (this.props as any).uiStore as UIStore
-    
-        return <Modal visible={us.editTagModalVisible} width={560} height={350} top={180} onClose={()=>{this.handleClose()}}>
+        return <Modal visible={this.props.visible} width={560} height={350} top={180} onClose={this.props.onClose}>
             <div {...styles.container}>
-                <Input {...styles.input} placeholder={'新增Tag'} onChange={(v)=> {this.setState({from: v})}} onSubmit={(v)=> {us.addTag(v)}}></Input>
+                <Input {...styles.input} placeholder={'新增Tag'} onSubmit={this.addTag.bind(this)}></Input>
                 <div style={{lineHeight: '36px'}}>
-                    {_.map(us.editTagModalBuffer.tags, (tag)=> {
-                        return <span {...styles.tag}>{tag}&nbsp;<a onClick={()=>{us.removeTag(tag)}}>x</a></span>
+                    {_.map(this.props.tags, (tag)=> {
+                        return <span {...styles.tag}>{tag}&nbsp;<a onClick={()=>{this.removeTag(tag)}}>x</a></span>
                     })}
                     <div style={{"clear": "both"}}></div>
                 </div>

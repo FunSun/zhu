@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2018-10-12
+### Added
+- 编辑页面增加了预览tab
+- 增加了自动补全
+### Changed
+- 重构了部分组件, 将依赖mobx的代码全部放到bindings.tsx下面了
+
 ## [1.9.0] - 2018-10-10
 ### Added
 - comment增加了时间显示

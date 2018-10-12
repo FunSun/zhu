@@ -1,9 +1,4 @@
 import * as React from 'react'
-import { inject, observer } from "mobx-react"
-import ResourceStore from '../stores/resourceStore'
-import UIStore from "../stores/uiStore"
-
-
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -17,7 +12,6 @@ import AddIcon from '@material-ui/icons/AddCircle'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
 import { createMuiTheme } from '@material-ui/core/styles'
 import {css} from 'glamor'
-
 
 let theme = createMuiTheme()
 
@@ -86,71 +80,40 @@ const styles = {
   }),
 }
 
-@inject('resourceStore', 'uiStore')
-@observer
-export default class extends React.Component {
-  componentDidMount() {
-    window.addEventListener('scroll', this.onScroll, false)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll, false)
-  }
-
-  onScroll = () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        let rs = (this.props as any).resourceStore as ResourceStore
-        rs.loadMore()
-    }
-  }
-
-  handleShowAddResourceModal() {
-    let us = (this.props as any).uiStore as UIStore
-    us.showAddBlogModal()
-  }
-
-  handleShowAddCommentModal() {
-    let us = (this.props as any).uiStore as UIStore
-    us.showAddCommentModal()
-  }
-
-  handleShowAddArticleModal() {
-    let us = (this.props as any).uiStore as UIStore
-    us.showArticleEditor()
-  }
-
-  handleSubmit(val:string) {
-    let rs = (this.props as any).resourceStore as ResourceStore
-    rs.reload(val)
-  }
-
-  render() {
-    return (
-      <div {...styles.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography {...styles.title} variant="h6" color="inherit" noWrap>
-              Archiver's View
-            </Typography>
-            <div {...styles.search}>
-              <div {...styles.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                {...css(styles.inputRoot, styles.inputInput)}
-                onSubmit={(v)=>{this.handleSubmit(v)}}
-              />
-            </div>
-            <div {...styles.grow} />
-            <div {...styles.sectionDesktop}>
-              <IconButton color="inherit" onClick={()=>this.handleShowAddCommentModal()}><CommentIcon /></IconButton>
-              <IconButton color="inherit" onClick={()=>this.handleShowAddArticleModal()}><ArticleIcon /></IconButton>
-              <IconButton color="inherit" onClick={()=>this.handleShowAddResourceModal()}><AddIcon /></IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
-    )
-  }
+interface Props {
+  onCommentIconClicked():void
+  onEditIconClicked():void
+  onAddIconClicked():void
+  onSubmit(val:string):void
 }
+
+export default function (props:Props) {
+    return (
+    <div {...styles.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography {...styles.title} variant="h6" color="inherit" noWrap>
+            Archiver's View
+          </Typography>
+          <div {...styles.search}>
+            <div {...styles.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              {...css(styles.inputRoot, styles.inputInput)}
+              onSubmit={props.onSubmit}
+            />
+          </div>
+          <div {...styles.grow} />
+          <div {...styles.sectionDesktop}>
+            <IconButton color="inherit" onClick={props.onCommentIconClicked}><CommentIcon /></IconButton>
+            <IconButton color="inherit" onClick={props.onEditIconClicked}><ArticleIcon /></IconButton>
+            <IconButton color="inherit" onClick={props.onAddIconClicked}><AddIcon /></IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </div>
+  )
+}
+
