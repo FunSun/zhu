@@ -2,7 +2,6 @@ import * as React from "react"
 import {
     BindingArticleEditor,
     BindingAppBar,
-    BindingScrollToBottomDetector, 
     BindingResourceList,
     BindingAddBlogModal,
     BindingAddCommentModal,
@@ -32,7 +31,6 @@ export default class App extends React.Component {
                 <BindingArticleEditor></BindingArticleEditor>
                 <BindingArticleView></BindingArticleView>
             </div>
-            <BindingScrollToBottomDetector></BindingScrollToBottomDetector>
         </div>)
     }
 }

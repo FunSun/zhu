@@ -45,9 +45,11 @@ export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props)
     let rs = props.resourceStore
     let us = props.uiStore
     return <AppBar
+        query={rs.query}
         onAddIconClicked={us.showAddBlogModal.bind(us)}
         onCommentIconClicked={us.showAddCommentModal.bind(us)}
         onEditIconClicked={()=>{us.showArticleEditor("", "")}}
+        onQueryChange={rs.updateQuery.bind(rs)}
         onSubmit={rs.reload.bind(rs)}
     ></AppBar>
 })
@@ -62,6 +64,8 @@ export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (
         onEditArticle={us.showArticleEditor.bind(us)}
         onShowArticle={us.showArticleView.bind(us)}
         onLabel={us.showEditTagModal.bind(us)}
+        onTagClicked={rs.addTagToQuery.bind(rs)}
+        onScrollToEnd={rs.loadMore.bind(rs)}
     ></ResourceList>)
 })
 

@@ -4,13 +4,13 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import InputBase from './InputBase'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import SearchIcon from '@material-ui/icons/Search'
 import ArticleIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/AddCircle'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
 import { createMuiTheme } from '@material-ui/core/styles'
+import InputBase from '@material-ui/core/InputBase'
 import {css} from 'glamor'
 
 let theme = createMuiTheme()
@@ -81,10 +81,12 @@ const styles = {
 }
 
 interface Props {
+  query: string
   onCommentIconClicked():void
   onEditIconClicked():void
   onAddIconClicked():void
-  onSubmit(val:string):void
+  onQueryChange(val:string):void
+  onSubmit():void
 }
 
 export default function (props:Props) {
@@ -102,7 +104,9 @@ export default function (props:Props) {
             <InputBase
               placeholder="Search…"
               {...css(styles.inputRoot, styles.inputInput)}
-              onSubmit={props.onSubmit}
+              value={props.query}
+              onChange={(e) => {props.onQueryChange(e.target.value)}}
+              onKeyDown={(e)=>{(e.key==='Enter'?props.onSubmit():null)}}
             />
           </div>
           <div {...styles.grow} />

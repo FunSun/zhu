@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.0]
+### Added
+- preview显示标签, 点击标签会在query中添加对应的内容
+### Fixed
+- 修复了不使用body scroll之后， scrollToBottom无法触发的情况
+
 ## [1.11.0] - 2018-10-17
 ### Added
 - 使用了自己写的pagex parser

@@ -2,7 +2,7 @@ import * as React from "react"
 import { createMuiTheme } from '@material-ui/core/styles'
 import {css} from 'glamor'
 import * as _ from 'lodash'
-
+import Chip from '@material-ui/core/Chip'
 
 let theme = createMuiTheme()
 
@@ -70,12 +70,23 @@ const frameStyle = css({
         marginTop: 0,
         color: theme.palette.grey[500],
         float: 'right'
+    },
+    '& .tags': {
+        marginTop: 8,
+        '& *': {
+            WebkitUserSelect: 'text !important'
+        }
     }
 })
 
-interface PreviewFrameworkProps {
+interface BaseProps {
     id: string
-    created?: number
+    tags: string[]
+    created: number
+    onTagClicked(tag:string):void
+}
+
+interface PreviewFrameworkProps extends BaseProps{
     onLabel: () => void
     onClick?: () => void
     onEdit?: () => void
@@ -98,6 +109,14 @@ function PreviewFramework(props:PreviewFrameworkProps) {
                     </span>
 
                 </h2>
+                <div className="tags">
+                    {
+                        _.map(props.tags, (tag) => {
+                            return <span style={{marginRight: 8, float: 'right'}}><Chip onClick={()=>{props.onTagClicked(tag)}} label={tag} color="default"></Chip></span>
+                        })
+                    }
+                    <div style={{clear: 'both'}}></div>
+                </div>
                 <div className="desc">
                 {props.desc || <span></span>}
             </div>
@@ -113,7 +132,7 @@ function PreviewFramework(props:PreviewFrameworkProps) {
 
 }
 
-interface FamousePreviewProps {
+interface FamousePreviewProps extends BaseProps {
     title: string
     from: string
     onLabel: () => void
@@ -122,41 +141,39 @@ interface FamousePreviewProps {
 interface ZhihuPreviewProps extends  FamousePreviewProps {
     id: string
     highlight: string
+    tags: string[]
+    created: number
 }
 
 export function ZhihuPreview(props:ZhihuPreviewProps) {
     let title = (<a  href={props.from} target='_blank'>{props.title}</a>)
     let desc = (<div dangerouslySetInnerHTML={{'__html': props.highlight}}></div>)
-    return (<PreviewFramework id={props.id} onLabel={props.onLabel} title={title} desc={desc}></PreviewFramework>)
+        return (<PreviewFramework {...Object.assign({}, props, {title, desc})} id={props.id} onLabel={props.onLabel}></PreviewFramework>)
 }
 
 
 
 interface LinkPreviewProps extends FamousePreviewProps {
-    id: string
     from: string
     favicon: string
 }
 
 export function LinkPreview(props:LinkPreviewProps) {
     let favicon = (<img src={props.favicon}></img>)
-    let title = (<a href={props.from} target='_blank'>{props.title}</a>)
+    let title = (<a href={props.from} target='_blank' title={props.from}>{props.title}</a>)
 
-    return <PreviewFramework id={props.id} onLabel={props.onLabel} favicon={favicon} title={title}></PreviewFramework>
+    return <PreviewFramework {...Object.assign({}, props, {favicon, title})} onLabel={props.onLabel}></PreviewFramework>
 }
 
-interface CommentPreviewProps {
-    id: string
+interface CommentPreviewProps extends BaseProps {
     content: string
-    created: number
     onLabel: () => void
 }
 export function CommentPreview(props:CommentPreviewProps) {
-    return <PreviewFramework id={props.id} created={props.created} onLabel={props.onLabel} desc={props.content}></PreviewFramework>
+    return <PreviewFramework {...Object.assign({}, props, {desc: props.content})} onLabel={props.onLabel}></PreviewFramework>
 }
 
-interface ArticlePreviewProps {
-    id: string
+interface ArticlePreviewProps extends BaseProps {
     title: string
     content: string
     highlight: string,
@@ -173,5 +190,5 @@ export function ArticlePreview(props:ArticlePreviewProps) {
     }
     
     let desc = (<div  dangerouslySetInnerHTML={{'__html': props.highlight}}></div>)
-    return (<PreviewFramework id={props.id} onEdit={props.onEdit} onClick={props.onClick} onLabel={props.onLabel} title={title} desc={desc}></PreviewFramework>)
+    return (<PreviewFramework {...Object.assign({}, props, {title, desc})} onEdit={props.onEdit} onClick={props.onClick} onLabel={props.onLabel}></PreviewFramework>)
 }

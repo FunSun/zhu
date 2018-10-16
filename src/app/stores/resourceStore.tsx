@@ -15,14 +15,35 @@ export interface Blog {
 
 export default class ResourceStore {
     @observable resources:any = []
-    prevQuery: string
+    @observable query: string = ""
     offset: number
+
+    @action
+    addTagToQuery(tag: string):void {
+        let trunks = _.split(this.query, ' ')
+        let exist = false
+        trunks = _.map(trunks, (trunk) => {
+            if (_.startsWith(trunk, 'tags:')) {
+                exist = true
+                return trunk + ',' + tag
+            }
+            return trunk
+        })
+        if (!exist) {
+            trunks.push("tags:" + tag)
+        }
+        this.query = trunks.join(" ")
+    }
+
+    @action
+    updateQuery(query: string) {
+        this.query = query
+    }
         
-    reload = flow(function * reload (query: string):any {
+    reload = flow(function * reload ():any {
         try {
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.query}`))
             this.resources.replace(res.data)
-            this.prevQuery = query
             this.offset = res.data.length
         } catch(err) {
             console.log(err)
@@ -31,7 +52,7 @@ export default class ResourceStore {
 
     loadMore = flow(function * loadMore():any {
         try {
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.prevQuery}&offset=${this.offset}`))
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.query}&offset=${this.offset}`))
             this.resources.push(...res.data)
             this.offset += res.data.length
         } catch(err) {
