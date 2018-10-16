@@ -1,5 +1,5 @@
 import * as React from "react"
-
+const {clipboard} = require('electron')
 import { css } from 'glamor'
 import Button from './Button'
 import Modal from './Modal'
@@ -37,19 +37,14 @@ const completer:any = {
     }
 }
 
-const completeShortcut = {
-    name: "autocomplete-alias",
-    exec: (editor:any) => { editor.execCommand("startAutocomplete")},
-    bindKey: "Ctrl-Q"
-}
-
 const styles = {
     container: css({
         fontSize: 20,
+        position:'relative'
     }),
     widget: css({
-        width: 912,
-        height: 720,
+        width: 960,
+        height: 840,
         boxSizing: 'border-box',
         margin: 'auto'
     }),
@@ -74,6 +69,12 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
         content: "",
         value: 0
     }
+    
+    shortcuts: any[] = [{
+        name: "autocomplete-alias",
+        exec: (editor:any) => { editor.execCommand("startAutocomplete")},
+        bindKey: "Ctrl-Q"
+    }]
 
     constructor(props:any) {
         super(props)
@@ -106,7 +107,7 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
     handleSwitch = (event:any, value:number) => {
         this.setState({ value })
     }
-    
+
     render () {
         let widget: React.ReactElement<any>
             if (this.state.value == 0) {
@@ -117,12 +118,13 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                     editorProps={{$blockScrolling: true}} 
                     value={this.state.content}
                     fontSize={14}
-                    width={"900px"}
-                    height={"720px"}
+                    width={"960px"}
+                    height={"800px"}
                     showPrintMargin={false}
                     wrapEnabled={true}
                     keyboardHandler="emacs"
-                    commands={[completeShortcut as any]}
+                    commands={(this.shortcuts as any)}
+                    onCopy={(v) => {clipboard.writeText(v)}}
                     setOptions={{
                         enableBasicAutocompletion: ([completer]) as any,
                         enableLiveAutocompletion: false,
@@ -130,10 +132,10 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                 >
                 </AceEditor>)
             } else {
-                widget = (<PageX content={this.props.content}></PageX>)
+                widget = (<PageX content={this.state.content}></PageX>)
             }
         return (
-            <Modal width={960} height={855} top={90} visible={this.props.visible}  onClose={this.props.onClose}>
+            <Modal width={1008} height={960} top={24} visible={this.props.visible}  onClose={this.props.onClose}>
                 <div {...styles.container}>
                     <Tabs
                         value={this.state.value}
@@ -149,7 +151,6 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                         {widget}
                     </div>
                     
-                    <div style={{height: 30}}></div>
                     <div {...styles.buttonArea}>
                         <Button type="primary" onClick={()=>{this.handleSubmit()}}>完成</Button>
                         <div style={{width: 40}}></div>                                        

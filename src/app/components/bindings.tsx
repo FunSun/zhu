@@ -55,6 +55,8 @@ export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props)
 export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
     let us = props.uiStore
+    // explicit declare dependency on inner structure
+    rs.resources.length
     return (<ResourceList
         resources={rs.resources}
         onEditArticle={us.showArticleEditor.bind(us)}

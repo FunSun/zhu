@@ -711,16 +711,24 @@ ine-block;
 `
 
 import * as React from 'react'
-import {parse} from '../pagex'
+import {parse, BlockType, InlineType} from '../lib/pagex'
 import { css } from 'glamor'
+import * as _ from 'lodash'
+import Latex from  './Latex'
+import Canvas from './Canvas'
+import {Plot} from './Plotly'
 
 const containerStyle = css({
     width: '100%',
     height: '100%',
     '& > article': {
         overflowY: 'scroll',
-        width: '100%',
-        height: '100%'
+        width: '98%',
+        marginLeft: 16,
+        height: 840,
+        '::-webkit-scrollbar': {
+          display: 'none'
+        }
     }
 })
 
@@ -728,17 +736,65 @@ interface Props {
     content: string
 }
 
+class Context {
+  inject(code: string):void {
+    let ctx = this
+    try {
+      eval(code)
+    } catch(e) {
+      console.log(e)
+    }
+    
+  }
+}
+
 export default function (props: Props) {
     let content = props.content
-    let target: React.ReactNode
-    eval(parse(content))
-
+    let blocks = parse(content)
+    let ctx = new Context()
     return (
         <div {...containerStyle}>
             <style type="text/css">
                 {markdownStyle}
             </style>
-            {target}
+            <article className="markdown-body">
+            {
+              _.map(blocks, (block) => {
+                switch(block.type) {
+                  case BlockType.FencedBlock:
+                    if (block.meta === 'latex') {
+                      return <Latex>{block.content.join('\n')}</Latex>
+                    } else if (block.meta==='canvas') {
+                      return <Canvas ctx={ctx} dsl={block.content.join('\n')}></Canvas>
+                    } else if (block.meta==='plot') {
+                      return <Plot>{block.content.join('\n')}</Plot>
+                    }
+
+                    if (block.meta==='context') {
+                      ctx.inject(block.content.join('\n'))
+                    }
+                    return <pre><code>{block.content.join('\n')}</code></pre>
+                  case BlockType.Heading:
+                    return React.createElement('h'+block.meta.toString(), {}, block.content[0])
+                  case BlockType.Paragraph:
+                    return <p>{_.map(block.content, (o) => {
+                      if (o === '\n') {
+                        return <br></br>
+                      }
+                      if (_.isString(o)) {
+                        return o
+                      } else if (o.type === InlineType.Link) {
+                        return <a href={o.content}>{o.name}</a>
+                      } else {
+                        return <img src={o.content} alt={o.name}></img>
+                      }
+                    })}</p>
+                  default: 
+                    return <pre><code>{block.content.join('\n')}</code></pre>
+                }
+              })
+            }
+            </article>
         </div>
     )
 }

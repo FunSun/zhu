@@ -14,23 +14,23 @@ export default function (props:Props) {
         let onLabel = () => {props.onLabel(resource.id, resource.tags)}
         switch (resource.type) {
             case 'zhihu':
-                return <ZhihuPreview onLabel={onLabel} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
+                return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
             case 'link':
-                return <LinkPreview onLabel={onLabel} title={resource.title} link={resource.from} favicon={resource.favicon}></LinkPreview>
+                return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
             case 'comment':
-                return <CommentPreview created={resource.created} onLabel={onLabel} content={resource.content}></CommentPreview>
+                return <CommentPreview key={resource.id} onLabel={onLabel} {...resource}></CommentPreview>
             case 'article':
                 return <ArticlePreview 
+                    key={resource.id} 
                     onEdit={()=> {props.onEditArticle(resource.id, resource.content)}} 
                     onClick={()=>{props.onShowArticle(resource)}} 
+                    {...resource}
                     onLabel={onLabel} title={resource.title} 
-                    content={resource.content} 
-                    desc={resource.highlight}
                 ></ArticlePreview>
         }
-        return <ZhihuPreview onLabel={onLabel} title={resource.title} link={resource.from} desc={resource.highlight}></ZhihuPreview>
+        return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
     })
-    return (<div style={{width:'100%', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+    return (<div style={{overflowY: 'scroll', height: 890, width:'100%', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         {previews}
     </div>)
 }

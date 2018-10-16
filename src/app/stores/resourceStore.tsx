@@ -1,5 +1,6 @@
 import { observable, action, flow } from 'mobx'
 import axios from 'axios'
+import * as _ from 'lodash'
 
 export interface Resource {
     id: string
@@ -17,10 +18,10 @@ export default class ResourceStore {
     prevQuery: string
     offset: number
         
-    reload = flow(function * (query: string):any {
+    reload = flow(function * reload (query: string):any {
         try {
             let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
-            this.resources = res.data
+            this.resources.replace(res.data)
             this.prevQuery = query
             this.offset = res.data.length
         } catch(err) {
@@ -28,7 +29,7 @@ export default class ResourceStore {
         }
     })
 
-    loadMore = flow(function * ():any {
+    loadMore = flow(function * loadMore():any {
         try {
             let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.prevQuery}&offset=${this.offset}`))
             this.resources.push(...res.data)
@@ -38,7 +39,7 @@ export default class ResourceStore {
         }
     })
 
-    addBlog = flow(function * (blog: Blog): any {
+    addBlog = flow(function * addBlog(blog: Blog): any {
         try {
             let body = [blog.from, blog.title, blog.tags.join("\n"), blog.content].join("\n")
             yield axios.post('http://localhost:8070/resources/blog', body)
@@ -47,7 +48,7 @@ export default class ResourceStore {
         }
     })
 
-    addComment = flow(function * (content:string): any {
+    addComment = flow(function * addComment(content:string): any {
         try {
             let body = {
                 content: content
@@ -58,7 +59,7 @@ export default class ResourceStore {
         }
     })
 
-    addArticle = flow(function * (content:string): any {
+    addArticle = flow(function * addArticle(content:string): any {
         try {
             let body = {
                     title: "",
@@ -70,7 +71,7 @@ export default class ResourceStore {
         }
     })
 
-    updateArticle = flow(function * (id:string, content:string): any {
+    updateArticle = flow(function * updateArticle(id:string, content:string): any {
         try {
             let body = {
                     id: id,
@@ -78,12 +79,14 @@ export default class ResourceStore {
                     content: content
             }
             yield axios.post('http://localhost:8070/resources/article', body)
+            let res = _.find(this.resources, {id}) as any
+            res.content = content
         } catch(err) {
             console.log(err)
         }
     })
     
-    updateTags = flow(function * (id: string, tags: string[]):any {
+    updateTags = flow(function * updateTags(id: string, tags: string[]):any {
         try {
             let body = {id, tags}
             let res = yield axios.post('http://localhost:8070/resources/tags', body)

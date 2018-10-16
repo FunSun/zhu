@@ -14,7 +14,8 @@ import { css } from 'glamor'
 let appStyle = css({
     width:'100%',
     minHeight: '1000px',
-    backgroundColor: '#efefef'
+    backgroundColor: '#efefef',
+    'WebkitUserSelect': 'text'
 })
 
 export default class App extends React.Component {

@@ -16,3 +16,6 @@ declare module "*.gif"
 declare module "*.png"
 declare module "*.svg"
 declare module "*.json"
+
+// i don't know how to declare an object
+declare function Plotly():void

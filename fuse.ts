@@ -1,4 +1,4 @@
-import { FuseBox, CSSPlugin, Sparky, CopyPlugin, ReplacePlugin } from "fuse-box"
+import { FuseBox, CSSResourcePlugin, CSSPlugin, Sparky, CopyPlugin, ReplacePlugin } from "fuse-box"
 import { spawn } from "child_process"
 let pjson = require("./package.json")
 
@@ -53,7 +53,7 @@ Sparky.task("default", ["copy-html"], () => {
   const rendererBundle = fuse
     .bundle("renderer")
     .instructions("> [electron/index.tsx] +fuse-box-css")
-    .plugin(CSSPlugin())
+    .plugin([CSSResourcePlugin({dist: "build/resources"}), CSSPlugin()])
     .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
 
   // and watch & hot reload unless we're bundling for production

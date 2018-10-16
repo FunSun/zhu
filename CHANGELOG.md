@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2018-10-17
+### Added
+- 使用了自己写的pagex parser
+- pagex增加了对数学公式的支持
+- pagex增加了对图标的支持
+- pagex增加了对绘图的支持
+### Changed
+- 更改Preview的接口
+### Fixed
+- 能够选择文本
+- 增大编辑区域
+- 修复了modal中滚动条到头会触发body滚动的问题
+- 修复了重构bindings之后, mobx数据改动不触发view更新的情况
+- 使mobx devtools能够显示flow名称(给flow传递一个有名字的generator)
+
 ## [1.10.0] - 2018-10-12
 ### Added
 - 编辑页面增加了预览tab
