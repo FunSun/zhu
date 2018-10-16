@@ -73,7 +73,7 @@ export default class AddResourceModal extends React.Component<Props> {
     } 
     addTag(tag:string) {
         this.setState({
-            tags: this.state.tags.push(tag)
+            tags: [...this.state.tags, tag]
         })
     }
     removeTag(tag:string) {
@@ -82,11 +82,12 @@ export default class AddResourceModal extends React.Component<Props> {
         })
     }
     render () {
+        console.log(this.state.tags)
         return <Modal visible={this.props.visible} width={560} height={350} top={180} onClose={this.props.onClose}>
             <div {...styles.container}>
                 <Input {...styles.input} placeholder={'新增Tag'} onSubmit={this.addTag.bind(this)}></Input>
                 <div style={{lineHeight: '36px'}}>
-                    {_.map(this.props.tags, (tag)=> {
+                    {_.map(this.state.tags, (tag)=> {
                         return <span {...styles.tag}>{tag}&nbsp;<a onClick={()=>{this.removeTag(tag)}}>x</a></span>
                     })}
                     <div style={{"clear": "both"}}></div>

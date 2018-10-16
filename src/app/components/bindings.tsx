@@ -105,6 +105,6 @@ export const BindingEditTagModal = bindingHelper(['uiStore', 'resourceStore'], (
         tags={us.editTagModalBuffer.tags}
         visible={us.editTagModalVisible}
         onClose={us.hideEditTagModal.bind(us)}
-        onSubmit={(tags) => {rs.updateTags(us.editTagModalBuffer.id, tags)}}
+        onSubmit={(tags) => {rs.updateTags(us.editTagModalBuffer.id, tags); us.hideEditTagModal()}}
     ></EditTagModal>
 })
