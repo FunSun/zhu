@@ -18,6 +18,10 @@ export default class ResourceStore {
     @observable query: string = ""
     offset: number
 
+    constructor() {
+        this.reload()
+    }
+
     @action
     addTagToQuery(tag: string):void {
         let trunks = _.split(this.query, ' ')
@@ -42,7 +46,8 @@ export default class ResourceStore {
         
     reload = flow(function * reload ():any {
         try {
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.query}`))
+            let query = (this.query.length > 0)?this.query: "random"
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
             this.resources.replace(res.data)
             this.offset = res.data.length
         } catch(err) {
@@ -52,7 +57,8 @@ export default class ResourceStore {
 
     loadMore = flow(function * loadMore():any {
         try {
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${this.query}&offset=${this.offset}`))
+            let query = (this.query.length > 0)?this.query: "random"
+            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}&offset=${this.offset}`))
             this.resources.push(...res.data)
             this.offset += res.data.length
         } catch(err) {
