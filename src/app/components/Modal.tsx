@@ -1,5 +1,8 @@
 import * as React from "react"
 import { css } from 'glamor'
+import { createMuiTheme } from '@material-ui/core/styles'
+
+let theme = createMuiTheme()
 
 const baseLayerStyle = {
     position: 'absolute',
@@ -8,7 +11,7 @@ const baseLayerStyle = {
     zIndex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(214, 228, 255, 0.7)'
+    backgroundColor: theme.palette.grey[300]
 }
 
 const baseContainerStyle = {

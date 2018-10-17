@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2019-10-17
+### Added
+- pagex增加对table的支持
+- pageX组件增加设置高度的接口
+### Changed
+- Modal背景改用不透明material标准灰配色
+- 优化了ArticleView的显示
+
 ## [1.12.1] - 2018-10-17
 ### Fixed
 - 修复了标签标注功能失效的问题

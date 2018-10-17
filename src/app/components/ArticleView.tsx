@@ -11,6 +11,12 @@ const styles = {
         paddingTop: 36,
         paddingLeft: 50,
         paddingRight: 50,
+    }),
+    widget: css({
+        width: 960,
+        height: 840,
+        boxSizing: 'border-box',
+        margin: 'auto'
     })
 }
 
@@ -22,10 +28,12 @@ interface Props {
 
 export default function(props:Props) {
     return (
-        <Modal width={960} height={855} top={90} visible={props.visible}  onClose={props.onClose}>
+        <Modal width={1008} height={960} top={24} visible={props.visible}  onClose={props.onClose}>
             <div {...styles.container}>
-              <PageX content={props.content}></PageX>
-            </div>                
+                <div {...styles.widget}>
+                    <PageX height={880} content={props.content}></PageX>
+                </div>
+            </div>
         </Modal>
     )
 }

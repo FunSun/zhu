@@ -132,7 +132,7 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                 >
                 </AceEditor>)
             } else {
-                widget = (<PageX content={this.state.content}></PageX>)
+                widget = (<PageX height={840} content={this.state.content}></PageX>)
             }
         return (
             <Modal width={1008} height={960} top={24} visible={this.props.visible}  onClose={this.props.onClose}>

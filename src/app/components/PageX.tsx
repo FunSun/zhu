@@ -717,15 +717,15 @@ import * as _ from 'lodash'
 import Latex from  './Latex'
 import Canvas from './Canvas'
 import {Plot} from './Plotly'
+import Table from './Table'
 
 const containerStyle = css({
     width: '100%',
-    height: '100%',
     '& > article': {
         overflowY: 'scroll',
         width: '98%',
         marginLeft: 16,
-        height: 840,
+        height: '100%',
         '::-webkit-scrollbar': {
           display: 'none'
         }
@@ -733,6 +733,7 @@ const containerStyle = css({
 })
 
 interface Props {
+    height: number
     content: string
 }
 
@@ -753,7 +754,7 @@ export default function (props: Props) {
     let blocks = parse(content)
     let ctx = new Context()
     return (
-        <div {...containerStyle}>
+        <div {...css(containerStyle, {height: props.height})}>
             <style type="text/css">
                 {markdownStyle}
             </style>
@@ -789,6 +790,8 @@ export default function (props: Props) {
                         return <img src={o.content} alt={o.name}></img>
                       }
                     })}</p>
+                  case BlockType.Table:
+                    return <Table>{block.content.join('\n')}</Table>
                   default: 
                     return <pre><code>{block.content.join('\n')}</code></pre>
                 }

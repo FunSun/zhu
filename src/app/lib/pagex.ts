@@ -10,7 +10,8 @@ export enum BlockType {
     IndentBlock,
     FencedBlock,
     TagTrunk,
-    Paragraph
+    Paragraph,
+    Table
 }
 
 export enum InlineType {
@@ -159,6 +160,28 @@ function parseTagTrunk(lines:string[], ln:number):[PageXBlock, number] {
     }, ln+1]
 }
 
+function isTable(line:string):boolean {
+    return line[0] === '|'
+}
+
+function parseTable(lines: string[], ln:number): [PageXBlock, number] {
+    let i = ln
+    let contentLines = []
+    while (i < lines.length) {
+        let line = lines[i]
+        if (line[0] !== '|') {
+            break
+        }
+        contentLines.push(line)
+        i+=1
+    }
+    return [{
+        type: BlockType.Table,
+        content: contentLines,
+        ln: [ln, i-1]
+    }, i]
+}
+
 function parseParagraph(lines: string[], ln: number): [PageXBlock, number] {
     // if nextLine isThematicBreak; return
     let i = ln
@@ -201,6 +224,9 @@ function linesToBlocks(lines:string[]): PageXBlock[] {
                 break
             case isIndentBlock(line):
                 [block, next] = parseIndentBlock(lines, ln)
+                break
+            case isTable(line):
+                [block, next] = parseTable(lines, ln)
                 break
             case isFencedBlock(line):
                 [block, next] = parseFencedBlock(lines, ln)
