@@ -11,12 +11,18 @@ import {
     BindingDeleteAlert
 } from './bindings'
 import { css } from 'glamor'
-import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: false,
-        suppressDeprecationWarnings: true
+        suppressDeprecationWarnings: true,
+        fontFamily: [
+            '"Helvetica Neue"',
+            '"Hiragino Sans GB"',
+            'Arial',
+            'sans-serif',
+        ].join(',')
     }
 })
 

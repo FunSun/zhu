@@ -1,28 +1,27 @@
 import * as React from "react"
-import { css } from 'glamor'
 import Button from '@material-ui/core/Button'
-import Modal from './Modal'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import TextField from '@material-ui/core/TextField'
-import { createMuiTheme } from '@material-ui/core/styles'
-
-const theme = createMuiTheme()
+import { withStyles, WithStyles } from '@material-ui/core/styles'
 
 const styles = {
-    dialog: css({
+    dialog: {
         width: 720
-    }),
+    },
+    textField: {
+        lineHeight: 1.4
+    }
 }
-
-interface Props {
+// 较了半天劲, 最后还是向withStyle妥协了。哎。。  不过还是挺好用的
+interface Props extends WithStyles {
     visible: boolean
     onSubmit(content:string):void
     onClose():void
 }
 
-export default class AddResourceModal extends React.Component<Props> {
+class AddCommentModal extends React.Component<Props> {
     state: {
         content: ""
     }
@@ -31,6 +30,7 @@ export default class AddResourceModal extends React.Component<Props> {
         this.props.onClose()
     } 
     render () {
+        let classes = this.props.classes
         return <Dialog 
             open={this.props.visible}
             onClose={this.props.onClose}
@@ -38,8 +38,10 @@ export default class AddResourceModal extends React.Component<Props> {
             aria-describedby="alert-dialog-description"
             maxWidth="md"
         >
-            <DialogContent className={`${styles.dialog}`}>
+            <DialogContent className={classes.dialog}>
                 <TextField
+                    className={classes.textField}
+                    inputProps={{className: classes.textField}}
                     rows={16}
                     label="发表想法"
                     autoFocus
@@ -62,3 +64,5 @@ export default class AddResourceModal extends React.Component<Props> {
         </Dialog>
     }
 }
+
+export default withStyles(styles)(AddCommentModal)

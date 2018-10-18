@@ -9,27 +9,24 @@ import SearchIcon from '@material-ui/icons/Search'
 import ArticleIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/AddCircle'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
-import { createMuiTheme } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
-import {css} from 'glamor'
+import { withStyles, Theme, WithStyles } from '@material-ui/core/styles'
 
-let theme = createMuiTheme()
-
-const styles = {
-  root: css({
+const styles = (theme:Theme) => ({
+  root: {
     width: '100%',
-  }),
-  grow: css({
+  },
+  grow: {
     flexGrow: 1,
-  }),
-  menuButton: css({
+  },
+  menuButton: {
     marginLeft: -12,
     marginRight: 20,
-  }),
-  title: css({
+  },
+  title: {
     flexGrow: 1,
-  }),
-  search: css({
+  },
+  search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -44,8 +41,8 @@ const styles = {
       width: 'auto',
     },
     flexGrow: 2
-  }),
-  searchIcon: css({
+  },
+  searchIcon: {
     width: theme.spacing.unit * 9,
     height: '100%',
     position: 'absolute',
@@ -53,34 +50,29 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  }),
-  inputRoot: css({
+  },
+  inputRoot: {
     color: 'inherit',
     width: '100%',
-  }),
-  inputInput: css({
+  },
+  inputInput: {
+    lineHeight: 1.4,
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
     transition: theme.transitions.create('width'),
-    width: '100%',
-  }),
-  sectionDesktop: css({
+    width: '100',
+  },
+  sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
-  }),
-  sectionMobile: css({
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  }),
-}
+  }
+})
 
-interface Props {
+interface Props extends WithStyles {
   query: string
   onCommentIconClicked():void
   onEditIconClicked():void
@@ -89,28 +81,29 @@ interface Props {
   onSubmit():void
 }
 
-export default function (props:Props) {
+export default withStyles(styles as any)(function (props:Props) {
+  let classes = props.classes
     return (
-    <div {...styles.root}>
+    <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography {...styles.title} variant="h6" color="inherit" noWrap>
+          <Typography className={classes.title} variant="h6" color="inherit" noWrap>
             Archiver's View
           </Typography>
-          <div {...styles.search}>
-            <div {...styles.searchIcon}>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
               placeholder="Search…"
-              {...css(styles.inputRoot, styles.inputInput)}
+              classes={{root: classes.inputRoot, input: classes.inputInput}}
               value={props.query}
               onChange={(e) => {props.onQueryChange(e.target.value)}}
               onKeyDown={(e)=>{(e.key==='Enter'?props.onSubmit():null)}}
             />
           </div>
-          <div {...styles.grow} />
-          <div {...styles.sectionDesktop}>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
             <IconButton color="inherit" onClick={props.onCommentIconClicked}><CommentIcon /></IconButton>
             <IconButton color="inherit" onClick={props.onEditIconClicked}><ArticleIcon /></IconButton>
             <IconButton color="inherit" onClick={props.onAddIconClicked}><AddIcon /></IconButton>
@@ -119,5 +112,5 @@ export default function (props:Props) {
       </AppBar>
     </div>
   )
-}
+})
 

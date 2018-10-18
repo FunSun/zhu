@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.1] - 2018-10-19
+### Changed
+- 用withStyle重构了部分组件
+### Fixed
+- 修复了部分组件字体上部被截断的问题
+
 ## [1.15.0] - 2018-10-18
 ### Added
 - 增加了删除功能
