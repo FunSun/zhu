@@ -84,6 +84,7 @@ interface BaseProps {
     tags: string[]
     created: number
     onTagClicked(tag:string):void
+    onDelete(id: string):void
 }
 
 interface PreviewFrameworkProps extends BaseProps{
@@ -125,6 +126,7 @@ function PreviewFramework(props:PreviewFrameworkProps) {
                 <span className="action" onClick={props.onLabel}>标记</span>
                 <span className="action" onClick={props.onClick}>显示</span>
                 <span className="action" onClick={props.onEdit}>编辑</span>
+                <span className="action" onClick={() => {props.onDelete(props.id)}}>删除</span>
                 <span className="time">{props.created?(new Date(props.created).toLocaleString()):""}</span>
             </div>
         </div>

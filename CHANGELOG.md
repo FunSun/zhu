@@ -6,12 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.14.0] - 2019-10-17
+## [1.15.0] - 2018-10-18
+### Added
+- 增加了删除功能
+- 增加了notify功能
+### Changed
+- 用material ui组件重构AddCommentModal
+- 用material ui组件重构EditTagModal
+### Fixed
+- 压制了material ui的deprecate warning
+
+## [1.14.0] - 2018-10-17
 ### Added
 - 增加了不指定关键字时, 使用随机搜索的功能
 - 增加了开屏随机搜索
 
-## [1.13.0] - 2019-10-17
+## [1.13.0] - 2018-10-17
 ### Added
 - pagex增加对table的支持
 - pageX组件增加设置高度的接口

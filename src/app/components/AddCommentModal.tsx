@@ -1,26 +1,18 @@
 import * as React from "react"
 import { css } from 'glamor'
-import Button from './Button'
+import Button from '@material-ui/core/Button'
 import Modal from './Modal'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import TextField from '@material-ui/core/TextField'
+import { createMuiTheme } from '@material-ui/core/styles'
+
+const theme = createMuiTheme()
 
 const styles = {
-    container: css({
-        fontSize: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    }),
-    textarea: css({
-        width: 600,
-        borderColor: '#1890ff',
-        height: 510,
-        borderStyle: 'solid',
-        paddingLeft: 10,
-        paddingRight: 10
-    }),
-    buttonArea: css({
-        display: 'flex',
-        justifyContent: 'center'
+    dialog: css({
+        width: 720
     }),
 }
 
@@ -39,20 +31,34 @@ export default class AddResourceModal extends React.Component<Props> {
         this.props.onClose()
     } 
     render () {
-        return (
-            <Modal width={700} height={755} top={140} visible={this.props.visible}  onClose={this.props.onClose}>
-                <div {...styles.container}>
-                    <div style={{height: 50}}></div>            
-                    <textarea {...styles.textarea} onChange={(e)=>{this.setState({content:e.target.value})}}></textarea>
-                    <div style={{height: 30}}></div>
-                    <div {...styles.buttonArea}>
-                        <Button type="primary" onClick={()=> {this.handleSubmit()}}>完成</Button>
-                        <div style={{width: 40}}></div>                                        
-                        <Button onClick={this.props.onClose}>放弃</Button>
-                    </div>
-
-                </div>                
-            </Modal>
-        )
+        return <Dialog 
+            open={this.props.visible}
+            onClose={this.props.onClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="md"
+        >
+            <DialogContent className={`${styles.dialog}`}>
+                <TextField
+                    rows={16}
+                    label="发表想法"
+                    autoFocus
+                    fullWidth
+                    placeholder="Something interesting!"
+                    multiline
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e)=>{this.setState({content:e.target.value})}}
+                    ></TextField>                 
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={this.props.onClose}>
+                   取消
+                </Button>
+                <Button onClick={() => {this.handleSubmit()}} color="secondary" autoFocus>
+                    提交
+                </Button>
+            </DialogActions>
+        </Dialog>
     }
 }

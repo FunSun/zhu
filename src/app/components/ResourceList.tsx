@@ -9,6 +9,7 @@ interface Props {
     onLabel(id:string, tags:string[]):void
     onScrollToEnd():void
     onTagClicked(tag:string):void
+    onDelete(id:string):void
 }
 
 export default class ResourceList extends React.Component<Props> {
@@ -38,7 +39,10 @@ export default class ResourceList extends React.Component<Props> {
     render() {
         let props = this.props
         let previews = _.map(props.resources, (resource) => {
-            resource = Object.assign({}, resource, {'onTagClicked': this.props.onTagClicked})
+            resource = Object.assign({}, resource, {
+                'onTagClicked': this.props.onTagClicked,
+                "onDelete": this.props.onDelete
+            })
             let onLabel = () => {props.onLabel(resource.id, resource.tags)}
             switch (resource.type) {
                 case 'zhihu':

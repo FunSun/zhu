@@ -11,6 +11,8 @@ import AddBlogModal from "./AddBlogModal"
 import AddCommentModal from './AddCommentModal'
 import ArticleView from './ArticleView'
 import EditTagModal from './EditTagModal'
+import NotificationManager from './NotificationManager'
+import DeleteAlert from './DeleteAlert'
 
 interface BindingProps {
     uiStore?: UIStore
@@ -66,6 +68,7 @@ export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (
         onLabel={us.showEditTagModal.bind(us)}
         onTagClicked={rs.addTagToQuery.bind(rs)}
         onScrollToEnd={rs.loadMore.bind(rs)}
+        onDelete={us.showDeleteAlert.bind(us)}
     ></ResourceList>)
 })
 
@@ -107,4 +110,22 @@ export const BindingEditTagModal = bindingHelper(['uiStore', 'resourceStore'], (
         onClose={us.hideEditTagModal.bind(us)}
         onSubmit={(tags) => {rs.updateTags(us.editTagModalBuffer.id, tags); us.hideEditTagModal()}}
     ></EditTagModal>
+})
+
+export const BindingNotificationManager = bindingHelper(['uiStore'], (props) => {
+    let us = props.uiStore
+    return <NotificationManager {...us.notifyBuffer}></NotificationManager>
+})
+
+export const BindingDeleteAlert = bindingHelper(['uiStore', 'resourceStore'], (props) => {
+    let us = props.uiStore    
+    let rs = props.resourceStore
+    return <DeleteAlert 
+        visible={us.deleteAlertVisible}
+        onDelete={() => {
+            rs.deleteResource(us.deleteAlertBuffer)
+            us.hideDeleteAlert()
+        }}
+        onCancel={us.hideDeleteAlert.bind(us)}
+    ></DeleteAlert>
 })

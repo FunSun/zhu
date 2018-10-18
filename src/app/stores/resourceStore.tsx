@@ -1,6 +1,7 @@
 import { observable, action, flow } from 'mobx'
 import axios from 'axios'
 import * as _ from 'lodash'
+import UIStore from './uiStore'
 
 export interface Resource {
     id: string
@@ -16,9 +17,11 @@ export interface Blog {
 export default class ResourceStore {
     @observable resources:any = []
     @observable query: string = ""
+    us: UIStore
     offset: number
 
-    constructor() {
+    constructor(us: UIStore) {
+        this.us = us
         this.reload()
     }
 
@@ -46,22 +49,28 @@ export default class ResourceStore {
         
     reload = flow(function * reload ():any {
         try {
-            let query = (this.query.length > 0)?this.query: "random"
+            let query = (this.query.length > 0)?this.query: "_random"
             let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
             this.resources.replace(res.data)
-            this.offset = res.data.length
+            this.offset = this.resources.length
+            this.us.notify("加载成功")
         } catch(err) {
+            this.us.notify("加载失败")
             console.log(err)
         }
     })
 
     loadMore = flow(function * loadMore():any {
         try {
-            let query = (this.query.length > 0)?this.query: "random"
+            let query = (this.query.length > 0)?this.query: "_random"
             let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}&offset=${this.offset}`))
-            this.resources.push(...res.data)
-            this.offset += res.data.length
+            this.resources.replace(_.unionWith(this.resources, res.data, (a:any, b:any) => {
+                return a.id === b.id
+            }))
+            this.offset = this.resources.length
+            this.us.notify("加载成功")
         } catch(err) {
+            this.us.notify("加载失败")    
             console.log(err)
         }
     })
@@ -81,7 +90,9 @@ export default class ResourceStore {
                 content: content
             }
             yield axios.post('http://localhost:8070/resources/comment', body)
+            this.us.notify("添加成功")
         } catch(err) {
+            this.us.notify("添加失败", "error")    
             console.log(err)
         }
     })
@@ -93,7 +104,9 @@ export default class ResourceStore {
                     content: content
             }
             yield axios.post('http://localhost:8070/resources/article', body)
+            this.us.notify("添加成功")
         } catch(err) {
+            this.us.notify("添加失败", "error")
             console.log(err)
         }
     })
@@ -108,7 +121,9 @@ export default class ResourceStore {
             yield axios.post('http://localhost:8070/resources/article', body)
             let res = _.find(this.resources, {id}) as any
             res.content = content
+            this.us.notify("添加成功")
         } catch(err) {
+            this.us.notify("添加失败", "error")    
             console.log(err)
         }
     })
@@ -117,7 +132,28 @@ export default class ResourceStore {
         try {
             let body = {id, tags}
             let res = yield axios.post('http://localhost:8070/resources/tags', body)
+            this.us.notify("更新成功")
+            let target = _.find(this.resources, {id}) as any
+            target.tags.replace(tags)
+            // connecting elemtn only react to this.resource, not this.resource[n].tags
+            // so we need this method to force update
+            this.resources.replace(this.resources) 
         } catch(err) {
+            this.us.notify("更新失败", "error")    
+            console.log(err)
+        }
+    })
+
+    deleteResource = flow(function *deleteResource(id:string):any {
+        try {
+            let res = yield axios.delete('http://localhost:8070/resources?id=' + encodeURIComponent(id))
+            
+            this.resources.replace(_.filter(this.resources, (o) => {
+                return o.id !== id
+            }))
+            this.us.notify("删除成功", "info")
+        } catch(err) {
+            this.us.notify("删除失败", "error")
             console.log(err)
         }
     })

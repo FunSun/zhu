@@ -6,9 +6,19 @@ import {
     BindingAddBlogModal,
     BindingAddCommentModal,
     BindingArticleView,
-    BindingEditTagModal
+    BindingEditTagModal,
+    BindingNotificationManager,
+    BindingDeleteAlert
 } from './bindings'
 import { css } from 'glamor'
+import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles'
+
+const muiTheme = createMuiTheme({
+    typography: {
+        useNextVariants: false,
+        suppressDeprecationWarnings: true
+    }
+})
 
 let appStyle = css({
     width:'100%',
@@ -19,7 +29,7 @@ let appStyle = css({
 
 export default class App extends React.Component {
     render() {
-        return (<div {...appStyle} >
+        return (<MuiThemeProvider theme={muiTheme}> <div {...appStyle} >
             <div>
                 <BindingAppBar></BindingAppBar>
                 <BindingResourceList></BindingResourceList>
@@ -31,6 +41,8 @@ export default class App extends React.Component {
                 <BindingArticleEditor></BindingArticleEditor>
                 <BindingArticleView></BindingArticleView>
             </div>
-        </div>)
+            <BindingNotificationManager></BindingNotificationManager>
+            <BindingDeleteAlert></BindingDeleteAlert>
+        </div></MuiThemeProvider>)
     }
 }

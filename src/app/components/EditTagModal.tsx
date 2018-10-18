@@ -1,53 +1,31 @@
 import * as React from "react"
 import { css } from 'glamor'
-import Input from './Input'
-import Button from './Button'
-import Modal from "./Modal"
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import * as _ from 'lodash'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Chip from '@material-ui/core/Chip'
+import { createMuiTheme } from '@material-ui/core/styles'
+
+const theme = createMuiTheme()
 
 const styles = {
-    container: css({
-        width: '100%',
-        height: '100%',
-        fontSize: 20,
-        borderRadius: 3,
-        paddingLeft: 80,
-        paddingRight: 80,        
-        paddingTop: 70,
-        position: 'relative',
-        boxSizing: 'border-box'
+    dialog: css({
+        width: 480
     }),
-    input: css({
-        width: 400,
-        borderColor: '#1890ff',
-        height: 30,
-        borderStyle: 'solid',
-        borderWidth: 1,
-        marginBottom: 20,
-        paddingLeft: 10,
-        borderRadius:3
+    root: css({
+        display: 'flex',
+        justifyContent: 'flex-start',
+        flexWrap: 'wrap',
+        marginBottom: 2*theme.spacing.unit
     }),
-    tag: css({
-        height: 36,
-        boxSizing: 'border-box',
-        borderRadius: 11,
-        backgroundColor: '#69c0ff',
-        color: '#ffffff',
-        paddingLeft: 10,
-        paddingRight: 10,
-        marginRight: 20,
-        whiteSpace: 'no-wrap',
-        marginBottom: 10,
-        fontSize: 14,
-        float: 'left'
-    }),
-    button: css({
-        position: 'absolute',
-        left: 180,
-        bottom: 75
+    chip: css({
+        margin: theme.spacing.unit,
     })
 }
-
 interface Props {
     visible: boolean
     tags: string[]
@@ -56,11 +34,12 @@ interface Props {
 }
 
 export default class AddResourceModal extends React.Component<Props> {
-    state: {tags:string[]}
+    state: {tags:string[], buffer: ""}
     constructor(props:Props) {
         super(props)
         this.state = {
-            tags: props.tags
+            tags: props.tags,
+            buffer: ""
         }
     }
     componentWillReceiveProps(props:Props) {
@@ -68,9 +47,20 @@ export default class AddResourceModal extends React.Component<Props> {
             tags: props.tags
         })
     }
+    handleChange(e:any) {
+        this.setState({
+            buffer: e.target.value
+        })
+    }
+    handleEnter(e:any) {
+        if (e.key === 'Enter') {
+            this.addTag(this.state.buffer)
+            return
+        }
+    }
     handleSubmit() {
         this.props.onSubmit(this.state.tags)
-    } 
+    }
     addTag(tag:string) {
         this.setState({
             tags: [...this.state.tags, tag]
@@ -78,25 +68,39 @@ export default class AddResourceModal extends React.Component<Props> {
     }
     removeTag(tag:string) {
         this.setState({
-            tags: _.remove(this.state.tags, tag)
+            tags: _.filter(this.state.tags, (o) => (o!==tag))
         })
     }
     render () {
-        console.log(this.state.tags)
-        return <Modal visible={this.props.visible} width={560} height={350} top={180} onClose={this.props.onClose}>
-            <div {...styles.container}>
-                <Input {...styles.input} placeholder={'新增Tag'} onSubmit={this.addTag.bind(this)}></Input>
-                <div style={{lineHeight: '36px'}}>
+        return <Dialog 
+            open={this.props.visible}
+            onClose={this.props.onClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{"修改标签"}</DialogTitle>        
+            <DialogContent className={`${styles.dialog}`}>
+                <div {...styles.root}>
                     {_.map(this.state.tags, (tag)=> {
-                        return <span {...styles.tag}>{tag}&nbsp;<a onClick={()=>{this.removeTag(tag)}}>x</a></span>
+                        return <Chip
+                            className={`${styles.chip}`}
+                            onDelete={()=>{this.removeTag(tag)}} 
+                            label={tag}
+                            color="default"
+                        ></Chip>
                     })}
-                    <div style={{"clear": "both"}}></div>
                 </div>
-                <div {...styles.button }>
-                    <Button type='primary' onClick={()=>{this.handleSubmit()}}>提交</Button>
-                </div>
-                
-            </div>
-        </Modal>
+                <TextField autoFocus fullWidth label={'新增Tag'}  onKeyDown={this.handleEnter.bind(this)} value={this.state.buffer} onChange={ this.handleChange.bind(this)}></TextField>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={this.props.onClose}>
+                   取消
+                </Button>
+                <Button onClick={() => {this.handleSubmit()}} color="secondary" autoFocus>
+                    提交
+                </Button>
+            </DialogActions>
+        </Dialog>
+
     }
 }

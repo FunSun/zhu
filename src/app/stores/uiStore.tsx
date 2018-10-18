@@ -1,14 +1,18 @@
 import { observable, action } from 'mobx'
+import * as _ from 'lodash'
 
 export default class UIStore {
     @observable addBlogModalVisible: boolean = false
     @observable editTagModalVisible: boolean = false
     @observable addCommentModalVisible: boolean = false    
     @observable articleEditorVisible: boolean = false
+    @observable deleteAlertVisible: boolean = false
     @observable articleEditorBuffer: any = {id:"", content:""}
     @observable articleViewVisible: boolean = false
     @observable editTagModalBuffer: any = {id: "", tags: []}
     @observable articleViewBuffer: any = {content:""}
+    @observable notifyBuffer: any = []
+    @observable deleteAlertBuffer = ""
     
     @action
     showAddBlogModal() {
@@ -78,4 +82,24 @@ export default class UIStore {
     hideArticleView() {
         this.articleViewVisible = false        
     }    
+
+    @action
+    notify(msg:string, kind:string='info') {
+        this.notifyBuffer = {
+            id: Date.now(),
+            msg,
+            kind
+        }
+    }
+
+    @action
+    showDeleteAlert(id: string) {
+        this.deleteAlertVisible = true
+        this.deleteAlertBuffer = id
+    }
+
+    @action
+    hideDeleteAlert() {
+        this.deleteAlertVisible = false
+    }
 }
