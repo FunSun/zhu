@@ -10,6 +10,7 @@ import ResourceList from "./ResourceList"
 import AddBlogModal from "./AddBlogModal"
 import AddCommentModal from './AddCommentModal'
 import ArticleView from './ArticleView'
+import BlogView from './BlogView'
 import EditTagModal from './EditTagModal'
 import NotificationManager from './NotificationManager'
 import DeleteAlert from './DeleteAlert'
@@ -65,6 +66,7 @@ export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (
         resources={rs.resources}
         onEditArticle={us.showArticleEditor.bind(us)}
         onShowArticle={us.showArticleView.bind(us)}
+        onShowBlog={us.showBlogView.bind(us)}
         onLabel={us.showEditTagModal.bind(us)}
         onTagClicked={rs.addTagToQuery.bind(rs)}
         onScrollToEnd={rs.loadMore.bind(rs)}
@@ -99,6 +101,15 @@ export const BindingArticleView = bindingHelper(['uiStore'], (props) => {
         content={us.articleViewBuffer.content}
         onClose={us.hideArticleView.bind(us)}
     ></ArticleView>
+})
+
+export const BindingBlogView = bindingHelper(['uiStore'], (props) => {
+    let us = props.uiStore
+    return <BlogView
+        visible={us.blogViewVisible}
+        content={us.blogViewBuffer.content}
+        onClose={us.hideBlogView.bind(us)}
+    ></BlogView>
 })
 
 export const BindingEditTagModal = bindingHelper(['uiStore', 'resourceStore'], (props) => {

@@ -153,7 +153,18 @@ export function ZhihuPreview(props:ZhihuPreviewProps) {
         return (<PreviewFramework {...Object.assign({}, props, {title, desc})} id={props.id} onLabel={props.onLabel}></PreviewFramework>)
 }
 
+interface BlogPreviewProps extends  FamousePreviewProps {
+    id: string
+    highlight: string
+    tags: string[]
+    created: number
+}
 
+export function BlogPreview(props:BlogPreviewProps) {
+    let title = (<a  href={props.from} target='_blank'>{props.title}</a>)
+    let desc = (<div dangerouslySetInnerHTML={{'__html': props.highlight}}></div>)
+        return (<PreviewFramework {...Object.assign({}, props, {title, desc})} id={props.id} onLabel={props.onLabel}></PreviewFramework>)
+}
 
 interface LinkPreviewProps extends FamousePreviewProps {
     from: string

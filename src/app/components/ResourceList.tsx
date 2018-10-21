@@ -1,10 +1,11 @@
 import * as React from "react"
 import * as _ from 'lodash'
-import {ZhihuPreview, LinkPreview, CommentPreview, ArticlePreview} from "./Previews"
+import {ZhihuPreview, BlogPreview, LinkPreview, CommentPreview, ArticlePreview} from "./Previews"
 
 interface Props {
     resources: any[]
     onShowArticle(resource:any):void
+    onShowBlog(resource:any):void    
     onEditArticle(id:string, content:string):void
     onLabel(id:string, tags:string[]):void
     onScrollToEnd():void
@@ -47,6 +48,12 @@ export default class ResourceList extends React.Component<Props> {
             switch (resource.type) {
                 case 'zhihu':
                     return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
+                case 'blog':
+                return <BlogPreview 
+                    key={resource.id} 
+                    onLabel={onLabel} {...resource}
+                    onClick={()=>{props.onShowBlog(resource)}}
+                ></BlogPreview>
                 case 'link':
                     return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
                 case 'comment':

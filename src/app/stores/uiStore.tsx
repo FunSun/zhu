@@ -9,8 +9,10 @@ export default class UIStore {
     @observable deleteAlertVisible: boolean = false
     @observable articleEditorBuffer: any = {id:"", content:""}
     @observable articleViewVisible: boolean = false
+    @observable blogViewVisible: boolean = false    
     @observable editTagModalBuffer: any = {id: "", tags: []}
     @observable articleViewBuffer: any = {content:""}
+    @observable blogViewBuffer: any = {content:""}
     @observable notifyBuffer: any = []
     @observable deleteAlertBuffer = ""
     
@@ -82,6 +84,17 @@ export default class UIStore {
     hideArticleView() {
         this.articleViewVisible = false        
     }    
+
+    @action
+    showBlogView(resource:any) {
+        this.blogViewBuffer.content = resource.content
+        this.blogViewVisible = true
+    }
+
+    @action
+    hideBlogView() {
+        this.blogViewVisible = false
+    }
 
     @action
     notify(msg:string, kind:string='info') {

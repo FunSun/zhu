@@ -8,7 +8,8 @@ import {
     BindingArticleView,
     BindingEditTagModal,
     BindingNotificationManager,
-    BindingDeleteAlert
+    BindingDeleteAlert,
+    BindingBlogView
 } from './bindings'
 import { css } from 'glamor'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
@@ -46,6 +47,7 @@ export default class App extends React.Component {
                 <BindingEditTagModal></BindingEditTagModal>
                 <BindingArticleEditor></BindingArticleEditor>
                 <BindingArticleView></BindingArticleView>
+                <BindingBlogView></BindingBlogView>
             </div>
             <BindingNotificationManager></BindingNotificationManager>
             <BindingDeleteAlert></BindingDeleteAlert>

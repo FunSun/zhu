@@ -10,9 +10,9 @@ import ArticleIcon from '@material-ui/icons/Edit'
 import AddIcon from '@material-ui/icons/AddCircle'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
 import InputBase from '@material-ui/core/InputBase'
-import { withStyles, Theme, WithStyles } from '@material-ui/core/styles'
+import { createStyles, withStyles, Theme, WithStyles } from '@material-ui/core/styles'
 
-const styles = (theme:Theme) => ({
+const styles = (theme:Theme) => createStyles({
   root: {
     width: '100%',
   },
@@ -72,7 +72,7 @@ const styles = (theme:Theme) => ({
   }
 })
 
-interface Props extends WithStyles {
+interface Props extends WithStyles<typeof styles> {
   query: string
   onCommentIconClicked():void
   onEditIconClicked():void
@@ -81,7 +81,7 @@ interface Props extends WithStyles {
   onSubmit():void
 }
 
-export default withStyles(styles as any)(function (props:Props) {
+export default withStyles(styles)((props:Props) => {
   let classes = props.classes
     return (
     <div className={classes.root}>

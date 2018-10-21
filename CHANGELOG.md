@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.16.0] - 2018-10-21
+### Added
+- 增加了BlogView
+
 ## [1.15.1] - 2018-10-19
 ### Changed
 - 用withStyle重构了部分组件
