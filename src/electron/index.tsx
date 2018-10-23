@@ -6,6 +6,9 @@ import * as ReactDOM from "react-dom"
 import { webFrame, shell } from "electron"
 import { css } from "glamor"
 
+// regist api
+(global as any).clipboard = require('electron')
+
 import { runApp } from '../app'
 
 /**

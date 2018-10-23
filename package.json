@@ -1,7 +1,7 @@
 {
-  "name": "archiver-view",
-  "productName": "Archiver's viewer",
-  "main": "build/main.js",
+  "name": "zhu-ui",
+  "productName": "Zhu UI",
+  "main": "build/electron/main.js",
   "version": "1.0.0",
   "description": "Archiver of content",
   "license": "MIT",
@@ -12,9 +12,12 @@
   },
   "scripts": {
     "clean": "rm -rf .fusebox out dist coverage",
-    "build": "NODE_ENV=production ts-node fuse",
-    "dev": "ts-node fuse",
-    "test": "jest"
+    "build": "NODE_ENV=production ts-node fuse electron",
+    "dev": "ts-node fuse electron",    
+    "web": "ts-node fuse web",
+    "test": "jest",
+    "dist": "electron-packager",
+    "dist-windows": "electron-packager --platform win32"
   },
   "dependencies": {
     "@material-ui/core": "^3.2.0",
@@ -46,6 +49,7 @@
     "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "electron": "^2.0.0",
+    "electron-packager": "^12.2.0",
     "fuse-box": "^3.0.2",
     "jest": "^23.6.0",
     "react-powerplug": "^0.1.2",

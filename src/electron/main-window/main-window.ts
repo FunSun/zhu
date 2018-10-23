@@ -39,7 +39,7 @@ export function createMainWindow(appPath: string, showDelay: number = 100) {
   window.maximize()  
   window.loadURL(
     format({
-      pathname: join(appPath, "build/index.html"),
+      pathname: join(appPath, "build/electron/index.html"),
       protocol: "file:",
       slashes: true,
     }),

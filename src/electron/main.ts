@@ -2,6 +2,7 @@ import { app, BrowserWindow } from "electron"
 import { createMainWindow } from "./main-window"
 import * as log from "electron-log"
 const isDev = true
+import {join} from 'path'
 
 log.transports.file.level = isDev ? false : "info"
 log.transports.console.level = isDev ? "debug" : false
@@ -12,8 +13,8 @@ const appPath = app.getAppPath()
 
 // fires when Electron is ready to start
 app.on("ready", () => {
-  BrowserWindow.addDevToolsExtension("/home/quanbit/.config/chromium/Profile 1/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.2.3_0")  
-  BrowserWindow.addDevToolsExtension("/workspace/src/archiver-view/extensions/mobx")
+  // BrowserWindow.addDevToolsExtension(join(process.cwd(), "extensions/react"))  
+  // BrowserWindow.addDevToolsExtension(join(process.cwd(), "extensions/mobx"))
   createMainWindow(appPath) as any
 })
 

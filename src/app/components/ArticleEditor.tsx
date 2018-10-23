@@ -1,5 +1,5 @@
 import * as React from "react"
-const {clipboard} = require('electron')
+
 import { css } from 'glamor'
 import Button from './Button'
 import Modal from './Modal'
@@ -16,25 +16,8 @@ import 'brace/ext/language_tools'
 
 import * as _ from 'lodash'
 
-import * as fs from 'fs'
-
-const completer:any = {
-    getCompletions: (editor:any, session:any, pos:any, prefix:string, cb:any) => {
-        if (!_.startsWith(prefix, 'images')) {
-            cb(null, [])
-            return
-        }
-        fs.readdir("./build/images", (err, files)=> {
-            let completions = _.map(files, (file) => {
-                return {
-                    caption: file,
-                    value: 'images/' + file,
-                    meta: 'images'
-                }
-            })
-            cb(null, completions)
-        })
-    }
+function handleCopy(v:string) {
+    (global as any).clipboard.writeText(v)
 }
 
 const styles = {
@@ -124,9 +107,9 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                     wrapEnabled={true}
                     keyboardHandler="emacs"
                     commands={(this.shortcuts as any)}
-                    onCopy={(v) => {clipboard.writeText(v)}}
+                    onCopy={handleCopy}
                     setOptions={{
-                        enableBasicAutocompletion: ([completer]) as any,
+                        enableBasicAutocompletion: true,
                         enableLiveAutocompletion: false,
                     }}
                 >
