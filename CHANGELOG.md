@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.0] - 2018-10-22
+### Added
+- 增加了web平台
+### Changed
+- 更改了项目名称
+
 ## [1.16.0] - 2018-10-21
 ### Added
 - 增加了BlogView
