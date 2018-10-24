@@ -41,6 +41,7 @@ interface ArticleEditorProps {
     visible: boolean
     rid: string,
     content: string,
+    keybindings?: string
     onAddArticle(content:string):void
     onUpdateArticle(id:string, content:string):void
     onClose():void
@@ -95,6 +96,7 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
         let widget: React.ReactElement<any>
             if (this.state.value == 0) {
                 widget = (<AceEditor 
+                    showGutter={false}
                     mode="markdown" 
                     theme="chrome" 
                     onChange={(v)=>{this.setState({content:v})}} 
@@ -105,7 +107,7 @@ export default class ArticleEditor extends React.Component<ArticleEditorProps> {
                     height={"800px"}
                     showPrintMargin={false}
                     wrapEnabled={true}
-                    keyboardHandler="emacs"
+                    keyboardHandler={(this.props.keybindings!=="default")?this.props.keybindings:undefined}
                     commands={(this.shortcuts as any)}
                     onCopy={handleCopy}
                     setOptions={{

@@ -1,6 +1,7 @@
 import * as React from "react"
 import ResourceStore from "../stores/resourceStore"
 import UIStore from "../stores/uiStore"
+import SettingStore from '../stores/settingStore'
 import { inject, observer } from "mobx-react"
 
 import ArticleEditor from './ArticleEditor'
@@ -14,10 +15,12 @@ import BlogView from './BlogView'
 import EditTagModal from './EditTagModal'
 import NotificationManager from './NotificationManager'
 import DeleteAlert from './DeleteAlert'
+import SettingModal from './SettingModal'
 
 interface BindingProps {
     uiStore?: UIStore
     resourceStore?: ResourceStore
+    settingStore?: SettingStore
     [key:string]:any
 }
 
@@ -26,11 +29,13 @@ function bindingHelper(stores:string[], comp:(props:BindingProps)=>React.ReactEl
 }
 
 
-export const BindingArticleEditor = bindingHelper(["uiStore", "resourceStore"], (props) => {
+export const BindingArticleEditor = bindingHelper(["uiStore", "resourceStore", "settingStore"], (props) => {
     let us = props.uiStore
     let rs = props.resourceStore
+    let ss = props.settingStore
     return (<ArticleEditor
         rid={us.articleEditorBuffer.id}
+        keybindings={ss.keybindings}
         content={us.articleEditorBuffer.content}
         visible={us.articleEditorVisible}
         onAddArticle={rs.addArticle.bind(rs)}
@@ -49,7 +54,7 @@ export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props)
     let us = props.uiStore
     return <AppBar
         query={rs.query}
-        onAddIconClicked={us.showAddBlogModal.bind(us)}
+        onAddIconClicked={us.showSettingModal.bind(us)}
         onCommentIconClicked={us.showAddCommentModal.bind(us)}
         onEditIconClicked={()=>{us.showArticleEditor("", "")}}
         onQueryChange={rs.updateQuery.bind(rs)}
@@ -139,4 +144,19 @@ export const BindingDeleteAlert = bindingHelper(['uiStore', 'resourceStore'], (p
         }}
         onCancel={us.hideDeleteAlert.bind(us)}
     ></DeleteAlert>
+})
+
+export const BindingSettingModal = bindingHelper(['uiStore', 'settingStore'], (props) => {
+    let ss = props.settingStore
+    let us = props.uiStore
+    return <SettingModal
+        visible={us.settingModalVisible}
+        server={ss.server}
+        keybindngs={ss.keybindings}
+        safeMode={ss.safeMode}
+        onServerChange={ss.setServer.bind(ss)}
+        onKeybindingChange={ss.setKeybindings.bind(ss)}
+        onSafeModeToggle={ss.toggleSafeMode.bind(ss)}
+        onClose={us.hideSettingModal.bind(us)}
+    ></SettingModal>
 })

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import SearchIcon from '@material-ui/icons/Search'
 import ArticleIcon from '@material-ui/icons/Edit'
-import AddIcon from '@material-ui/icons/AddCircle'
+import SettingsIcon from '@material-ui/icons/Settings'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
 import InputBase from '@material-ui/core/InputBase'
 import { createStyles, withStyles, Theme, WithStyles } from '@material-ui/core/styles'
@@ -106,7 +106,7 @@ export default withStyles(styles)((props:Props) => {
           <div className={classes.sectionDesktop}>
             <IconButton color="inherit" onClick={props.onCommentIconClicked}><CommentIcon /></IconButton>
             <IconButton color="inherit" onClick={props.onEditIconClicked}><ArticleIcon /></IconButton>
-            <IconButton color="inherit" onClick={props.onAddIconClicked}><AddIcon /></IconButton>
+            <IconButton color="inherit" onClick={props.onAddIconClicked}><SettingsIcon /></IconButton>
           </div>
         </Toolbar>
       </AppBar>

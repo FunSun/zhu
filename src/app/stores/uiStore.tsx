@@ -15,6 +15,7 @@ export default class UIStore {
     @observable blogViewBuffer: any = {content:""}
     @observable notifyBuffer: any = []
     @observable deleteAlertBuffer = ""
+    @observable settingModalVisible: boolean = false
     
     @action
     showAddBlogModal() {
@@ -115,4 +116,14 @@ export default class UIStore {
     hideDeleteAlert() {
         this.deleteAlertVisible = false
     }
+
+    @action
+    showSettingModal() {
+        this.settingModalVisible = true
+    }
+
+    @action
+    hideSettingModal() {
+        this.settingModalVisible = false
+    }    
 }

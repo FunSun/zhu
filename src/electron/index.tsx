@@ -1,13 +1,18 @@
 // This is the entry point for the renderer process.
 //
 // Here we disable a few electron settings and mount the root component.
-import * as React from "react"
-import * as ReactDOM from "react-dom"
 import { webFrame, shell } from "electron"
 import { css } from "glamor"
+import {defaultSetting} from '../app/lib/settings'
 
-// regist api
-(global as any).clipboard = require('electron')
+// default setting
+defaultSetting("safeMode", false)
+defaultSetting("server", "http://localhost:8070")
+
+defaultSetting("keybindings", "default")
+
+let glb = (global as any)
+glb.clipboard = require('electron').clipboard as any
 
 import { runApp } from '../app'
 
@@ -29,7 +34,6 @@ css.global("html, body", {
   // font
   font: "caption",
 
-  // text rendering
   WebkitFontSmoothing: "subpixel-antialiased",
   textRendering: "optimizeLegibility",
 })

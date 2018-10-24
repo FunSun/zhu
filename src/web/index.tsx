@@ -2,6 +2,7 @@
 //
 // Here we disable a few electron settings and mount the root component.
 import { css } from "glamor"
+import {defaultSetting} from '../app/lib/settings'
 
 import { runApp } from '../app'
 
@@ -9,6 +10,11 @@ import { runApp } from '../app'
  * CSS reset
  */
 import "glamor/reset"
+
+// default setting
+defaultSetting("safeMode", false)
+defaultSetting("server", "")
+defaultSetting("keybindings", "default")
 
 /**
  * Electron-focused CSS resets

@@ -2,6 +2,7 @@ import { observable, action, flow } from 'mobx'
 import axios from 'axios'
 import * as _ from 'lodash'
 import UIStore from './uiStore'
+import SettingStore from './settingStore'
 
 export interface Resource {
     id: string
@@ -18,10 +19,12 @@ export default class ResourceStore {
     @observable resources:any = []
     @observable query: string = ""
     us: UIStore
+    ss: SettingStore
     offset: number
 
-    constructor(us: UIStore) {
+    constructor(us: UIStore, ss: SettingStore) {
         this.us = us
+        this.ss = ss
         this.reload()
     }
 
@@ -50,7 +53,8 @@ export default class ResourceStore {
     reload = flow(function * reload ():any {
         try {
             let query = (this.query.length > 0)?this.query: "_random"
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}`))
+            query = this.processSafeMode(query)            
+            let res = yield axios.get(encodeURI(this.ss.server + `/resources/search?q=${query}`))
             this.resources.replace(res.data)
             this.offset = this.resources.length
             this.us.notify("加载成功")
@@ -63,7 +67,8 @@ export default class ResourceStore {
     loadMore = flow(function * loadMore():any {
         try {
             let query = (this.query.length > 0)?this.query: "_random"
-            let res = yield axios.get(encodeURI(`http://localhost:8070/resources/search?q=${query}&offset=${this.offset}`))
+            query = this.processSafeMode(query)
+            let res = yield axios.get(encodeURI(this.ss.server + `/resources/search?q=${query}&offset=${this.offset}`))
             this.resources.replace(_.unionWith(this.resources, res.data, (a:any, b:any) => {
                 return a.id === b.id
             }))
@@ -78,7 +83,7 @@ export default class ResourceStore {
     addBlog = flow(function * addBlog(blog: Blog): any {
         try {
             let body = [blog.from, blog.title, blog.tags.join("\n"), blog.content].join("\n")
-            yield axios.post('http://localhost:8070/resources/blog', body)
+            yield axios.post(this.ss.server + '/resources/blog', body)
         } catch(err) {
             console.log(err)
         }
@@ -89,7 +94,7 @@ export default class ResourceStore {
             let body = {
                 content: content
             }
-            yield axios.post('http://localhost:8070/resources/comment', body)
+            yield axios.post(this.ss.server + '/resources/comment', body)
             this.us.notify("添加成功")
         } catch(err) {
             this.us.notify("添加失败", "error")    
@@ -103,7 +108,7 @@ export default class ResourceStore {
                     title: "",
                     content: content
             }
-            yield axios.post('http://localhost:8070/resources/article', body)
+            yield axios.post(this.ss.server + '/resources/article', body)
             this.us.notify("添加成功")
         } catch(err) {
             this.us.notify("添加失败", "error")
@@ -118,7 +123,7 @@ export default class ResourceStore {
                     title: "",
                     content: content
             }
-            yield axios.post('http://localhost:8070/resources/article', body)
+            yield axios.post(this.ss.server + '/resources/article', body)
             let res = _.find(this.resources, {id}) as any
             res.content = content
             this.us.notify("添加成功")
@@ -131,7 +136,7 @@ export default class ResourceStore {
     updateTags = flow(function * updateTags(id: string, tags: string[]):any {
         try {
             let body = {id, tags}
-            let res = yield axios.post('http://localhost:8070/resources/tags', body)
+            let res = yield axios.post(this.ss.server + '/resources/tags', body)
             this.us.notify("更新成功")
             let target = _.find(this.resources, {id}) as any
             target.tags.replace(tags)
@@ -146,7 +151,7 @@ export default class ResourceStore {
 
     deleteResource = flow(function *deleteResource(id:string):any {
         try {
-            let res = yield axios.delete('http://localhost:8070/resources?id=' + encodeURIComponent(id))
+            let res = yield axios.delete(this.ss.server + '/resources?id=' + encodeURIComponent(id))
             
             this.resources.replace(_.filter(this.resources, (o) => {
                 return o.id !== id
@@ -157,4 +162,11 @@ export default class ResourceStore {
             console.log(err)
         }
     })
+
+    processSafeMode(q: string) {
+        if (!this.ss.safeMode && !_.includes(q, '_safe')) {
+            q += " _safe"
+        }
+        return q
+    }
 }
