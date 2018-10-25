@@ -9,8 +9,10 @@ import {css} from 'glamor'
 
 interface Props {
     visible: boolean
+    title: string
+    desc: string
     onCancel():void
-    onDelete():void
+    onConfirm():void
 }
 
 const dialogStyle = css({
@@ -24,18 +26,18 @@ export default function DeleteAlert(props: Props)  {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"确认删除?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
         <DialogContent className={`${dialogStyle}`}>
           <DialogContentText id="alert-dialog-description">
-            你确定要删除这个条目吗？
+            {props.desc}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onCancel}>
             取消
           </Button>
-          <Button onClick={props.onDelete} color="secondary" autoFocus>
-            删除
+          <Button onClick={props.onConfirm} color="secondary" autoFocus>
+            确认
           </Button>
         </DialogActions>
       </Dialog>)

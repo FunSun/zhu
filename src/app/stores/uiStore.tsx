@@ -6,7 +6,7 @@ export default class UIStore {
     @observable editTagModalVisible: boolean = false
     @observable addCommentModalVisible: boolean = false    
     @observable articleEditorVisible: boolean = false
-    @observable deleteAlertVisible: boolean = false
+    @observable confirmAlertVisible: boolean = false
     @observable articleEditorBuffer: any = {id:"", content:""}
     @observable articleViewVisible: boolean = false
     @observable blogViewVisible: boolean = false    
@@ -14,8 +14,11 @@ export default class UIStore {
     @observable articleViewBuffer: any = {content:""}
     @observable blogViewBuffer: any = {content:""}
     @observable notifyBuffer: any = []
-    @observable deleteAlertBuffer = ""
+    @observable confirmAlertTitle:string = ""
+    @observable confirmAlertDesc: string = ""
+    @observable confirmAlertAction = ()=>{}
     @observable settingModalVisible: boolean = false
+    @observable backupsModalVisible: boolean = false
     
     @action
     showAddBlogModal() {
@@ -107,14 +110,16 @@ export default class UIStore {
     }
 
     @action
-    showDeleteAlert(id: string) {
-        this.deleteAlertVisible = true
-        this.deleteAlertBuffer = id
+    showConfirmAlert(title: string, desc: string, action:()=>void) {
+        this.confirmAlertVisible = true
+        this.confirmAlertTitle = title
+        this.confirmAlertDesc = desc
+        this.confirmAlertAction = action
     }
 
     @action
-    hideDeleteAlert() {
-        this.deleteAlertVisible = false
+    hideConfirmAlert() {
+        this.confirmAlertVisible = false
     }
 
     @action
@@ -126,4 +131,15 @@ export default class UIStore {
     hideSettingModal() {
         this.settingModalVisible = false
     }    
+
+    @action
+    showBackupsModal() {
+        this.backupsModalVisible = true
+    }
+
+    @action
+    hideBackupsModal() {
+        this.backupsModalVisible = false
+    }    
+
 }

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.0] - 2018-10-26
+### Added
+- 添加了备份恢复面板
+### Changed
+- 将DeleteAlert重构为更通用的ConfirmAlert
+
 ## [1.18.0] - 2018-10-24
 ### Added
 - 增加了本地设置

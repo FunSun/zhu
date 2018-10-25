@@ -14,8 +14,9 @@ import ArticleView from './ArticleView'
 import BlogView from './BlogView'
 import EditTagModal from './EditTagModal'
 import NotificationManager from './NotificationManager'
-import DeleteAlert from './DeleteAlert'
+import ConfirmAlert from './ConfirmAlert'
 import SettingModal from './SettingModal'
+import BackupsModal from './BackupsModal'
 
 interface BindingProps {
     uiStore?: UIStore
@@ -62,6 +63,9 @@ export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props)
     ></AppBar>
 })
 
+const DeleteResourceConfirmTitle = "确认删除?"
+const DeleteResourceConfirmDesc = "你确定要删除这个条目吗?"
+
 export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
     let us = props.uiStore
@@ -75,7 +79,11 @@ export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (
         onLabel={us.showEditTagModal.bind(us)}
         onTagClicked={rs.addTagToQuery.bind(rs)}
         onScrollToEnd={rs.loadMore.bind(rs)}
-        onDelete={us.showDeleteAlert.bind(us)}
+        onDelete={(id:string) => {
+            us.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
+                rs.deleteResource(id)
+            })
+        }}
     ></ResourceList>)
 })
 
@@ -133,17 +141,18 @@ export const BindingNotificationManager = bindingHelper(['uiStore'], (props) => 
     return <NotificationManager {...us.notifyBuffer}></NotificationManager>
 })
 
-export const BindingDeleteAlert = bindingHelper(['uiStore', 'resourceStore'], (props) => {
+export const BindingConfirmAlert = bindingHelper(['uiStore'], (props) => {
     let us = props.uiStore    
-    let rs = props.resourceStore
-    return <DeleteAlert 
-        visible={us.deleteAlertVisible}
-        onDelete={() => {
-            rs.deleteResource(us.deleteAlertBuffer)
-            us.hideDeleteAlert()
+    return <ConfirmAlert
+        visible={us.confirmAlertVisible}
+        title={us.confirmAlertTitle}
+        desc={us.confirmAlertDesc}
+        onConfirm={() => {
+            us.confirmAlertAction()
+            us.hideConfirmAlert()
         }}
-        onCancel={us.hideDeleteAlert.bind(us)}
-    ></DeleteAlert>
+        onCancel={us.hideConfirmAlert.bind(us)}
+    ></ConfirmAlert>
 })
 
 export const BindingSettingModal = bindingHelper(['uiStore', 'settingStore'], (props) => {
@@ -157,6 +166,40 @@ export const BindingSettingModal = bindingHelper(['uiStore', 'settingStore'], (p
         onServerChange={ss.setServer.bind(ss)}
         onKeybindingChange={ss.setKeybindings.bind(ss)}
         onSafeModeToggle={ss.toggleSafeMode.bind(ss)}
+        onOpenBackups={() => {us.hideSettingModal(); ss.openBackups()}}
         onClose={us.hideSettingModal.bind(us)}
     ></SettingModal>
+})
+
+const RestoreConfirmTitle = "数据恢复"
+const RestoreConfirmDesc = "确定将数据恢复这个时间点吗？"
+const DeleteBackupConfirmTitle = "删除备份"
+const DeleteBackupConfirmDesc = "确定要删除这个备份吗？"
+export const BindingBackupsModal = bindingHelper(['uiStore', 'settingStore'], (props)=> {
+    let ss = props.settingStore
+    let us = props.uiStore
+    ss.backups.length
+    return <BackupsModal
+        visible={us.backupsModalVisible}
+        backups={ss.backups}
+        onAddBackup={ss.addBackup.bind(ss)}
+        onRestore={(id:string)=> {
+            us.showConfirmAlert(
+                RestoreConfirmTitle,
+                RestoreConfirmDesc,
+                () => {
+                    ss.restoreBackup(id)
+                }
+            )
+        }}
+        onDelete={(id:string) => {
+            us.showConfirmAlert(
+                DeleteBackupConfirmTitle,
+                DeleteBackupConfirmDesc,
+                () => {
+                ss.deleteBackup(id)
+            })
+        }}
+        onClose={us.hideBackupsModal.bind(us)}
+    ></BackupsModal>
 })

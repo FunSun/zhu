@@ -12,18 +12,24 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Switch from '@material-ui/core/Switch'
 import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { IconButton } from "@material-ui/core"
 
 const styles = (theme:Theme) => createStyles({
     dialog: {
         width: 480,
-        height: 300,
+        height: 320,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around'
     },
     switch: {
+        justifyContent: 'space-between',
+        marginLeft: 0
+    },
+    open: {
         justifyContent: 'space-between',
         marginLeft: 0
     }
@@ -37,6 +43,7 @@ interface Props extends WithStyles<typeof styles> {
     onKeybindingChange(v: string):void
     onServerChange(v: string):void
     onSafeModeToggle(checked: boolean):void
+    onOpenBackups():void
     onClose():void
 }
 
@@ -77,6 +84,15 @@ export default withStyles(styles)((props:Props) => {
                 }
                 label="Safe Mode"
                 />
+            <FormControlLabel
+                classes={{
+                    root: classes.open
+                }}
+                labelPlacement="start"
+                control={<IconButton color="inherit" onClick={props.onOpenBackups}><OpenInNewIcon /></IconButton>}
+                label="Backups"
+                />
+
         </DialogContent>
         <DialogActions>
             <Button onClick={props.onClose}>
