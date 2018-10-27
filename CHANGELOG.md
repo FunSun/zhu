@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.0] - 2018-10-27
+### Added
+- ArticleEditor称为更加全面的编辑器
+### Fixed
+- EditTagModal完全使用material的系统
+
 ## [1.19.0] - 2018-10-26
 ### Added
 - 添加了备份恢复面板

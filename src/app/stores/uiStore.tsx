@@ -7,7 +7,6 @@ export default class UIStore {
     @observable addCommentModalVisible: boolean = false    
     @observable articleEditorVisible: boolean = false
     @observable confirmAlertVisible: boolean = false
-    @observable articleEditorBuffer: any = {id:"", content:""}
     @observable articleViewVisible: boolean = false
     @observable blogViewVisible: boolean = false    
     @observable editTagModalBuffer: any = {id: "", tags: []}
@@ -62,14 +61,7 @@ export default class UIStore {
     }
 
     @action
-    showArticleEditor(id?:string, content?:string) {
-        if (id) {
-            this.articleEditorBuffer.id = id
-            this.articleEditorBuffer.content = content
-        } else {
-            this.articleEditorBuffer.id = ""
-            this.articleEditorBuffer.content = ""
-        }
+    showArticleEditor() {
         this.articleEditorVisible = true
     }
 

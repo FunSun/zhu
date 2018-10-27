@@ -102,37 +102,6 @@ export default class ResourceStore {
         }
     })
 
-    addArticle = flow(function * addArticle(content:string): any {
-        try {
-            let body = {
-                    title: "",
-                    content: content
-            }
-            yield axios.post(this.ss.server + '/resources/article', body)
-            this.us.notify("添加成功")
-        } catch(err) {
-            this.us.notify("添加失败", "error")
-            console.log(err)
-        }
-    })
-
-    updateArticle = flow(function * updateArticle(id:string, content:string): any {
-        try {
-            let body = {
-                    id: id,
-                    title: "",
-                    content: content
-            }
-            yield axios.post(this.ss.server + '/resources/article', body)
-            let res = _.find(this.resources, {id}) as any
-            res.content = content
-            this.us.notify("添加成功")
-        } catch(err) {
-            this.us.notify("添加失败", "error")    
-            console.log(err)
-        }
-    })
-    
     updateTags = flow(function * updateTags(id: string, tags: string[]):any {
         try {
             let body = {id, tags}

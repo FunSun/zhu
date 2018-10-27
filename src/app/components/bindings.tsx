@@ -2,6 +2,7 @@ import * as React from "react"
 import ResourceStore from "../stores/resourceStore"
 import UIStore from "../stores/uiStore"
 import SettingStore from '../stores/settingStore'
+import EditorStore from '../stores/editorStore'
 import { inject, observer } from "mobx-react"
 
 import ArticleEditor from './ArticleEditor'
@@ -22,6 +23,7 @@ interface BindingProps {
     uiStore?: UIStore
     resourceStore?: ResourceStore
     settingStore?: SettingStore
+    editorStore?: EditorStore
     [key:string]:any
 }
 
@@ -30,17 +32,23 @@ function bindingHelper(stores:string[], comp:(props:BindingProps)=>React.ReactEl
 }
 
 
-export const BindingArticleEditor = bindingHelper(["uiStore", "resourceStore", "settingStore"], (props) => {
+export const BindingArticleEditor = bindingHelper(["uiStore", "editorStore", "settingStore"], (props) => {
     let us = props.uiStore
-    let rs = props.resourceStore
     let ss = props.settingStore
+    let es = props.editorStore
+    es.tabs.length
     return (<ArticleEditor
-        rid={us.articleEditorBuffer.id}
-        keybindings={ss.keybindings}
-        content={us.articleEditorBuffer.content}
         visible={us.articleEditorVisible}
-        onAddArticle={rs.addArticle.bind(rs)}
-        onUpdateArticle={rs.updateArticle.bind(rs)}
+        keybindings={ss.keybindings}
+        curTab={es.curTab}
+        tabs={es.tabs}
+        curDirty={es.curDirty}
+        curContent={es.curContent}
+        onAdd={es.newAritcle.bind(es)}
+        onSwitch={es.switchTab.bind(es)}
+        onCloseTab={es.closeTab.bind(es)}
+        onSave={es.saveCurrent.bind(es)}
+        onChange={es.bufferContent.bind(es)}
         onClose={us.hideArticleEditor.bind(us)}
     ></ArticleEditor>)
 })
@@ -50,14 +58,15 @@ export const BindingScrollToBottomDetector = bindingHelper(['resourceStore'], (p
     return (<ScrollToBottomDetector onScrollToEnd={rs.loadMore.bind(rs)}></ScrollToBottomDetector>)
 })
 
-export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props) => {
+export const BindingAppBar = bindingHelper(['uiStore', 'editorStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
     let us = props.uiStore
+    let es = props.editorStore
     return <AppBar
         query={rs.query}
         onAddIconClicked={us.showSettingModal.bind(us)}
         onCommentIconClicked={us.showAddCommentModal.bind(us)}
-        onEditIconClicked={()=>{us.showArticleEditor("", "")}}
+        onEditIconClicked={es.openEditor.bind(es)}
         onQueryChange={rs.updateQuery.bind(rs)}
         onSubmit={rs.reload.bind(rs)}
     ></AppBar>
@@ -66,14 +75,15 @@ export const BindingAppBar = bindingHelper(['uiStore', 'resourceStore'], (props)
 const DeleteResourceConfirmTitle = "确认删除?"
 const DeleteResourceConfirmDesc = "你确定要删除这个条目吗?"
 
-export const BindingResourceList = bindingHelper(['uiStore', 'resourceStore'], (props) => {
+export const BindingResourceList = bindingHelper(['uiStore', 'editorStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
     let us = props.uiStore
+    let es = props.editorStore
     // explicit declare dependency on inner structure
     rs.resources.length
     return (<ResourceList
         resources={rs.resources}
-        onEditArticle={us.showArticleEditor.bind(us)}
+        onEditArticle={es.editArticle.bind(es)}
         onShowArticle={us.showArticleView.bind(us)}
         onShowBlog={us.showBlogView.bind(us)}
         onLabel={us.showEditTagModal.bind(us)}

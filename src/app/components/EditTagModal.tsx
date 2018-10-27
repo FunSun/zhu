@@ -1,5 +1,4 @@
 import * as React from "react"
-import { css } from 'glamor'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import * as _ from 'lodash'
@@ -8,32 +7,32 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Chip from '@material-ui/core/Chip'
-import { createMuiTheme } from '@material-ui/core/styles'
 
-const theme = createMuiTheme()
+import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-const styles = {
-    dialog: css({
+const styles = (theme:Theme) => createStyles({
+    dialog: {
         width: 480
-    }),
-    root: css({
+    },
+    root: {
         display: 'flex',
         justifyContent: 'flex-start',
         flexWrap: 'wrap',
         marginBottom: 2*theme.spacing.unit
-    }),
-    chip: css({
+    },
+    chip: {
         margin: theme.spacing.unit,
-    })
-}
-interface Props {
+    }
+})
+
+interface Props extends WithStyles<typeof styles>{
     visible: boolean
     tags: string[]
     onSubmit(tags:string[]):void
     onClose():void
 }
 
-export default class AddResourceModal extends React.Component<Props> {
+export default withStyles(styles)(class AddResourceModal extends React.Component<Props> {
     state: {tags:string[], buffer: ""}
     constructor(props:Props) {
         super(props)
@@ -72,6 +71,7 @@ export default class AddResourceModal extends React.Component<Props> {
         })
     }
     render () {
+        let classes = this.props.classes
         return <Dialog 
             open={this.props.visible}
             onClose={this.props.onClose}
@@ -79,11 +79,11 @@ export default class AddResourceModal extends React.Component<Props> {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">{"修改标签"}</DialogTitle>        
-            <DialogContent className={`${styles.dialog}`}>
-                <div {...styles.root}>
+            <DialogContent className={classes.dialog}>
+                <div className={classes.root}>
                     {_.map(this.state.tags, (tag)=> {
                         return <Chip
-                            className={`${styles.chip}`}
+                            className={classes.chip}
                             onDelete={()=>{this.removeTag(tag)}} 
                             label={tag}
                             color="default"
@@ -103,4 +103,4 @@ export default class AddResourceModal extends React.Component<Props> {
         </Dialog>
 
     }
-}
+})

@@ -197,7 +197,7 @@ interface ArticlePreviewProps extends BaseProps {
 
 export function ArticlePreview(props:ArticlePreviewProps) {
     let title = props.title
-    if (title ==="" && props.content.startsWith("# ")) {
+    if (title ==="" && props.content && props.content.startsWith("# ")) {
         let headline = _.split(props.content, '\n')[0]
         title = _.trimStart(headline, '# ')
     }
