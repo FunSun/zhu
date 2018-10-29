@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.2] - 2018-10-29
+### Fixed
+- 解决了ReousrceList高度的问题
+
 ## [1.20.1] - 2018-10-29
 ### Changed
 - 消除对glamor的依赖

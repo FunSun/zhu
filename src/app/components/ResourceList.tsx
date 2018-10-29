@@ -16,24 +16,34 @@ interface Props {
 
 export default class ResourceList extends React.Component<Props> {
     ref: any
+    state = {
+        height: 0
+    }
     constructor(props:Props) {
         super(props)
         this.ref = React.createRef()
+        this.state.height = window.innerHeight - 64
     }
 
     componentDidMount() {
         let node = this.ref.current as HTMLElement
+        window.addEventListener('resize', this.handleResize.bind(this), false)
         node.addEventListener('scroll', this.handleScroll.bind(this), false)
     }
 
     componentWillUnmount() {
         let node = this.ref.current as HTMLElement        
+        window.removeEventListener('resize', this.handleResize.bind(this), false)
         node.removeEventListener('scroll', this.handleScroll.bind(this), false)
     }
     
+    handleResize() {
+        this.setState({height: window.innerHeight - 64})
+    }
+
     handleScroll() {
         let node = this.ref.current as HTMLElement
-        if ((node.scrollHeight - node.scrollTop) === 950) {
+        if ((node.scrollHeight - node.scrollTop) === this.state.height) {
             this.props.onScrollToEnd()
         }
     }
@@ -70,7 +80,7 @@ export default class ResourceList extends React.Component<Props> {
             }
             return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
         })
-        return (<div ref={this.ref} style={{overflowY: 'scroll', height: 890, width:'100%', paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        return (<div ref={this.ref} style={{overflowY: 'scroll', width:'100%', height: this.state.height, paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             {previews}
         </div>)
     }
