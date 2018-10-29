@@ -1,7 +1,8 @@
 import * as React from 'react'
+import * as _ from 'lodash'
+
 const createPlotlyComponent  = require('react-plotly.js/factory') as any
 const OriginPlot = createPlotlyComponent(Plotly) as any
-import * as _ from 'lodash'
 
 interface Props {
     children: string

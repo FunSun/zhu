@@ -1,21 +1,18 @@
 import * as React from "react"
-import TextField from '@material-ui/core/TextField'
 import * as _ from 'lodash'
-import Dialog from '@material-ui/core/Dialog'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import MenuItem from '@material-ui/core/MenuItem'
-import Select from '@material-ui/core/Select'
-import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import InputLabel from '@material-ui/core/InputLabel'
-import Switch from '@material-ui/core/Switch'
-import Button from '@material-ui/core/Button'
-import DialogActions from '@material-ui/core/DialogActions'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { IconButton } from "@material-ui/core"
+import {
+    Button,
+    Dialog, DialogContent, DialogTitle, DialogActions,
+    IconButton,
+    InputLabel,
+    FormControl, FormControlLabel, 
+    MenuItem, 
+    Select, Switch,
+    TextField
+} from '@material-ui/core'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 const styles = (theme:Theme) => createStyles({
     dialog: {

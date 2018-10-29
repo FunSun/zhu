@@ -1,13 +1,6 @@
 import * as React from 'react'
 import * as _ from 'lodash'
 
-interface Props {
-    dsl: string
-    ctx?: any
-    width?: number
-    height?: number
-}
-
 function filledShapeBase(ctx:any, points:any[]) {
     if (points.length <= 2) {
         return
@@ -22,6 +15,13 @@ function filledShapeBase(ctx:any, points:any[]) {
         ctx.lineTo(point[0]+200, 200-point[1])
     })
     ctx.fill()
+}
+
+interface Props {
+    dsl: string
+    ctx?: any
+    width?: number
+    height?: number
 }
 
 export default class Canvas extends React.Component<Props> {

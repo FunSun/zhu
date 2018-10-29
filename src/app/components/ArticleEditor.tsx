@@ -1,19 +1,17 @@
 import * as React from "react"
+import * as _ from 'lodash'
 
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-
-import Dialog from '@material-ui/core/Dialog'
-import DialogContent from '@material-ui/core/DialogContent'
-import Button from '@material-ui/core/Button'
-import ViewIcon from '@material-ui/icons/RemoveRedEye'
-import EditIcon from '@material-ui/icons/Edit'
-import SaveIcon from '@material-ui/icons/SaveSharp'
+import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
+import {
+    Button, 
+    Dialog, DialogContent, IconButton,
+    Tabs, Tab
+} from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
-import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
-
-import PageX from './PageX'
+import EditIcon from '@material-ui/icons/Edit'
+import SaveIcon from '@material-ui/icons/SaveSharp'
+import ViewIcon from '@material-ui/icons/RemoveRedEye'
 
 import 'brace'
 import AceEditor from 'react-ace'
@@ -23,12 +21,7 @@ import 'brace/keybinding/emacs'
 import 'brace/keybinding/vim'
 import 'brace/ext/language_tools'
 
-import * as _ from 'lodash'
-import { IconButton } from "@material-ui/core"
-
-function handleCopy(v:string) {
-    (global as any).clipboard.writeText(v)
-}
+import PageX from './PageX'
 
 const styles = (theme:Theme) => createStyles({
     dialog: {
@@ -116,6 +109,10 @@ export default withStyles(styles)(class ArticleEditor extends React.Component<Pr
         bindKey: "Ctrl-Q"
     }]
 
+    handleCopy(v:string) {
+        (global as any).clipboard.writeText(v)
+    }
+
     handleToggle = () => {
         this.setState({preview: !this.state.preview})
     }
@@ -139,7 +136,7 @@ export default withStyles(styles)(class ArticleEditor extends React.Component<Pr
                         wrapEnabled={true}
                         keyboardHandler={(this.props.keybindings!=="default")?this.props.keybindings:undefined}
                         commands={(this.shortcuts as any)}
-                        onCopy={handleCopy}
+                        onCopy={this.handleCopy}
                         setOptions={{
                             enableBasicAutocompletion: true,
                             enableLiveAutocompletion: false,

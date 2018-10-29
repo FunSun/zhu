@@ -1,15 +1,15 @@
 import * as React from "react"
+
+import { inject, observer } from "mobx-react"
 import ResourceStore from "../stores/resourceStore"
 import UIStore from "../stores/uiStore"
 import SettingStore from '../stores/settingStore'
 import EditorStore from '../stores/editorStore'
-import { inject, observer } from "mobx-react"
 
 import ArticleEditor from './ArticleEditor'
 import ScrollToBottomDetector from "./ScrollToBottomDetector"
 import AppBar from './AppBar'
 import ResourceList from "./ResourceList"
-import AddBlogModal from "./AddBlogModal"
 import AddCommentModal from './AddCommentModal'
 import ArticleView from './ArticleView'
 import BlogView from './BlogView'
@@ -97,23 +97,16 @@ export const BindingResourceList = bindingHelper(['uiStore', 'editorStore', 'res
     ></ResourceList>)
 })
 
-export const BindingAddBlogModal = bindingHelper(['uiStore', 'resourceStore'], (props) => {
-    let rs = props.resourceStore
-    let us = props.uiStore
-    return <AddBlogModal
-        visible={us.addBlogModalVisible}
-        onClose={us.hideAddBlogModal.bind(us)}
-        onSubmit={rs.addBlog.bind(rs)}
-    ></AddBlogModal>
-})
-
 export const BindingAddCommentModal = bindingHelper(['uiStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
     let us = props.uiStore
     return <AddCommentModal
         visible={us.addCommentModalVisible}
         onClose={us.hideAddCommentModal.bind(us)}
-        onSubmit={rs.addComment.bind(rs)}
+        onSubmit={(v:string) => {
+            rs.addComment(v)
+            us.hideAddCommentModal()
+        }}
     ></AddCommentModal>
 })
 

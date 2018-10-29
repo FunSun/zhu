@@ -711,31 +711,15 @@ ine-block;
 `
 
 import * as React from 'react'
-import {parse, BlockType, InlineType} from '../lib/pagex'
-import { css } from 'glamor'
 import * as _ from 'lodash'
+
+import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
+
+import {parse, BlockType, InlineType} from '../lib/pagex'
 import Latex from  './Latex'
 import Canvas from './Canvas'
 import {Plot} from './Plotly'
 import Table from './Table'
-
-const containerStyle = css({
-    width: '100%',
-    '& > article': {
-        overflowY: 'scroll',
-        width: '98%',
-        marginLeft: 16,
-        height: '100%',
-        '::-webkit-scrollbar': {
-          display: 'none'
-        }
-    }
-})
-
-interface Props {
-    height: number
-    content: string
-}
 
 class Context {
   inject(code: string):void {
@@ -749,12 +733,33 @@ class Context {
   }
 }
 
-export default function (props: Props) {
+const styles = createStyles({
+    root: {
+      width: '100%',
+      '& > article': {
+          overflowY: 'scroll',
+          width: '98%',
+          marginLeft: 16,
+          height: '100%',
+          '::-webkit-scrollbar': {
+            display: 'none'
+          }
+      }
+    }
+})
+
+interface Props extends WithStyles<typeof styles> {
+  height: number
+  content: string
+}
+
+export default withStyles(styles)((props: Props) => {
+    let classes = props.classes
     let content = props.content
     let blocks = parse(content)
     let ctx = new Context()
     return (
-        <div {...css(containerStyle, {height: props.height})}>
+        <div className={classes.root} style={{height: props.height}}>
             <style type="text/css">
                 {markdownStyle}
             </style>
@@ -800,4 +805,4 @@ export default function (props: Props) {
             </article>
         </div>
     )
-}
+})

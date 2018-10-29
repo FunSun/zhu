@@ -1,17 +1,14 @@
 import * as React from 'react'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
 import * as _ from 'lodash'
-
-interface Props {
-    children: string
-}
 
 function splitCols(content:string) {
     return _.map(_.filter(_.split(content, '|'), (o) => (o!=='')), _.trim)
+}
+
+import {Table, TableBody, TableCell, TableHead, TableRow} from '@material-ui/core'
+
+interface Props {
+    children: string
 }
 
 export default function (props:Props) {

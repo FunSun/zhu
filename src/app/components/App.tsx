@@ -1,9 +1,11 @@
 import * as React from "react"
+import {createStyles, withStyles, WithStyles} from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+
 import {
     BindingArticleEditor,
     BindingAppBar,
     BindingResourceList,
-    BindingAddBlogModal,
     BindingAddCommentModal,
     BindingArticleView,
     BindingEditTagModal,
@@ -13,38 +15,24 @@ import {
     BindingSettingModal,
     BindingBackupsModal
 } from './bindings'
-import { css } from 'glamor'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
-const muiTheme = createMuiTheme({
-    typography: {
-        useNextVariants: false,
-        suppressDeprecationWarnings: true,
-        fontFamily: [
-            '"Helvetica Neue"',
-            '"Hiragino Sans GB"',
-            'Arial',
-            'sans-serif',
-        ].join(',')
+let styles = createStyles({
+    root: {
+        width:'100%',
+        minHeight: '1000px',
+        backgroundColor: '#efefef',
     }
 })
 
-let appStyle = css({
-    width:'100%',
-    minHeight: '1000px',
-    backgroundColor: '#efefef',
-    'WebkitUserSelect': 'text'
-})
-
-export default class App extends React.Component {
-    render() {
-        return (<MuiThemeProvider theme={muiTheme}> <div {...appStyle} >
+export default withStyles(styles)((props: WithStyles<typeof styles>) => {
+    return (<React.Fragment>
+        <CssBaseline/>
+        <div className={props.classes.root}>
             <div>
                 <BindingAppBar></BindingAppBar>
                 <BindingResourceList></BindingResourceList>
             </div>
             <div>
-                <BindingAddBlogModal></BindingAddBlogModal>
                 <BindingAddCommentModal></BindingAddCommentModal>
                 <BindingEditTagModal></BindingEditTagModal>
                 <BindingArticleEditor></BindingArticleEditor>
@@ -55,6 +43,6 @@ export default class App extends React.Component {
             </div>
             <BindingNotificationManager></BindingNotificationManager>
             <BindingConfirmAlert></BindingConfirmAlert>
-        </div></MuiThemeProvider>)
-    }
-}
+        </div>
+    </React.Fragment>)
+})

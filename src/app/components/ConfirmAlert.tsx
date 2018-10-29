@@ -1,13 +1,15 @@
 import * as React from 'react'
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import {css} from 'glamor'
 
-interface Props {
+import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core'
+
+const styles = createStyles({
+  content: {
+    width: 480
+  }
+})
+
+interface Props extends WithStyles<typeof styles> {
     visible: boolean
     title: string
     desc: string
@@ -15,11 +17,7 @@ interface Props {
     onConfirm():void
 }
 
-const dialogStyle = css({
-    width: 480
-})
-
-export default function DeleteAlert(props: Props)  {
+export default  withStyles(styles)((props: Props) => {
     return (<Dialog
         open={props.visible}
         onClose={props.onCancel}
@@ -27,7 +25,7 @@ export default function DeleteAlert(props: Props)  {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-        <DialogContent className={`${dialogStyle}`}>
+        <DialogContent className={props.classes.content}>
           <DialogContentText id="alert-dialog-description">
             {props.desc}
           </DialogContentText>
@@ -41,5 +39,4 @@ export default function DeleteAlert(props: Props)  {
           </Button>
         </DialogActions>
       </Dialog>)
-}
-
+})

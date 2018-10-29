@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.1] - 2018-10-29
+### Changed
+- 消除对glamor的依赖
+- 移除了无用的组件
+
 ## [1.20.0] - 2018-10-27
 ### Added
 - ArticleEditor称为更加全面的编辑器

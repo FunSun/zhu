@@ -1,16 +1,15 @@
 import * as React from "react"
 import * as _ from 'lodash'
-import Dialog from '@material-ui/core/Dialog'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import RestoreIcon from '@material-ui/icons/Restore'
-import DeleteIcon from '@material-ui/icons/Delete'
-import Button from '@material-ui/core/Button'
-import DialogActions from '@material-ui/core/DialogActions'
-
 
 import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from "@material-ui/core"
+import { 
+    Button,
+    Dialog, DialogTitle, DialogContent, DialogActions,
+    List, ListItem, ListItemText, ListItemSecondaryAction,
+    IconButton 
+} from "@material-ui/core"
+import RestoreIcon from '@material-ui/icons/Restore'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 const styles = (theme:Theme) => createStyles({
     dialog: {

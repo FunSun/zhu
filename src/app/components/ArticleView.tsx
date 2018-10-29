@@ -1,39 +1,48 @@
 import * as React from "react"
-import { css } from 'glamor'
-import Modal from './Modal'
+
+import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
+import {Dialog, DialogContent} from '@material-ui/core'
+
 import PageX from './PageX'
 
-
-const styles = {
-    container: css({
-        fontSize: 14,
-        boxSizing: 'border-box',
-        paddingTop: 36,
-        paddingLeft: 50,
-        paddingRight: 50,
-    }),
-    widget: css({
+const styles = createStyles({
+    dialog: {
+        flexDirection: 'column',
+        justifyContent: "flex-start"
+    },
+    paper: {
+        width: 1008,
+        height: 960,
+        marginTop: 24
+    },
+    widget: {
         width: 960,
         height: 840,
         boxSizing: 'border-box',
         margin: 'auto'
-    })
-}
+    }
+})
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     content: string
     visible: boolean
     onClose():void
 }
 
-export default function(props:Props) {
+export default withStyles(styles)((props:Props) => {
+    let classes = props.classes
     return (
-        <Modal width={1008} height={960} top={24} visible={props.visible}  onClose={props.onClose}>
-            <div {...styles.container}>
-                <div {...styles.widget}>
-                    <PageX height={880} content={props.content}></PageX>
+        <Dialog 
+            open={props.visible} 
+            onClose={props.onClose} 
+            maxWidth="lg" 
+            classes={{root: classes.dialog, paper: classes.paper}}
+        >
+            <DialogContent >
+                <div className={classes.widget}>
+                        <PageX height={880} content={props.content}></PageX>
                 </div>
-            </div>
-        </Modal>
+            </DialogContent>
+        </Dialog>
     )
-}
+})

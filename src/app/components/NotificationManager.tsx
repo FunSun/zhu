@@ -1,61 +1,54 @@
 import * as React from 'react'
+
+import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
+import {Snackbar, SnackbarContent} from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'
 import InfoIcon from '@material-ui/icons/Info'
 import WarningIcon from '@material-ui/icons/Warning'
-import Snackbar from '@material-ui/core/Snackbar'
-import SnackbarContent from '@material-ui/core/SnackbarContent'
-import { createMuiTheme } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green'
 import amber from '@material-ui/core/colors/amber'
-import {css} from 'glamor'
-
-const theme = createMuiTheme({
-    typography: {
-      useNextVariants: true
-    }
-})
 
 const variantIcon = {
     success: CheckCircleIcon,
     warning: WarningIcon,
     error: ErrorIcon,
     info: InfoIcon,
-  }
+}
   
-const styles = {
-    success: css({
+const styles = (theme:Theme) => createStyles({
+    success: {
         backgroundColor: green[600] + ' !important',
-    }),
-    error: css({
+    },
+    error: {
         backgroundColor: theme.palette.error.dark + ' !important',
-    }),
-    info: css({
+    },
+    info: {
         backgroundColor: theme.palette.secondary.dark + '!important',
-    }),
-    warning: css({
+    },
+    warning: {
         backgroundColor: amber[700] + '!important',
-    }),
-    icon: css({
+    },
+    icon: {
         fontSize: 20,
-    }),
-    iconVariant: css({
+    },
+    iconVariant: {
         opacity: 0.9,
         marginRight: theme.spacing.unit,
-    }),
-    message: css({
+    },
+    message: {
         display: 'flex',
         alignItems: 'center',
-    })
-}
+    }
+})
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     id: number
     msg: string
     kind: string
 }
 
-export default class NotificationManager extends React.Component<Props> {
+export default withStyles(styles)(class NotificationManager extends React.Component<Props> {
     state:any = {
         show: false,
         msg: "",
@@ -100,9 +93,10 @@ export default class NotificationManager extends React.Component<Props> {
     }    
 
     render () {
-        let variantStyle = (styles as any)[this.state.kind]
+        let classes = this.props.classes
+        let variantStyle =  (classes as {[key:string]:string})[this.state.kind]
         
-        let iconStyle = css(styles.icon, styles.iconVariant)
+        let iconStyle = [classes.icon, classes.iconVariant].join(" ")
         let Icon = (variantIcon as any)[this.state.kind]
         return (<Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -113,11 +107,11 @@ export default class NotificationManager extends React.Component<Props> {
         >
             <SnackbarContent
                 classes={{
-                    root: `${variantStyle}`
+                    root: variantStyle
                 }}
                 message={
-                <span id="client-snackbar" className={`${styles.message}`}>
-                    <Icon className={`${iconStyle}`} />
+                <span id="client-snackbar" className={classes.message}>
+                    <Icon className={iconStyle} />
                     {this.state.msg}
                 </span>
                 }
@@ -125,4 +119,4 @@ export default class NotificationManager extends React.Component<Props> {
 
         </Snackbar>)
     }
-}
+})

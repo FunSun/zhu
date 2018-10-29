@@ -1,16 +1,13 @@
 import * as React from 'react'
 
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
-import { fade } from '@material-ui/core/styles/colorManipulator'
+import { createStyles, withStyles, Theme, WithStyles } from '@material-ui/core/styles'
+import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import ArticleIcon from '@material-ui/icons/Edit'
 import SettingsIcon from '@material-ui/icons/Settings'
 import CommentIcon from '@material-ui/icons/ChatBubbleOutline'
 import InputBase from '@material-ui/core/InputBase'
-import { createStyles, withStyles, Theme, WithStyles } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles/colorManipulator'
 
 const styles = (theme:Theme) => createStyles({
   root: {
