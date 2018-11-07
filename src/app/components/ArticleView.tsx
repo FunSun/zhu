@@ -12,14 +12,8 @@ const styles = createStyles({
     },
     paper: {
         width: 1008,
-        height: 960,
-        marginTop: 24
-    },
-    widget: {
-        width: 960,
-        height: 840,
-        boxSizing: 'border-box',
-        margin: 'auto'
+        marginTop: 24,
+        maxHeight: 'none'
     }
 })
 
@@ -38,10 +32,8 @@ export default withStyles(styles)((props:Props) => {
             maxWidth="lg" 
             classes={{root: classes.dialog, paper: classes.paper}}
         >
-            <DialogContent >
-                <div className={classes.widget}>
-                        <PageX height={880} content={props.content}></PageX>
-                </div>
+            <DialogContent>
+                <PageX width={960} height={'85vh'} content={props.content}></PageX>
             </DialogContent>
         </Dialog>
     )

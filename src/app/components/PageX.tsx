@@ -737,7 +737,7 @@ const styles = createStyles({
     root: {
       width: '100%',
       '& > article': {
-          overflowY: 'scroll',
+          overflowY: 'auto',
           width: '98%',
           marginLeft: 16,
           height: '100%',
@@ -749,7 +749,8 @@ const styles = createStyles({
 })
 
 interface Props extends WithStyles<typeof styles> {
-  height: number
+  width: number | string
+  height: number | string
   content: string
 }
 
@@ -759,7 +760,7 @@ export default withStyles(styles)((props: Props) => {
     let blocks = parse(content)
     let ctx = new Context()
     return (
-        <div className={classes.root} style={{height: props.height}}>
+        <div className={classes.root} style={{width: props.width, height: props.height}}>
             <style type="text/css">
                 {markdownStyle}
             </style>

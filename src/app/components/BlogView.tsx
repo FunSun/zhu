@@ -10,15 +10,14 @@ const styles = createStyles({
     },
     paper: {
         width: 1008,
-        height: 960,
-        marginTop: 24
+        marginTop: 24,
+        maxHeight: 'none'  
     },
     widget: {
         width: 960,
-        height: 840,
-        boxSizing: 'border-box',
+        height: '85vh',
         margin: 'auto',
-        overflowY: 'scroll',
+        overflowY: 'auto',
         '::-webkit-scrollbar': {
             display: 'none'
         }
@@ -40,10 +39,8 @@ export default withStyles(styles)((props:Props) => {
             maxWidth="lg" 
             classes={{root: classes.dialog, paper: classes.paper}}
         >
-            <DialogContent >
-                <div className={classes.widget}>
-                    <div dangerouslySetInnerHTML={{__html: props.content}}></div>
-                </div>
+            <DialogContent>
+                    <div className={classes.widget} dangerouslySetInnerHTML={{__html: props.content}}></div>
             </DialogContent>
         </Dialog>
     )

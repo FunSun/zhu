@@ -30,7 +30,8 @@ const styles = (theme:Theme) => createStyles({
     },
     paper: {
         width: 1008,
-        marginTop: 24
+        marginTop: 24,
+        maxHeight: 'none'
     },
     content: {
         fontSize: 20,
@@ -41,10 +42,13 @@ const styles = (theme:Theme) => createStyles({
     },
     widget: {
         width: 960,
-        height: 840,
+        height: '85vh',
         marginTop: 16,
         boxSizing: 'border-box',
-        margin: 'auto'
+        margin: 'auto',
+        "& .ace_scrollbar": { 
+            display: 'none'
+        }
     },
     addBtn: {
         position: 'absolute',
@@ -131,7 +135,7 @@ export default withStyles(styles)(class ArticleEditor extends React.Component<Pr
                         value={this.props.curContent}
                         fontSize={14}
                         width={"960px"}
-                        height={"800px"}
+                        height={"85vh"}
                         showPrintMargin={false}
                         wrapEnabled={true}
                         keyboardHandler={(this.props.keybindings!=="default")?this.props.keybindings:undefined}
@@ -152,7 +156,7 @@ export default withStyles(styles)(class ArticleEditor extends React.Component<Pr
                 ]
             } else {
                 widget = [
-                    <PageX height={840} content={this.props.curContent}></PageX>,
+                    <PageX width={960} height={'85vh'} content={this.props.curContent}></PageX>,
                     <Button 
                         className={classes.editBtn} 
                         color="secondary" 

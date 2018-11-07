@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.3] - 2018-11-7
+### Fixed
+- 修复了一些样式问题
+- 修复了一些package-lock里的不安全依赖
+
 ## [1.20.2] - 2018-10-29
 ### Fixed
 - 解决了ReousrceList高度的问题

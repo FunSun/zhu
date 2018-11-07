@@ -19,7 +19,6 @@ import {
 let styles = createStyles({
     root: {
         width:'100%',
-        minHeight: '1000px',
         backgroundColor: '#efefef',
     }
 })
