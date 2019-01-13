@@ -20,6 +20,7 @@ Sparky.task("electron", ["copy-electron-html"], () => {
   const fuse = FuseBox.init({
     homeDir: "src",
     output: `${ELECTRON_OUTPUT_DIR}/$name.js`,
+    allowSyntheticDefaultImports: true,
     target: "electron",
     log: isProduction,
     cache: !isProduction,
@@ -86,6 +87,7 @@ Sparky.task("web", ["copy-web-html"], () => {
   // setup the producer with common settings
   const fuse = FuseBox.init({
     homeDir: "src",
+    allowSyntheticDefaultImports: true,
     output: `${WEB_OUTPUT_DIR}/$name.js`,
     target: "browser@es6",
     log: true,

@@ -1,15 +1,15 @@
-import * as React from 'react'
+import React from 'react'
+import { makeStyles } from '@material-ui/styles'
 
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core'
 
-const styles = createStyles({
-  content: {
-    width: 480
-  }
+const useStyles = makeStyles({
+    content: {
+        width: 480
+    }
 })
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
     visible: boolean
     title: string
     desc: string
@@ -17,26 +17,27 @@ interface Props extends WithStyles<typeof styles> {
     onConfirm():void
 }
 
-export default  withStyles(styles)((props: Props) => {
+export default  function (props: Props) {
+    const classes = useStyles()
     return (<Dialog
         open={props.visible}
         onClose={props.onCancel}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
+    >
         <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-        <DialogContent className={props.classes.content}>
-          <DialogContentText id="alert-dialog-description">
-            {props.desc}
-          </DialogContentText>
+        <DialogContent className={classes.content}>
+            <DialogContentText id="alert-dialog-description">
+                {props.desc}
+            </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onCancel}>
-            取消
-          </Button>
-          <Button onClick={props.onConfirm} color="secondary" autoFocus>
-            确认
-          </Button>
+            <Button onClick={props.onCancel}>
+                取消
+            </Button>
+            <Button onClick={props.onConfirm} color="secondary" autoFocus>
+                确认
+            </Button>
         </DialogActions>
-      </Dialog>)
-})
+    </Dialog>)
+}

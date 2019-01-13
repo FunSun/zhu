@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.4] - 2019-1-13
+### Refactory
+- 引入react hook
+- 所有组件用react hook重构
+- 引入新的material ui style 系统
+- 引入luis
+
+
 ## [1.20.3] - 2018-11-7
 ### Fixed
 - 修复了一些样式问题

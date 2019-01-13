@@ -7,7 +7,6 @@ import SettingStore from '../stores/settingStore'
 import EditorStore from '../stores/editorStore'
 
 import ArticleEditor from './ArticleEditor'
-import ScrollToBottomDetector from "./ScrollToBottomDetector"
 import AppBar from './AppBar'
 import ResourceList from "./ResourceList"
 import AddCommentModal from './AddCommentModal'
@@ -51,11 +50,6 @@ export const BindingArticleEditor = bindingHelper(["uiStore", "editorStore", "se
         onChange={es.bufferContent.bind(es)}
         onClose={us.hideArticleEditor.bind(us)}
     ></ArticleEditor>)
-})
-
-export const BindingScrollToBottomDetector = bindingHelper(['resourceStore'], (props) => {
-    let rs = props.resourceStore
-    return (<ScrollToBottomDetector onScrollToEnd={rs.loadMore.bind(rs)}></ScrollToBottomDetector>)
 })
 
 export const BindingAppBar = bindingHelper(['uiStore', 'editorStore', 'resourceStore'], (props) => {

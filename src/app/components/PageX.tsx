@@ -710,10 +710,9 @@ ine-block;
 }
 `
 
-import * as React from 'react'
+import React from 'react'
+import { makeStyles } from '@material-ui/styles'
 import * as _ from 'lodash'
-
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
 
 import {parse, BlockType, InlineType} from '../lib/pagex'
 import Latex from  './Latex'
@@ -721,19 +720,8 @@ import Canvas from './Canvas'
 import {Plot} from './Plotly'
 import Table from './Table'
 
-class Context {
-  inject(code: string):void {
-    let ctx = this
-    try {
-      eval(code)
-    } catch(e) {
-      console.log(e)
-    }
-    
-  }
-}
 
-const styles = createStyles({
+const useStyles = makeStyles({
     root: {
       width: '100%',
       '& > article': {
@@ -748,14 +736,14 @@ const styles = createStyles({
     }
 })
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   width: number | string
   height: number | string
   content: string
 }
 
-export default withStyles(styles)((props: Props) => {
-    let classes = props.classes
+export default function (props: Props) {
+    let classes = useStyles()
     let content = props.content
     let blocks = parse(content)
     let ctx = new Context()
@@ -806,4 +794,16 @@ export default withStyles(styles)((props: Props) => {
             </article>
         </div>
     )
-})
+}
+
+class Context {
+  inject(code: string):void {
+    let ctx = this
+    try {
+      eval(code)
+    } catch(e) {
+      console.log(e)
+    }
+    
+  }
+}

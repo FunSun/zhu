@@ -1,9 +1,9 @@
-import * as React from "react"
+import React from "react"
+import { makeStyles } from '@material-ui/styles'
 
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles'
 import {Dialog, DialogContent} from '@material-ui/core'
 
-const styles = createStyles({
+const useStyles = makeStyles({
     dialog: {
         flexDirection: 'column',
         justifyContent: "flex-start"
@@ -24,14 +24,14 @@ const styles = createStyles({
     }
 })
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
     content: string
     visible: boolean
     onClose():void
 }
 
-export default withStyles(styles)((props:Props) => {
-    let classes = props.classes
+export default function (props:Props) {
+    const classes = useStyles()
     return (
         <Dialog 
             open={props.visible} 
@@ -44,4 +44,4 @@ export default withStyles(styles)((props:Props) => {
             </DialogContent>
         </Dialog>
     )
-})
+}

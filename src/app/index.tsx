@@ -2,7 +2,9 @@ import * as ReactDOM from 'react-dom'
 import * as React from 'react'
 import { configure } from 'mobx'
 import { Provider } from 'mobx-react'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
+
+import { createMuiTheme} from '@material-ui/core/styles'
 
 const muiTheme = createMuiTheme({
     typography: {
@@ -30,9 +32,9 @@ configure({
 export function runApp () {
     ReactDOM.render((
         <Provider {...stores}>
-            <MuiThemeProvider theme={muiTheme}>         
+            <ThemeProvider theme={muiTheme}>         
             <App />
-            </MuiThemeProvider>
+            </ThemeProvider>
         </Provider>
       ), document.getElementById('root'))
 }

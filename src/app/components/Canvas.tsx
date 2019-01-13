@@ -1,5 +1,18 @@
-import * as React from 'react'
+import React, {useRef, useMemo} from 'react'
 import * as _ from 'lodash'
+
+interface Props {
+    dsl: string
+    ctx?: any
+    width?: number
+    height?: number
+}
+
+export default function (props: Props) {
+    let ref = useRef(null)
+    useMemo(()=> refreshCanvas(ref, props.ctx), [props.ctx])
+    return <canvas width={400} height={400} style={{ margin: 8, width: 400, height: 400}} ref={ref}></canvas>
+}
 
 function filledShapeBase(ctx:any, points:any[]) {
     if (points.length <= 2) {
@@ -17,44 +30,16 @@ function filledShapeBase(ctx:any, points:any[]) {
     ctx.fill()
 }
 
-interface Props {
-    dsl: string
-    ctx?: any
-    width?: number
-    height?: number
-}
-
-export default class Canvas extends React.Component<Props> {
-    ref:any
-
-    constructor(props:Props) {
-        super(props)
-        this.ref = React.createRef()
-    }
-
-    componentDidMount() {
-        this.refreshCanvas()
-    }
-
-    componentWillReceiveProps() {
-        this.refreshCanvas()
-    }
-
-    refreshCanvas() {
-        let node = this.ref.current as HTMLCanvasElement
-        let drawCtx = node.getContext('2d')
-        let ctx = this.props.ctx || {}
-        let filledShape = filledShapeBase.bind(null, drawCtx)
-        let f:any
-        try {        
-            eval("f = (ctx, drawArea)=>{ " + this.props.dsl + " }")
-            f(ctx, filledShape)
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    render () {
-        return <canvas width={400} height={400} style={{ margin: 8, width: 400, height: 400}} ref={this.ref}></canvas>
+function refreshCanvas (ref:any, ctx?:any)  {
+    let node = ref.current as HTMLCanvasElement
+    let drawCtx = node.getContext('2d')
+    ctx = ctx || {}
+    let filledShape = filledShapeBase.bind(null, drawCtx)
+    let f:any
+    try {        
+        eval("f = (ctx, drawArea)=>{ " + this.props.dsl + " }")
+        f(ctx, filledShape)
+    } catch(e) {
+        console.log(e)
     }
 }

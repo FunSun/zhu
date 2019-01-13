@@ -1,10 +1,11 @@
-import * as React from "react"
+import React from "react"
+import { makeStyles, createStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core/styles'
 import * as _ from 'lodash'
 
-import {withStyles, createStyles, Theme, WithStyles} from '@material-ui/core/styles'
 import {Chip} from '@material-ui/core'
 
-const styles = (theme:Theme) => createStyles({
+const useStyles = makeStyles((theme:Theme) => createStyles({
     frame: {
         backgroundColor: '#ffffff',
         boxShadow: theme.shadows[1],
@@ -73,7 +74,7 @@ const styles = (theme:Theme) => createStyles({
     tags: {
         marginTop: 8,
     }
-})
+}))
 
 interface BaseProps {
     id: string
@@ -83,7 +84,7 @@ interface BaseProps {
     onDelete(id: string):void
 }
 
-interface PreviewFrameworkProps extends BaseProps, WithStyles<typeof styles> {
+interface PreviewFrameworkProps extends BaseProps {
     onLabel: () => void
     onClick?: () => void
     onEdit?: () => void
@@ -92,8 +93,8 @@ interface PreviewFrameworkProps extends BaseProps, WithStyles<typeof styles> {
     desc?: React.ReactNode
 }
 
-const PreviewFramework = withStyles(styles)((props:PreviewFrameworkProps) => {
-    let classes = props.classes
+const PreviewFramework = (props:PreviewFrameworkProps) => {
+    let classes = useStyles()
     return (
         <div className={classes.frame}>
             <div className={classes.content}>
@@ -128,7 +129,7 @@ const PreviewFramework = withStyles(styles)((props:PreviewFrameworkProps) => {
             </div>
         </div>
     )
-})
+}
 
 interface FamousePreviewProps extends BaseProps {
     title: string

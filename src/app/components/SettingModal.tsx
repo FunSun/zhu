@@ -1,7 +1,8 @@
-import * as React from "react"
+import React from 'react'
+import { makeStyles, createStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core/styles'
 import * as _ from 'lodash'
 
-import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
 import {
     Button,
     Dialog, DialogContent, DialogTitle, DialogActions,
@@ -14,7 +15,7 @@ import {
 } from '@material-ui/core'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
-const styles = (theme:Theme) => createStyles({
+const useStyles = makeStyles((theme:Theme) => createStyles({
     dialog: {
         width: 480,
         height: 320,
@@ -30,9 +31,9 @@ const styles = (theme:Theme) => createStyles({
         justifyContent: 'space-between',
         marginLeft: 0
     }
-})
+}))
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
     visible: boolean
     server: string
     safeMode: boolean
@@ -44,8 +45,8 @@ interface Props extends WithStyles<typeof styles> {
     onClose():void
 }
 
-export default withStyles(styles)((props:Props) => {
-    let classes = props.classes
+export default function (props:Props) {
+    let classes = useStyles()
     return <Dialog 
         open={props.visible}
         onClose={props.onClose}
@@ -97,4 +98,4 @@ export default withStyles(styles)((props:Props) => {
             </Button>
         </DialogActions>
     </Dialog>
-})
+}

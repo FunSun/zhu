@@ -5,11 +5,12 @@
     "moduleResolution": "node",
     "jsx": "react",
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
     "strictNullChecks": false,
     "noImplicitReturns": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "sourceMap": true
   },
   "include": ["src", "typings", "fuse.ts"],
   "exclude": [

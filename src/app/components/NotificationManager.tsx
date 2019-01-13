@@ -1,6 +1,7 @@
-import * as React from 'react'
+import React, { useState, useMemo } from 'react'
+import { makeStyles, createStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core/styles'
 
-import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
 import {Snackbar, SnackbarContent} from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'
@@ -16,7 +17,7 @@ const variantIcon = {
     info: InfoIcon,
 }
   
-const styles = (theme:Theme) => createStyles({
+const useStyles = makeStyles((theme:Theme) => createStyles({
     success: {
         backgroundColor: green[600] + ' !important',
     },
@@ -40,83 +41,76 @@ const styles = (theme:Theme) => createStyles({
         display: 'flex',
         alignItems: 'center',
     }
-})
+}))
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
     id: number
     msg: string
     kind: string
 }
 
-export default withStyles(styles)(class NotificationManager extends React.Component<Props> {
-    state:any = {
-        show: false,
-        msg: "",
-        kind: "info"
-    }
-    queue:any[] = []
+let queue:any[] = []
 
-    componentWillReceiveProps(props:any) {
-        this.queue.push({
+export default function (props:Props) {
+    const classes = useStyles()
+    const [show, setShow] = useState(false)
+    const [msg, setMsg] = useState("")
+    const [kind, setKind] = useState("info")
+    const [key, setKey] = useState(0)
+    const processQueue = () => {
+        if (queue.length > 0) {
+            let obj = queue.shift()
+            setMsg(obj.msg)
+            setKind(obj.kind)
+            setKey(obj.key)
+            setShow(true)
+        }
+    }
+    useMemo(()=> {
+        queue.push({
             msg: props.msg,
             kind: props.kind,
             key: props.id
         })
-        if (this.state.open) {
-            this.setState({ show: false })
-          } else {
-            this.processQueue()
-          }        
-    }
-
-    processQueue () {
-        if (this.queue.length > 0) {
-            let obj = this.queue.shift()
-          this.setState({
-            msg: obj.msg,
-            kind: obj.kind,
-            key: obj.key,
-            show: true,
-          })
+        if (show) {
+            setShow(false)
+            return
         }
-    }
-
-    handleClose = (event:any, reason:string) => {
+        processQueue()            
+    }, [props.id])
+    const handleClose = (event:any, reason:string) => {
         if (reason === 'clickaway') {
-          return
+            return
         }
-        this.setState({ show: false })
+        setShow(false)
     }
-    
-    handleExited () {
-        this.processQueue()
-    }    
 
-    render () {
-        let classes = this.props.classes
-        let variantStyle =  (classes as {[key:string]:string})[this.state.kind]
-        
-        let iconStyle = [classes.icon, classes.iconVariant].join(" ")
-        let Icon = (variantIcon as any)[this.state.kind]
-        return (<Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            open={this.state.show}
-            autoHideDuration={1500}
-            onClose={this.handleClose.bind(this)}
-            onExited={this.handleExited.bind(this)}
-        >
-            <SnackbarContent
-                classes={{
-                    root: variantStyle
-                }}
-                message={
-                <span id="client-snackbar" className={classes.message}>
-                    <Icon className={iconStyle} />
-                    {this.state.msg}
-                </span>
-                }
-            ></SnackbarContent>
-
-        </Snackbar>)
+    if (!kind) {
+        return <div></div>
     }
-})
+    const handleExited = processQueue
+
+    let variantStyle = (classes as {[key:string]:string})[kind]
+    let iconStyle = [classes.icon, classes.iconVariant].join(" ")
+    let Icon = (variantIcon as any)[kind]
+    return (<Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={show}
+        autoHideDuration={1500}
+        onClose={handleClose}
+        onExited={handleExited}
+    >
+        <SnackbarContent
+            classes={{
+                root: variantStyle
+            }}
+            message={
+            <span id="client-snackbar" className={classes.message}>
+                <Icon className={iconStyle} />
+                {msg}
+            </span>
+            }
+        ></SnackbarContent>
+
+    </Snackbar>)
+}

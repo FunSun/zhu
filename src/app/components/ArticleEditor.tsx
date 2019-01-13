@@ -1,7 +1,9 @@
-import * as React from "react"
+import React, {useState} from "react"
+import { makeStyles, createStyles } from '@material-ui/styles'
+import { Theme } from '@material-ui/core/styles'
+
 import * as _ from 'lodash'
 
-import { withStyles, WithStyles, createStyles, Theme } from '@material-ui/core/styles'
 import {
     Button, 
     Dialog, DialogContent, IconButton,
@@ -23,7 +25,7 @@ import 'brace/ext/language_tools'
 
 import PageX from './PageX'
 
-const styles = (theme:Theme) => createStyles({
+const useStyles =  makeStyles((theme:Theme) => createStyles({
     dialog: {
         flexDirection: 'column',
         justifyContent: "flex-start"
@@ -85,9 +87,9 @@ const styles = (theme:Theme) => createStyles({
             }
         }
     }
-})
+}))
 
-interface Props extends WithStyles<typeof styles>{
+interface Props {
     visible: boolean
     curTab: number,
     tabs: string[],
@@ -102,117 +104,114 @@ interface Props extends WithStyles<typeof styles>{
     onClose():void
 }
 
-export default withStyles(styles)(class ArticleEditor extends React.Component<Props> {
-    state = {
-        preview: false
+const shortcuts: any[] = [{
+    name: "autocomplete-alias",
+    exec: (editor:any) => { editor.execCommand("startAutocomplete")},
+    bindKey: "Ctrl-Q"
+}]
+
+function handleCopy(v:string) {
+    (global as any).clipboard.writeText(v)
+}
+
+
+export default function (props:Props) {
+    const classes = useStyles()
+
+    const [preview, setPreview] = useState(false)
+    const handleToggle = () => {
+        setPreview(!preview)
     }
     
-    shortcuts: any[] = [{
-        name: "autocomplete-alias",
-        exec: (editor:any) => { editor.execCommand("startAutocomplete")},
-        bindKey: "Ctrl-Q"
-    }]
-
-    handleCopy(v:string) {
-        (global as any).clipboard.writeText(v)
-    }
-
-    handleToggle = () => {
-        this.setState({preview: !this.state.preview})
-    }
-
-    render () {
-        let classes = this.props.classes
-        let widget: React.ReactElement<any>[]
-            if (!this.state.preview) {
-                widget = [
-                    <AceEditor 
-                        showGutter={false}
-                        mode="markdown" 
-                        theme="chrome" 
-                        onChange={this.props.onChange} 
-                        editorProps={{$blockScrolling: true}} 
-                        value={this.props.curContent}
-                        fontSize={14}
-                        width={"960px"}
-                        height={"85vh"}
-                        showPrintMargin={false}
-                        wrapEnabled={true}
-                        keyboardHandler={(this.props.keybindings!=="default")?this.props.keybindings:undefined}
-                        commands={(this.shortcuts as any)}
-                        onCopy={this.handleCopy}
-                        setOptions={{
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: false,
-                        }}
-                    >
-                    </AceEditor>,
-                    <Button 
-                        className={classes.viewBtn} 
-                        color="secondary" 
-                        variant="fab"
-                        onClick={()=> {this.handleToggle()}}
-                    ><ViewIcon/></Button>
-                ]
-            } else {
-                widget = [
-                    <PageX width={960} height={'85vh'} content={this.props.curContent}></PageX>,
-                    <Button 
-                        className={classes.editBtn} 
-                        color="secondary" 
-                        variant="fab"
-                        onClick={()=> {this.handleToggle()}}
-                    ><EditIcon/></Button>
-                ]
-            }
-        return (
-            <Dialog
-                open={this.props.visible}
-                onClose={this.props.onClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth="lg"
-                classes={
-                    {root: classes.dialog, paper: classes.paper}
-                }
+    let widget: React.ReactElement<any>[]
+    if (!preview) {
+        widget = [
+            <AceEditor 
+                showGutter={false}
+                mode="markdown" 
+                theme="chrome" 
+                onChange={props.onChange} 
+                editorProps={{$blockScrolling: true}} 
+                value={props.curContent}
+                fontSize={14}
+                width={"960px"}
+                height={"85vh"}
+                showPrintMargin={false}
+                wrapEnabled={true}
+                keyboardHandler={(props.keybindings!=="default")?props.keybindings:undefined}
+                commands={(shortcuts as any)}
+                onCopy={handleCopy}
+                setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: false,
+                }}
             >
-                <DialogContent classes={{root: classes.content}}>
-                    <Tabs
-                        value={this.props.curTab}
-                        onChange={(e, v)=> {this.props.onSwitch(v)}}
-                        indicatorColor="primary"
-                        textColor="primary"
-                    >
-                        {
-                            _.map(this.props.tabs, (tab, k)=> {
-                                return <Tab component="div" label={
-                                    <span className={classes.tab}>
-                                        <span>{tab}</span>
-                                        <IconButton className="closeBtn" onClick={(e)=>{this.props.onCloseTab(k); e.stopPropagation()}}>
-                                            <CloseIcon  fontSize="small"/>
-                                        </IconButton>
-                                    </span>
-                                }/>
-                            })
-                        }
-                    </Tabs>
-                    <div className={classes.widget}>
-                        {widget}
-                        <Button 
-                            className={classes.saveBtn} 
-                            color="primary" 
-                            variant="fab"
-                            onClick={this.props.onSave}
-                        ><SaveIcon/></Button>                    
-                    </div>
-                    <Button 
-                            className={classes.addBtn} 
-                            color="secondary" 
-                            variant="fab"
-                            onClick={this.props.onAdd}
-                        ><AddIcon/></Button>                    
-                </DialogContent>
-            </Dialog>
-        )
+            </AceEditor>,
+            <Button 
+                className={classes.viewBtn} 
+                color="secondary" 
+                variant="fab"
+                onClick={handleToggle}
+            ><ViewIcon/></Button>
+        ]
+    } else {
+        widget = [
+            <PageX width={960} height={'85vh'} content={this.props.curContent}></PageX>,
+            <Button 
+                className={classes.editBtn} 
+                color="secondary" 
+                variant="fab"
+                onClick={handleToggle}
+            ><EditIcon/></Button>
+        ]
     }
-})
+    return (
+        <Dialog
+            open={props.visible}
+            onClose={props.onClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="lg"
+            classes={
+                {root: classes.dialog, paper: classes.paper}
+            }
+        >
+            <DialogContent classes={{root: classes.content}}>
+                <Tabs
+                    value={props.curTab}
+                    onChange={(e, v)=> {props.onSwitch(v)}}
+                    indicatorColor="primary"
+                    textColor="primary"
+                >
+                    {
+                        _.map(props.tabs, (tab, k)=> {
+                            return <Tab component="div" label={
+                                <span className={classes.tab}>
+                                    <span>{tab}</span>
+                                    <IconButton className="closeBtn" onClick={(e)=>{props.onCloseTab(k); e.stopPropagation()}}>
+                                        <CloseIcon  fontSize="small"/>
+                                    </IconButton>
+                                </span>
+                            }/>
+                        })
+                    }
+                </Tabs>
+                <div className={classes.widget}>
+                    {widget}
+                    <Button 
+                        className={classes.saveBtn} 
+                        color="primary" 
+                        variant="fab"
+                        onClick={props.onSave}
+                    ><SaveIcon/></Button>                    
+                </div>
+                <Button 
+                        className={classes.addBtn} 
+                        color="secondary" 
+                        variant="fab"
+                        onClick={props.onAdd}
+                    ><AddIcon/></Button>                    
+            </DialogContent>
+        </Dialog>
+    )
+}
