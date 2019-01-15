@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.5] - 2019-1-16
+### Refactory
+- 使用slate editor
+
 ## [1.20.4] - 2019-1-13
 ### Refactory
 - 引入react hook

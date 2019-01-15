@@ -14,14 +14,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/SaveSharp'
 import ViewIcon from '@material-ui/icons/RemoveRedEye'
-
-import 'brace'
-import AceEditor from 'react-ace'
-import 'brace/mode/markdown'
-import 'brace/theme/chrome'
-import 'brace/keybinding/emacs'
-import 'brace/keybinding/vim'
-import 'brace/ext/language_tools'
+import SlateEditor from './SlateEditor'
 
 import PageX from './PageX'
 
@@ -104,16 +97,6 @@ interface Props {
     onClose():void
 }
 
-const shortcuts: any[] = [{
-    name: "autocomplete-alias",
-    exec: (editor:any) => { editor.execCommand("startAutocomplete")},
-    bindKey: "Ctrl-Q"
-}]
-
-function handleCopy(v:string) {
-    (global as any).clipboard.writeText(v)
-}
-
 
 export default function (props:Props) {
     const classes = useStyles()
@@ -126,27 +109,7 @@ export default function (props:Props) {
     let widget: React.ReactElement<any>[]
     if (!preview) {
         widget = [
-            <AceEditor 
-                showGutter={false}
-                mode="markdown" 
-                theme="chrome" 
-                onChange={props.onChange} 
-                editorProps={{$blockScrolling: true}} 
-                value={props.curContent}
-                fontSize={14}
-                width={"960px"}
-                height={"85vh"}
-                showPrintMargin={false}
-                wrapEnabled={true}
-                keyboardHandler={(props.keybindings!=="default")?props.keybindings:undefined}
-                commands={(shortcuts as any)}
-                onCopy={handleCopy}
-                setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: false,
-                }}
-            >
-            </AceEditor>,
+            <SlateEditor value={props.curContent} onSave={props.onSave}></SlateEditor>,
             <Button 
                 className={classes.viewBtn} 
                 color="secondary" 
@@ -156,7 +119,7 @@ export default function (props:Props) {
         ]
     } else {
         widget = [
-            <PageX width={960} height={'85vh'} content={this.props.curContent}></PageX>,
+            <PageX width={960} height={'85vh'} content={props.curContent}></PageX>,
             <Button 
                 className={classes.editBtn} 
                 color="secondary" 

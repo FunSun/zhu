@@ -110,20 +110,20 @@ export default class EditorStore {
         this.curDirty = article.dirty
     }
 
-    saveCurrent = flow(function * saveCurrent(): any {
+    saveCurrent = flow(function * saveCurrent(content: string): any {
         let article = this.articles[this.curTab]
         try {
             let body:any
             if (_.startsWith(article.id, 'NEW-')) {
                 body = {
                     title: "",
-                    content: article.content
+                    content: content
                 }
             } else {
                 body = {
                     id: article.id,
                     title: "",
-                    content: article.content
+                    content: content
                 }
             }
             let res = yield axios.post(this.ss.server + '/resources/article', body)
