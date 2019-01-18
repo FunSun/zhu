@@ -13,7 +13,8 @@ import {
     BindingConfirmAlert,
     BindingBlogView,
     BindingSettingModal,
-    BindingBackupsModal
+    BindingBackupsModal,
+    BindingSnippetModal
 } from './bindings'
 
 let styles = createStyles({
@@ -34,11 +35,13 @@ export default withStyles(styles)((props: WithStyles<typeof styles>) => {
             <div>
                 <BindingAddCommentModal></BindingAddCommentModal>
                 <BindingEditTagModal></BindingEditTagModal>
+                <BindingEditTagModal></BindingEditTagModal>                
                 <BindingArticleEditor></BindingArticleEditor>
                 <BindingArticleView></BindingArticleView>
                 <BindingBlogView></BindingBlogView>
                 <BindingSettingModal></BindingSettingModal>
                 <BindingBackupsModal></BindingBackupsModal>
+                <BindingSnippetModal></BindingSnippetModal>
             </div>
             <BindingNotificationManager></BindingNotificationManager>
             <BindingConfirmAlert></BindingConfirmAlert>

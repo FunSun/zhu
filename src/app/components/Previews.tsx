@@ -183,6 +183,14 @@ export function CommentPreview(props:CommentPreviewProps) {
     return <PreviewFramework {...Object.assign({}, props, {desc: props.content})} onLabel={props.onLabel}></PreviewFramework>
 }
 
+interface SnippetPreviewProps extends BaseProps {
+    content: string
+    onLabel: () => void
+}
+export function SnippetPreview(props:SnippetPreviewProps) {
+    return <PreviewFramework {...Object.assign({}, props, {desc: props.content})} onLabel={props.onLabel}></PreviewFramework>
+}
+
 interface ArticlePreviewProps extends BaseProps {
     title: string
     content: string

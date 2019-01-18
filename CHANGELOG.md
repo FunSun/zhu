@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.0] - 2019-1-19
+### Added
+- 增加快捷键
+- 增加snippet相关ui
+
+
 ## [1.20.5] - 2019-1-16
 ### Refactory
 - 使用slate editor

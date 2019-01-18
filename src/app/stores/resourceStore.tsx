@@ -102,6 +102,20 @@ export default class ResourceStore {
         }
     })
 
+    addSnippet = flow(function * addSnippet(content:string, tags: string[]): any {
+        try {
+            let body = {
+                content: content,
+                tags: tags
+            }
+            yield axios.post(this.ss.server + '/resources/snippet', body)
+            this.us.notify("添加成功")
+        } catch(err) {
+            this.us.notify("添加失败", "error")    
+            console.log(err)
+        }
+    })
+
     updateTags = flow(function * updateTags(id: string, tags: string[]):any {
         try {
             let body = {id, tags}

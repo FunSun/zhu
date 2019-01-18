@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from "react"
 import * as _ from 'lodash'
 
-import {ZhihuPreview, BlogPreview, LinkPreview, CommentPreview, ArticlePreview} from "./Previews"
+import {ZhihuPreview, BlogPreview, LinkPreview, CommentPreview, SnippetPreview, ArticlePreview} from "./Previews"
 
 interface Props {
     resources: any[]
@@ -68,6 +68,8 @@ export default function (props:Props) {
                 return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
             case 'comment':
                 return <CommentPreview key={resource.id} onLabel={onLabel} {...resource}></CommentPreview>
+            case 'snippet':
+                return <SnippetPreview key={resource.id} onLabel={onLabel} {...resource}></SnippetPreview>
             case 'article':
                 return <ArticlePreview 
                     key={resource.id} 

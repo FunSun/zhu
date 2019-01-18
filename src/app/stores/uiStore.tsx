@@ -18,6 +18,7 @@ export default class UIStore {
     @observable confirmAlertAction = ()=>{}
     @observable settingModalVisible: boolean = false
     @observable backupsModalVisible: boolean = false
+    @observable snippetModalVisible: boolean = false
     
     @action
     showAddBlogModal() {
@@ -133,5 +134,15 @@ export default class UIStore {
     hideBackupsModal() {
         this.backupsModalVisible = false
     }    
+
+    @action
+    showSnippetModal() {
+        this.snippetModalVisible = true
+    }
+
+    @action
+    hideSnippetModal() {
+        this.snippetModalVisible = false        
+    }
 
 }

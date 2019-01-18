@@ -15,7 +15,8 @@ export default function (props: Props) {
         setVal(Plain.deserialize(props.value))
     }, [props.value])
     let keyboardHandler = useKeyHandler(props)
-    return <Editor style={{fontSize: 14}} placeholder="请输入?" value={val} onKeyDown={keyboardHandler} onChange={({value})=>{setVal(value)}}></Editor>    
+    console.log()
+    return <Editor renderEditor={(p, editor, next)=> { editor.focus(); return next()} } style={{fontSize: 14}} placeholder="" value={val} onKeyDown={keyboardHandler} onChange={({value})=>{setVal(value)}}></Editor>    
 }
 
 function useKeyHandler(props:Props):any {

@@ -6,6 +6,8 @@ import { ThemeProvider } from '@material-ui/styles'
 
 import { createMuiTheme} from '@material-ui/core/styles'
 
+import { bind } from 'mousetrap'
+
 const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: false,
@@ -24,6 +26,10 @@ const muiTheme = createMuiTheme({
 import App from './components/App'
 
 import stores from './stores'
+
+bind("alt+s", () => {
+    stores.uiStore.showSnippetModal()
+})
 
 configure({
     enforceActions: "observed"

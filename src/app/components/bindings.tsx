@@ -17,6 +17,7 @@ import NotificationManager from './NotificationManager'
 import ConfirmAlert from './ConfirmAlert'
 import SettingModal from './SettingModal'
 import BackupsModal from './BackupsModal'
+import SnippetModal from "./SnippetModal"
 
 interface BindingProps {
     uiStore?: UIStore
@@ -199,4 +200,18 @@ export const BindingBackupsModal = bindingHelper(['uiStore', 'settingStore'], (p
         }}
         onClose={us.hideBackupsModal.bind(us)}
     ></BackupsModal>
+})
+
+export const BindingSnippetModal = bindingHelper(['uiStore', 'resourceStore'], (props)=> {
+    let rs = props.resourceStore
+    let us = props.uiStore
+
+    return <SnippetModal
+        visible={us.snippetModalVisible}
+        onClose={us.hideSnippetModal.bind(us)}
+        onSubmit={(content:string, tags: string[]) => {
+            rs.addSnippet(content, tags)
+            us.hideAddCommentModal()
+        }}
+    ></SnippetModal>
 })
