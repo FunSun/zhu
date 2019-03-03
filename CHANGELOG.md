@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.1] - 2019-03-03
+### Fixed
+- 重构binding组件
+- 使用broker
+- 尝试打包
+
 ## [1.21.0] - 2019-1-19
 ### Added
 - 增加快捷键

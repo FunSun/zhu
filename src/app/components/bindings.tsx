@@ -1,4 +1,5 @@
 import * as React from "react"
+import * as _ from 'lodash'
 
 import { inject, observer } from "mobx-react"
 import ResourceStore from "../stores/resourceStore"
@@ -18,6 +19,8 @@ import ConfirmAlert from './ConfirmAlert'
 import SettingModal from './SettingModal'
 import BackupsModal from './BackupsModal'
 import SnippetModal from "./SnippetModal"
+
+import {ZhihuPreview, BlogPreview, LinkPreview, CommentPreview, SnippetPreview, ArticlePreview} from "./Previews"
 
 interface BindingProps {
     uiStore?: UIStore
@@ -76,19 +79,47 @@ export const BindingResourceList = bindingHelper(['uiStore', 'editorStore', 'res
     let es = props.editorStore
     // explicit declare dependency on inner structure
     rs.resources.length
+
+    let previews = _.map(rs.resources, (resource) => {
+        resource = Object.assign({}, resource, {
+            'onTagClicked': (tag:string) => {rs.addTagToQuery(tag)},
+            "onDelete": (id:string) => {
+                us.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
+                    rs.deleteResource(id)
+                })
+            }
+        })
+        let onLabel = () => {us.showEditTagModal(resource.id, resource.tags)}
+        switch (resource.type) {
+            case 'zhihu':
+                return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
+            case 'blog':
+            return <BlogPreview 
+                key={resource.id} 
+                onLabel={onLabel} {...resource}
+                onClick={()=>{us.showBlogView(resource)}}
+            ></BlogPreview>
+            case 'link':
+                return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
+            case 'comment':
+                return <CommentPreview key={resource.id} onLabel={onLabel} {...resource}></CommentPreview>
+            case 'snippet':
+                return <SnippetPreview key={resource.id} onLabel={onLabel} {...resource}></SnippetPreview>
+            case 'article':
+                return <ArticlePreview 
+                    key={resource.id} 
+                    onEdit={()=> {es.editArticle(resource.id, resource.content)}} 
+                    onClick={()=>{us.showArticleView(resource)}} 
+                    {...resource}
+                    onLabel={onLabel} title={resource.title} 
+                ></ArticlePreview>
+        }
+        return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
+    })
+
     return (<ResourceList
-        resources={rs.resources}
-        onEditArticle={es.editArticle.bind(es)}
-        onShowArticle={us.showArticleView.bind(us)}
-        onShowBlog={us.showBlogView.bind(us)}
-        onLabel={us.showEditTagModal.bind(us)}
-        onTagClicked={rs.addTagToQuery.bind(rs)}
+        children={previews}
         onScrollToEnd={rs.loadMore.bind(rs)}
-        onDelete={(id:string) => {
-            us.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
-                rs.deleteResource(id)
-            })
-        }}
     ></ResourceList>)
 })
 

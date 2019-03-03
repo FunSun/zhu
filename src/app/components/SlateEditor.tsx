@@ -20,23 +20,24 @@ export default function (props: Props) {
 }
 
 function useKeyHandler(props:Props):any {
-    let ref = useRef(pointMove)
+    let ref = useRef(PointMoveAction)
     return (e: KeyboardEvent, editor:Editor, next:()=> any) => {
         if (e.ctrlKey) {
             e.preventDefault()
+            let actions = new ref.current(editor)
             switch (e.key) {
                 case "a":
-                return editor.moveToStartOfBlock()
+                return actions.moveToStartOfLine()
                 case "e":
-                return editor.moveToEndOfBlock()
+                return actions.moveToEndOfLine()
                 case "f":
-                return ref.current.moveForward(editor)
+                return actions.moveForward()
                 case "b":
-                return ref.current.moveBackward(editor)
+                return actions.moveBackward()
                 case "p":
-                return ref.current.moveUpward(editor)
+                return actions.moveUpward()
                 case "n":
-                return ref.current.moveDownward(editor)
+                return actions.moveDownward()
                 case "w":
                 return doCopy(editor)
                 case "y":
@@ -51,66 +52,11 @@ function useKeyHandler(props:Props):any {
     }
 }
 
-
-let pointMove = {
-    moveUpward: (editor:Editor) => {
-        let originOffset = editor.value.selection.focus.offset
-        editor.moveToStartOfPreviousBlock()
-        let rowLen = editor.value.focusText.text.length
-        if (originOffset > rowLen) {
-            originOffset = rowLen
-        }
-        editor.moveForward(originOffset)
-    },
-    moveDownward: (editor:Editor) => {
-        let originOffset = editor.value.selection.focus.offset
-        editor.moveToStartOfNextBlock()
-        let rowLen = editor.value.focusText.text.length
-        if (originOffset > rowLen) {
-            originOffset = rowLen
-        }
-        editor.moveForward(originOffset)
-    },
-    moveForward: (editor:Editor) => {
-        editor.moveForward()
-    },
-    moveBackward: (editor:Editor) => {
-        editor.moveBackward()
-    }
-}
-
-let markMove = {
-    moveForward: (editor:Editor) => {
-        editor.moveFocusForward()
-    },
-    moveBackward: (editor:Editor) => {
-        editor.moveFocusBackward()
-    },
-    moveUpward: (editor: Editor) => {
-        let originOffset = editor.value.selection.focus.offset
-        editor.moveFocusToStartOfPreviousBlock()
-        let rowLen = editor.value.focusText.text.length
-        if (originOffset > rowLen) {
-            originOffset = rowLen
-        }
-        editor.moveFocusForward(originOffset)
-    },
-    moveDownward: (editor: Editor) => {
-        let originOffset = editor.value.selection.focus.offset
-        editor.moveFocusToStartOfNextBlock()
-        let rowLen = editor.value.focusText.text.length
-        if (originOffset > rowLen) {
-            originOffset = rowLen
-        }
-        editor.moveFocusForward(originOffset)
-    }
-}
-
 function toggleRef(ref:any, editor:Editor) {
-    if (ref.current === pointMove) {
-        ref.current = markMove
+    if (ref.current === PointMoveAction) {
+        ref.current = MarkMoveAction
     } else {
-        ref.current = pointMove
+        ref.current = PointMoveAction
         let focus = editor.value.selection.focus
         editor.moveAnchorTo(focus.path, focus.offset)
     }
@@ -167,4 +113,93 @@ function deserialize(str:string):any {
 function doPaste(editor:Editor) {
     let text = (global as any).clipboard.readText()
     editor.insertFragment(deserialize(text))
+}
+
+interface MoveAction {
+    moveToStartOfLine():void
+    moveToEndOfLine():void
+    moveForward():void
+    moveBackward():void
+    moveUpward(): void
+    moveDownward():void
+}
+
+class PointMoveAction implements MoveAction {
+    editor: Editor
+    constructor(editor:Editor) {
+        this.editor = editor
+    }
+    moveToStartOfLine():void {
+        this.editor.moveToStartOfBlock()
+    }
+    moveToEndOfLine(): void {
+        this.editor.moveToEndOfBlock()
+    }
+    moveForward(): void {
+        this.editor.moveForward()        
+    }
+    moveBackward(): void {
+        this.editor.moveBackward()
+    }
+    moveUpward(): void {
+        let editor = this.editor
+        let originOffset = editor.value.selection.focus.offset
+        editor.moveToStartOfPreviousBlock()
+        let rowLen = editor.value.focusText.text.length
+        if (originOffset > rowLen) {
+            originOffset = rowLen
+        }
+        editor.moveForward(originOffset)
+    }
+    moveDownward(): void {
+        let editor = this.editor
+        let originOffset = editor.value.selection.focus.offset
+        editor.moveToStartOfNextBlock()
+        let rowLen = editor.value.focusText.text.length
+        if (originOffset > rowLen) {
+            originOffset = rowLen
+        }
+        editor.moveForward(originOffset)
+    }
+    
+}
+
+class MarkMoveAction implements MoveAction{
+    editor: Editor
+    constructor(editor:Editor) {
+        this.editor = editor
+    }
+    moveToStartOfLine() {
+        this.editor.moveFocusToStartOfBlock()
+    }
+    moveToEndOfLine() {
+        this.editor.moveFocusToEndOfBlock()
+    }
+    moveForward() {
+        this.editor.moveFocusForward()        
+    }
+    moveBackward() {
+        this.editor.moveFocusBackward()
+    }
+    moveUpward() {
+        let editor = this.editor
+        let originOffset = editor.value.selection.focus.offset
+        editor.moveFocusToStartOfPreviousBlock()
+        let rowLen = editor.value.focusText.text.length
+        if (originOffset > rowLen) {
+            originOffset = rowLen
+        }
+        editor.moveFocusForward(originOffset)
+    }
+    moveDownward() {
+        let editor = this.editor
+        let originOffset = editor.value.selection.focus.offset
+        editor.moveFocusToStartOfNextBlock()
+        let rowLen = editor.value.focusText.text.length
+        if (originOffset > rowLen) {
+            originOffset = rowLen
+        }
+        editor.moveFocusForward(originOffset)
+    }
+
 }

@@ -10,16 +10,17 @@
     "email": "funsun_chn@163.com",
     "name": "Fun Sun"
   },
-  "scripts": {
-    "luis": "luis",
-    "clean": "rm -rf .fusebox out dist coverage",
-    "build": "NODE_ENV=production ts-node fuse electron",
-    "dev": "ts-node fuse electron",
-    "web": "ts-node fuse web",
-    "test": "jest",
-    "dist": "electron-packager",
-    "dist-windows": "electron-packager --platform win32"
+  "build": {
+    "appId": "rocks.letus.zhu-ui",
+    "productName": "zhu-ui",
+    "files": [
+      "./build/**/*"
+    ],
+    "linux": {
+      "target": "zip"
+    }
   },
+  "scripts": {},
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
