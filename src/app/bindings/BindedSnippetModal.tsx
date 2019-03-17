@@ -27,8 +27,7 @@ export default bindWith(["snippetStore"], (props:bindProps) => {
     let onClose = () => {store.hideSnippetModal()}
     let onSubmit = (v:string) => {
         let {content, tags} = parseText(v)
-        store.addSnippet(content, tags)
-        store.hideSnippetModal()
+        store.submitSnippet(content, tags)
     }
 
 

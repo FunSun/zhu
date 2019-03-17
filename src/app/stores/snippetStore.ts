@@ -10,6 +10,7 @@ export default class SnippetStore {
     @observable id: string = ""
 
     bs: BasicStore
+    saved: boolean
 
     constructor(bs: BasicStore) {
         this.bs = bs
@@ -23,6 +24,11 @@ export default class SnippetStore {
     @action
     hideSnippetModal() {
         this.visible = false
+        if (this.saved) {
+            this.id = ""
+            this.content = ""
+            this.saved = false
+        }
     }
 
     @action
@@ -32,17 +38,34 @@ export default class SnippetStore {
         this.content = content
     }
 
-    addSnippet = flow(function * addSnippet(content:string, tags: string[]): any {
-        try {
-            let body = {
-                content: content,
-                tags: tags
+    submitSnippet = flow(function * addSnippet(content:string, tags: string[]): any {
+        if (this.id === "") {
+            try {
+                let body = {
+                    content: content,
+                    tags: tags
+                }
+                let res = yield axios.post(this.bs.server + '/resources/snippet/add', body)
+                this.id = res.data.id
+                this.bs.notify("添加成功")
+            } catch(err) {
+                this.bs.notify("添加失败", "error")    
+                console.log(err)
             }
-            yield axios.post(this.bs.server + '/resources/snippet', body)
-            this.bs.notify("添加成功")
-        } catch(err) {
-            this.bs.notify("添加失败", "error")    
-            console.log(err)
+        } else {
+            try {
+                let body = {
+                    id: this.id,
+                    content: content,
+                    tags: tags
+                }
+                yield axios.post(this.bs.server + '/resources/snippet/update', body)
+                this.bs.notify("添加成功")
+            } catch(err) {
+                this.bs.notify("添加失败", "error")    
+                console.log(err)
+            }
         }
+        this.saved = true
     })
 }
