@@ -1,17 +1,21 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bind, BindingProps} from './base'
+import {bindWith} from './base'
 import ResourceList from '../components/ResourceList'
 import {Preview, EditAction, LabelAction, DeleteAction, LinkRow, SnippetRow} from '../components/Previews'
-import { FormTextArea } from "semantic-ui-react";
+import ResourceStore from "../stores/resourceStore"
+import TagStore from "../stores/tagStore"
 
-function bindPreview(props:BindingProps, resource:any) {
-    let rs = props.resource
-    let us = props.ui
+function bindPreview(props:{
+    resourceStore: ResourceStore,
+    tagStore: TagStore
+}, resource:any) {
+    let rs = props.resourceStore
+    let ts = props.tagStore
     let rows = null
     // onTag={() => {rs.addTagToQuery(resource.tags)}}
     let actions = [
-        <LabelAction onLabel={() => {us.showEditTagModal(resource.id, resource.tags)}}></LabelAction>,
+        <LabelAction onLabel={() => {ts.showEditTagModal(resource.id, resource.tags)}}></LabelAction>,
         <DeleteAction onDelete={() => {
             alert("暂时禁用")
             // us.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
@@ -61,13 +65,16 @@ function bindPreview(props:BindingProps, resource:any) {
     return <Preview key={resource.id} rows={rows} actions={actions} created={resource.created}></Preview>
 }
 
-export default bind((props:BindingProps) => {
+export default bindWith(["resourceStore", "tagStore"], (props:{
+    resourceStore: ResourceStore,
+    tagStore: TagStore
+}) => {
     // explicit declare dependency on inner structure
-    let resources = props.resource.resources
+    let resources = props.resourceStore.resources
     resources.length
     console.log(resources[0])
-    props.resource.resources.length
-    let onScrollToEnd = () => {props.resource.loadMore()}
+    props.resourceStore.resources.length
+    let onScrollToEnd = () => {props.resourceStore.loadMore()}
 
     let previews = _.map(resources, bindPreview.bind(null, props))
 

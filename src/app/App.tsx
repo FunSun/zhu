@@ -3,18 +3,14 @@ import {createStyles, withStyles, WithStyles} from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
 import {
-    BindingArticleEditor,
-    BindingAppBar,
-    BindingAddCommentModal,
-    BindingArticleView,
-    BindingEditTagModal,
-    BindingNotificationManager,
-    BindingConfirmAlert,
-    BindingBlogView,
-    BindingSettingModal,
-    BindingBackupsModal,
-    BindedSnippetModal,
-    BindedResouceList
+    BindedAppBar,
+    BindedBackupModal,
+    BindedConfirmAlert,
+    BindedEditTagModal,
+    BindedNotificationManager,
+    BindedResouceList,
+    BindedSettingModal,
+    BindedSnippetModal
 } from './bindings'
 
 let styles = createStyles({
@@ -29,22 +25,17 @@ export default withStyles(styles)((props: WithStyles<typeof styles>) => {
         <CssBaseline/>
         <div className={props.classes.root}>
             <div>
-                <BindingAppBar></BindingAppBar>
+                <BindedAppBar></BindedAppBar>
                 <BindedResouceList></BindedResouceList>
             </div>
             <div>
-                <BindingAddCommentModal></BindingAddCommentModal>
-                <BindingEditTagModal></BindingEditTagModal>
-                <BindingEditTagModal></BindingEditTagModal>                
-                <BindingArticleEditor></BindingArticleEditor>
-                <BindingArticleView></BindingArticleView>
-                <BindingBlogView></BindingBlogView>
-                <BindingSettingModal></BindingSettingModal>
-                <BindingBackupsModal></BindingBackupsModal>
+                <BindedBackupModal></BindedBackupModal>
+                <BindedSettingModal></BindedSettingModal>
+                <BindedEditTagModal></BindedEditTagModal>
                 <BindedSnippetModal></BindedSnippetModal>
             </div>
-            <BindingNotificationManager></BindingNotificationManager>
-            <BindingConfirmAlert></BindingConfirmAlert>
+            <BindedNotificationManager></BindedNotificationManager>
+            <BindedConfirmAlert></BindedConfirmAlert>
         </div>
     </React.Fragment>)
 })

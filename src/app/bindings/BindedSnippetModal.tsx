@@ -1,7 +1,8 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bind, BindingProps} from './base'
+import {bindWith} from './base'
 import SnippetModal from '../components/SnippetModal'
+import SnippetStore from '../stores/snippetStore'
 
 function parseText(v: string) {
     let content = v
@@ -16,19 +17,24 @@ function parseText(v: string) {
     return {content, tags}
 }
 
-export default bind((props:BindingProps) => {
-    let visible = props.ui.snippetModalVisible
-    let content = props.ui.snippetModalContent
-    let onClose = () => {props.ui.hideSnippetModal()}
+interface bindProps {
+    snippetStore: SnippetStore
+}
+
+export default bindWith(["snippetStore"], (props:bindProps) => {
+    let store = props.snippetStore
+
+    let onClose = () => {store.hideSnippetModal()}
     let onSubmit = (v:string) => {
         let {content, tags} = parseText(v)
-        props.resource.addSnippet(content, tags)
-        props.ui.hideAddCommentModal()
+        store.addSnippet(content, tags)
+        store.hideSnippetModal()
     }
 
+
     return <SnippetModal
-        visible={visible}
-        content={content}
+        visible={store.visible}
+        content={store.content}
         onClose={onClose}
         onSubmit={onSubmit}
     ></SnippetModal>

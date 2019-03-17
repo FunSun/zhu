@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.0] - 2019-03-17
+### Change
+- 重构了binding
+
 ## [1.22.0] - 2019-03-17
 ### Change
 - snippet有接受store的提供的输入

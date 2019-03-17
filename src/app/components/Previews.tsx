@@ -2,6 +2,7 @@ import React from "react"
 import { makeStyles, createStyles } from '@material-ui/styles'
 import { Theme } from '@material-ui/core/styles'
 import * as _ from 'lodash'
+import PageX from './PageX'
 
 import {Chip} from '@material-ui/core'
 
@@ -179,19 +180,13 @@ export function DeleteAction(props:DeleteActionProps) {
     return <span className={classes.action} onClick={props.onDelete}>删除</span>
 }
 
-interface SnippetViewProps {
-    content: string
-}
-const SnippetView = (props:SnippetViewProps) => {
-    return <div>{props.content}</div>
-}
-
 interface SnippetRowProps {
     content: string
 }
 
 export function SnippetRow(props:SnippetRowProps) {
-    return <div>{props.content}</div>
+    return (<PageX content={props.content}></PageX>)
+
 }
 
 interface FamousePreviewProps extends BaseProps {

@@ -1,15 +1,18 @@
+import BasicStore from './basicStore'
 import ResourceStore from './resourceStore'
-import UIStore from './uiStore'
 import SettingStore from './settingStore'
-import EditorStore from './editorStore'
-let us = new UIStore()
-let ss = new SettingStore(us)
-let rs = new ResourceStore(us, ss)
-let es = new EditorStore(us, ss)
+import SnippetStore from './snippetStore'
+import TagStore from './tagStore'
+let basicStore = new BasicStore()
+let settingStore = new SettingStore(basicStore)
+let resourceStore = new ResourceStore(basicStore)
+let snippetStore = new SnippetStore(basicStore)
+let tagStore = new TagStore(basicStore)
 
 export default {
-    resourceStore: rs,
-    uiStore: us,
-    settingStore: ss,
-    editorStore: es
+    basicStore,
+    resourceStore,
+    settingStore,
+    snippetStore,
+    tagStore
 }
