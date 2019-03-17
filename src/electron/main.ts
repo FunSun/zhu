@@ -13,8 +13,8 @@ const appPath = app.getAppPath()
 
 // fires when Electron is ready to start
 app.on("ready", () => {
-  if (process.env["NODE_ENV"] === 'developement'){
-    BrowserWindow.addDevToolsExtension(join(process.cwd(), "extensions/react"))  
+  if (process.env["PLUGIN"] === 'withplugin'){
+    BrowserWindow.addDevToolsExtension(join(process.cwd(), "extensions/react"))
     BrowserWindow.addDevToolsExtension(join(process.cwd(), "extensions/mobx"))
   }
   createMainWindow(appPath) as any

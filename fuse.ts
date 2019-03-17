@@ -63,12 +63,15 @@ Sparky.task("electron", ["copy-electron-html"], () => {
     rendererBundle.hmr()
   }
 
+  let env = Object.create( process.env )
+  env.PLUGIN = 'withplugin'
   // when we are finished bundling...
   return fuse.run().then(() => {
     if (!isProduction) {
       // startup electron
       spawn("node", [`${__dirname}/node_modules/electron/cli.js`, __dirname], {
         stdio: "inherit",
+        env: env
       }).on("exit", code => {
         console.log(`electron process exited with code ${code}`)
         process.exit(code)

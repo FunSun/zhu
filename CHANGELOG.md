@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2019-03-17
+### Change
+- snippet有接受store的提供的输入
+- 重构了preivew部分
+- 增加binding目录
+- 调整插件加载机制
+
 ## [1.21.1] - 2019-03-03
 ### Fixed
 - 重构binding组件

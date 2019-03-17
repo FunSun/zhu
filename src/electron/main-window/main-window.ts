@@ -3,7 +3,7 @@ import { join } from "path"
 import { format } from "url"
 
 // default dimensions
-export const DIMENSIONS = { width: 1920, height: 800, minWidth: 1920, minHeight: 800 }
+export const DIMENSIONS = { width: 600, height: 400, minWidth: 600, minHeight: 400 }
 
 /**
  * Creates the main window.

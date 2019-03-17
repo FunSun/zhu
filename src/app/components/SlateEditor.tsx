@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function (props: Props) {
-    let [val, setVal] = useState(Plain.deserialize(""))
+    let [val, setVal] = useState(Plain.deserialize(props.value))
     useMemo(() => {
         setVal(Plain.deserialize(props.value))
     }, [props.value])

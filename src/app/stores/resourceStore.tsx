@@ -16,7 +16,7 @@ export interface Blog {
 }
 
 export default class ResourceStore {
-    @observable resources:any = []
+    @observable resources:any[] = []
     @observable query: string = ""
     us: UIStore
     ss: SettingStore

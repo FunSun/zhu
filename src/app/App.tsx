@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import {
     BindingArticleEditor,
     BindingAppBar,
-    BindingResourceList,
     BindingAddCommentModal,
     BindingArticleView,
     BindingEditTagModal,
@@ -14,7 +13,8 @@ import {
     BindingBlogView,
     BindingSettingModal,
     BindingBackupsModal,
-    BindingSnippetModal
+    BindedSnippetModal,
+    BindedResouceList
 } from './bindings'
 
 let styles = createStyles({
@@ -30,7 +30,7 @@ export default withStyles(styles)((props: WithStyles<typeof styles>) => {
         <div className={props.classes.root}>
             <div>
                 <BindingAppBar></BindingAppBar>
-                <BindingResourceList></BindingResourceList>
+                <BindedResouceList></BindedResouceList>
             </div>
             <div>
                 <BindingAddCommentModal></BindingAddCommentModal>
@@ -41,7 +41,7 @@ export default withStyles(styles)((props: WithStyles<typeof styles>) => {
                 <BindingBlogView></BindingBlogView>
                 <BindingSettingModal></BindingSettingModal>
                 <BindingBackupsModal></BindingBackupsModal>
-                <BindingSnippetModal></BindingSnippetModal>
+                <BindedSnippetModal></BindedSnippetModal>
             </div>
             <BindingNotificationManager></BindingNotificationManager>
             <BindingConfirmAlert></BindingConfirmAlert>

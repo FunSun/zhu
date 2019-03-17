@@ -23,7 +23,7 @@ const muiTheme = createMuiTheme({
 
 
 
-import App from './components/App'
+import App from './App'
 
 import stores from './stores'
 

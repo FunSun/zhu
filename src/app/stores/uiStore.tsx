@@ -19,6 +19,8 @@ export default class UIStore {
     @observable settingModalVisible: boolean = false
     @observable backupsModalVisible: boolean = false
     @observable snippetModalVisible: boolean = false
+    @observable snippetModalContent: string = ""
+    @observable snippetId: string = ""
     
     @action
     showAddBlogModal() {
@@ -137,12 +139,21 @@ export default class UIStore {
 
     @action
     showSnippetModal() {
+        this.snippetModalContent = ""
+        this.snippetId = ""
         this.snippetModalVisible = true
     }
 
     @action
     hideSnippetModal() {
         this.snippetModalVisible = false        
+    }
+
+    @action
+    editSnippet(id:string, content:string) {
+        this.snippetModalVisible = true
+        this.snippetId  = id
+        this.snippetModalContent = content
     }
 
 }

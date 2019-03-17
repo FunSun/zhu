@@ -7,20 +7,18 @@ import UIStore from "../stores/uiStore"
 import SettingStore from '../stores/settingStore'
 import EditorStore from '../stores/editorStore'
 
-import ArticleEditor from './ArticleEditor'
-import AppBar from './AppBar'
-import ResourceList from "./ResourceList"
-import AddCommentModal from './AddCommentModal'
-import ArticleView from './ArticleView'
-import BlogView from './BlogView'
-import EditTagModal from './EditTagModal'
-import NotificationManager from './NotificationManager'
-import ConfirmAlert from './ConfirmAlert'
-import SettingModal from './SettingModal'
-import BackupsModal from './BackupsModal'
-import SnippetModal from "./SnippetModal"
-
-import {ZhihuPreview, BlogPreview, LinkPreview, CommentPreview, SnippetPreview, ArticlePreview} from "./Previews"
+import ArticleEditor from '../components/ArticleEditor'
+import AppBar from '../components/AppBar'
+import ResourceList from "../components/ResourceList"
+import AddCommentModal from '../components/AddCommentModal'
+import ArticleView from '../components/ArticleView'
+import BlogView from '../components/BlogView'
+import EditTagModal from '../components/EditTagModal'
+import NotificationManager from '../components/NotificationManager'
+import ConfirmAlert from '../components/ConfirmAlert'
+import SettingModal from '../components/SettingModal'
+import BackupsModal from '../components/BackupsModal'
+import SnippetModal from "../components/SnippetModal"
 
 interface BindingProps {
     uiStore?: UIStore
@@ -63,7 +61,7 @@ export const BindingAppBar = bindingHelper(['uiStore', 'editorStore', 'resourceS
     return <AppBar
         query={rs.query}
         onAddIconClicked={us.showSettingModal.bind(us)}
-        onCommentIconClicked={us.showAddCommentModal.bind(us)}
+        onCommentIconClicked={us.showSnippetModal.bind(us)}
         onEditIconClicked={es.openEditor.bind(es)}
         onQueryChange={rs.updateQuery.bind(rs)}
         onSubmit={rs.reload.bind(rs)}
@@ -72,56 +70,6 @@ export const BindingAppBar = bindingHelper(['uiStore', 'editorStore', 'resourceS
 
 const DeleteResourceConfirmTitle = "确认删除?"
 const DeleteResourceConfirmDesc = "你确定要删除这个条目吗?"
-
-export const BindingResourceList = bindingHelper(['uiStore', 'editorStore', 'resourceStore'], (props) => {
-    let rs = props.resourceStore
-    let us = props.uiStore
-    let es = props.editorStore
-    // explicit declare dependency on inner structure
-    rs.resources.length
-
-    let previews = _.map(rs.resources, (resource) => {
-        resource = Object.assign({}, resource, {
-            'onTagClicked': (tag:string) => {rs.addTagToQuery(tag)},
-            "onDelete": (id:string) => {
-                us.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
-                    rs.deleteResource(id)
-                })
-            }
-        })
-        let onLabel = () => {us.showEditTagModal(resource.id, resource.tags)}
-        switch (resource.type) {
-            case 'zhihu':
-                return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
-            case 'blog':
-            return <BlogPreview 
-                key={resource.id} 
-                onLabel={onLabel} {...resource}
-                onClick={()=>{us.showBlogView(resource)}}
-            ></BlogPreview>
-            case 'link':
-                return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
-            case 'comment':
-                return <CommentPreview key={resource.id} onLabel={onLabel} {...resource}></CommentPreview>
-            case 'snippet':
-                return <SnippetPreview key={resource.id} onLabel={onLabel} {...resource}></SnippetPreview>
-            case 'article':
-                return <ArticlePreview 
-                    key={resource.id} 
-                    onEdit={()=> {es.editArticle(resource.id, resource.content)}} 
-                    onClick={()=>{us.showArticleView(resource)}} 
-                    {...resource}
-                    onLabel={onLabel} title={resource.title} 
-                ></ArticlePreview>
-        }
-        return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
-    })
-
-    return (<ResourceList
-        children={previews}
-        onScrollToEnd={rs.loadMore.bind(rs)}
-    ></ResourceList>)
-})
 
 export const BindingAddCommentModal = bindingHelper(['uiStore', 'resourceStore'], (props) => {
     let rs = props.resourceStore
@@ -233,16 +181,5 @@ export const BindingBackupsModal = bindingHelper(['uiStore', 'settingStore'], (p
     ></BackupsModal>
 })
 
-export const BindingSnippetModal = bindingHelper(['uiStore', 'resourceStore'], (props)=> {
-    let rs = props.resourceStore
-    let us = props.uiStore
-
-    return <SnippetModal
-        visible={us.snippetModalVisible}
-        onClose={us.hideSnippetModal.bind(us)}
-        onSubmit={(content:string, tags: string[]) => {
-            rs.addSnippet(content, tags)
-            us.hideAddCommentModal()
-        }}
-    ></SnippetModal>
-})
+export {default as BindedSnippetModal} from './BindedSnippetModal'
+export {default as BindedResouceList} from './BindedResourceList'
