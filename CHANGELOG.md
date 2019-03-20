@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.1] - 2019-03-21
+### Fixed
+- 修复了pagex组件不能解析thermal break的问题
+
 ## [1.24.0] - 2019-03-17
 ### Change
 - snippet增加删除和编辑功能

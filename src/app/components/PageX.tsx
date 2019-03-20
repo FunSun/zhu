@@ -784,6 +784,8 @@ export default function (props: Props) {
                         return <img src={o.content} alt={o.name}></img>
                       }
                     })}</p>
+                  case BlockType.ThermaticBreak:
+                    return <hr></hr>
                   case BlockType.Table:
                     return <Table>{block.content.join('\n')}</Table>
                   default: 
