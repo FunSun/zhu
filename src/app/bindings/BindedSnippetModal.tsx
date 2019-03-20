@@ -7,13 +7,13 @@ import SnippetStore from '../stores/snippetStore'
 function parseText(v: string) {
     let content = v
     let tags = ["未分类"]
-    let lines = _.split(v, "\n")
-    if (lines.length > 1) {
-        tags = _.map(_.filter(_.split(lines[0], " "), (token) => {return token !== "" && token !== " "}), (token:string) => {
-            return _.trimStart(token, '@')
-        })
-        content = _.join(lines.slice(1), "\n")
-    }
+    // let lines = _.split(v, "\n")
+    // if (lines.length > 1) {
+    //     tags = _.map(_.filter(_.split(lines[0], " "), (token) => {return token !== "" && token !== " "}), (token:string) => {
+    //         return _.trimStart(token, '@')
+    //     })
+    //     content = _.join(lines.slice(1), "\n")
+    // }
     return {content, tags}
 }
 

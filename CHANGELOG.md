@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.2] - 2019-03-22
+### Fixed
+- 禁用了snippet第一行留给标签的逻辑
+
 ## [1.24.1] - 2019-03-21
 ### Fixed
 - 修复了pagex组件不能解析thermal break的问题
