@@ -11,7 +11,7 @@ const isProduction = process.env.NODE_ENV === "production"
 
 // copy the renderer's html file into the right place
 Sparky.task("copy-electron-html", () => {
-  return Sparky.src("src/electron/index.html").dest(`${ELECTRON_OUTPUT_DIR}/$name`)
+  return Sparky.src("src/renderer/index.html").dest(`${ELECTRON_OUTPUT_DIR}/$name`)
 })
 
 // the default task
@@ -37,7 +37,7 @@ Sparky.task("electron", ["copy-electron-html"], () => {
   const mainBundle = fuse
     .bundle("main")
     .target("server")
-    .instructions("> [electron/main.ts]")
+    .instructions("> [main/main.ts]")
     // inject in some configuration
     .plugin(
       ReplacePlugin({
@@ -53,7 +53,7 @@ Sparky.task("electron", ["copy-electron-html"], () => {
   // bundle the electron renderer code
   const rendererBundle = fuse
     .bundle("renderer")
-    .instructions("> [electron/index.tsx] +fuse-box-css")
+    .instructions("> [renderer/index.tsx] +fuse-box-css")
     .plugin([CSSResourcePlugin({dist: ELECTRON_OUTPUT_DIR + "/resources"}), CSSPlugin()])
     .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
 
@@ -78,37 +78,4 @@ Sparky.task("electron", ["copy-electron-html"], () => {
       })
     }
   })
-})
-
-const WEB_OUTPUT_DIR = "build/web"
-
-Sparky.task("copy-web-html", () => {
-  return Sparky.src("src/web/index.html").dest(`${WEB_OUTPUT_DIR}/$name`)
-})
-
-Sparky.task("web", ["copy-web-html"], () => {
-  // setup the producer with common settings
-  const fuse = FuseBox.init({
-    homeDir: "src",
-    allowSyntheticDefaultImports: true,
-    output: `${WEB_OUTPUT_DIR}/$name.js`,
-    target: "browser@es6",
-    log: true,
-    cache: false,
-    sourceMaps: true,
-    tsConfig: "tsconfig.json",
-  })
-
-
-
-  // bundle the electron renderer code
-  fuse
-    .bundle("renderer")
-    .target("browser")
-    .instructions("> web/index.tsx")
-    .plugin([CSSResourcePlugin({dist: WEB_OUTPUT_DIR + "/resources"}), CSSPlugin()])
-    .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
-
-  // when we are finished bundling...
-  return fuse.run().then(() => {})
 })

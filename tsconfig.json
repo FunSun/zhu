@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": { "*": ["types/*"] },
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -12,7 +14,7 @@
     "noImplicitAny": true,
     "sourceMap": true
   },
-  "include": ["src", "typings", "fuse.ts"],
+  "include": ["src", "fuse.ts", "types"],
   "exclude": [
     "node_modules"
   ]

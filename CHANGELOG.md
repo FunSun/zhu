@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-03-24
+### Changed
+- 将数据存储转移到main进程
+
+
 ## [1.24.2] - 2019-03-22
 ### Fixed
 - 禁用了snippet第一行留给标签的逻辑
