@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2019-03-25
+### Changed
+- 重构代码
+- 重新启用NSFW
+
 ## [2.1.0] - 2019-03-24
 ### Changed
 - 修复无法导致无法打包相关问题， 

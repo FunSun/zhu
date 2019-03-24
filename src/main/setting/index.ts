@@ -20,6 +20,10 @@ export function getPort(): number {
     return conf["port"]
 }
 
+export function getNSFW(): boolean {
+    return conf["NSFW"]
+}
+
 export async function init() {
     let target = null
     if (fs.existsSync("./settings.json")) {

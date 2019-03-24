@@ -25,6 +25,16 @@ function getFullText(doc: any): string {
     return ""
 }
 
+function filterDocs(docs: any[]): any[] {
+    if (!settings.getNSFW()) {
+        return docs
+    }
+    return _.filter(docs, (doc:any) => {
+        let tags = doc.tags as string[]
+        return !_.includes(tags, "NSFW")
+    })
+}
+
 export class Store {
         db: PouchDB.Database
         idx: flexsearch.Index
@@ -88,37 +98,37 @@ export class Store {
                 emit("1")
             }
         }, {key: "1", include_docs: true})
-        return _.map(_.shuffle(res.rows).slice(0, limit), (row) => {
+        return filterDocs(_.map(_.shuffle(res.rows).slice(0, limit), (row) => {
             let res = row.doc as any
             res.id = row.id
             delete res["_id"]
             delete res["_rev"]
             return res
-        })
+        }))
     }
 
     async simpleSearch(query:string, offset:number, limit:number): Promise<any> {
         let ids = await this.idx.search(query)
         let res =  await this.db.find({selector: {_id: {$in: ids}}})
-        return _.map(res.docs, (doc) => {
+        return filterDocs(_.map(res.docs, (doc) => {
             let res = doc as any
             res.id = doc["_id"]
             delete res["_id"]
             delete res["_rev"]
             return res
-        })
+        }))
     }
 
     async findByType(type: string, offset:number, limit: number) {
         logger("findByType").debug(type)
         let res = await this.db.find({selector: {"type": type, "created": {$gt: null}}, skip:offset, limit:limit, sort: [{"created": "desc"}]})
-        return _.map(res.docs, (doc) => {
+        return filterDocs(_.map(res.docs, (doc) => {
             let res = doc as any
             res.id = doc["_id"]
             delete res["_id"]
             delete res["_rev"]
             return res
-        })
+        }))
     }
     async updateTags(id: string, tags:Tag[]):Promise<void> {
         let doc = await this.db.get(id)
