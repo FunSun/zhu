@@ -1,8 +1,3 @@
-// logger as a builtin
-import {replaceConsoleLog} from './logger'
-
-replaceConsoleLog()
-
 import {Link, Tag, hashCode} from '../models'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'

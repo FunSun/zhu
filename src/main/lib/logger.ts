@@ -38,8 +38,15 @@ export default function createLogger(ns?:string) {
 
 export function replaceConsoleLog() {
     (global as any).logger = createLogger
-    console.log = function (...params:any[]) {
-        console.trace()
-        throw "Use globa.logger instead! "
-    }
+    // console.log = function (...params:any[]) {
+    //     console.trace()
+    //     throw "Use globa.logger instead! "
+    // }
 }
+
+export function wait(ms: number) {
+    return new Promise((receive, reject) => {
+        setTimeout(() => {receive()}, ms)
+    })
+}
+

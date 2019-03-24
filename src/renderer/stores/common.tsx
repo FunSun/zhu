@@ -1,12 +1,8 @@
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
 import axios from 'axios'
-import { loadSetting} from '../lib/settings'
 
-export default class BasicStore {
-    @observable safeMode:boolean
-    @observable server: string
-    @observable keybindings: string
+export class BasicStore {
     @observable notifyBuffer: any = []
     @observable confirmAlertVisible: boolean = false
     @observable confirmAlertTitle:string = ""
@@ -14,9 +10,6 @@ export default class BasicStore {
     @observable confirmAlertAction = ()=>{}
     
     constructor() {
-        this.safeMode = loadSetting("safeMode")
-        this.server = loadSetting("server")
-        this.keybindings = loadSetting("keybindings")
     }
 
     @action
@@ -43,11 +36,31 @@ export default class BasicStore {
 
 }
 
+let _store:BasicStore = null
+export function getStore(): BasicStore {
+    if (!_store) {
+        _store = new BasicStore()
+    }
+    return _store
+
+}
+
 export async function invokeRPC(method: string, ...args: any[]):Promise<any> {
-    let res = await axios.post('http://127.0.0.1:8070/rpc', {method, args})
+    let port = (global as any).port
+    let res = await axios.post(`http://127.0.0.1:${port}/rpc`, {method, args})
     let data = res.data
     if (data.error) {
         throw data.error
     }
     return data.result
 }
+
+function doNotify(lvl:string, msg: string) {
+    getStore().notify(msg, lvl)
+}
+
+export const notify = {
+    warn: doNotify.bind(null, "warn"),
+    info: doNotify.bind(null, "info")
+}
+

@@ -1,48 +1,50 @@
 // This is the entry point for the renderer process.
-//
-// Here we disable a few electron settings and mount the root component.
-import { webFrame, shell } from "electron"
-import {defaultSetting} from './lib/settings'
-
-// default setting
-defaultSetting("safeMode", false)
-defaultSetting("server", "http://localhost:8070")
-defaultSetting("keybindings", "default")
-
-let glb = (global as any)
-glb.clipboard = require('electron').clipboard as any
-
-/**
- * Zooming resets
- */
-webFrame.setVisualZoomLevelLimits(1, 1)
-webFrame.setLayoutZoomLevelLimits(0, 0)
-
-/**
- * Drag and drop resets
- */
-document.addEventListener("dragover", event => event.preventDefault())
-document.addEventListener("drop", event => event.preventDefault())
-document.addEventListener('click', function (event:any) {
-  if (event.target.tagName === 'A' && event.target.href.startsWith('http')) {
-    event.preventDefault()
-    shell.openExternal(event.target.href)
-  }
-})
-
-
-
-
+import { webFrame, shell, remote } from "electron"
 import * as ReactDOM from 'react-dom'
 import * as React from 'react'
-import { configure } from 'mobx'
+
+// default 
+function preset() {
+    // set global var
+    let glb = (global as any)
+    glb.port = remote.getGlobal("port")
+    glb.clipboard = require('electron').clipboard as any
+    (window as any).React = React
+
+    // Zooming resets
+    webFrame.setVisualZoomLevelLimits(1, 1)
+    webFrame.setLayoutZoomLevelLimits(0, 0)
+    
+    // Drag and drop resets
+    document.addEventListener("dragover", event => event.preventDefault())
+    document.addEventListener("drop", event => event.preventDefault())
+    // handle anchor click
+    document.addEventListener('click', function (event:any) {
+      if (event.target.tagName === 'A' && event.target.href.startsWith('http')) {
+        event.preventDefault()
+        shell.openExternal(event.target.href)
+      }
+    })
+}
+preset()
+
+// store
 import { Provider } from 'mobx-react'
-import { ThemeProvider } from '@material-ui/styles'
+import { configure } from 'mobx'
+import stores from './stores'
+configure({
+    enforceActions: "observed"
+})
 
-import { createMuiTheme} from '@material-ui/core/styles'
-
+// keybindings
 import { bind } from 'mousetrap'
+bind("alt+s", () => {
+    stores.snippetStore.showSnippetModal()
+})
 
+// theme
+import { ThemeProvider } from '@material-ui/styles'
+import { createMuiTheme} from '@material-ui/core/styles'
 const muiTheme = createMuiTheme({
     typography: {
         useNextVariants: false,
@@ -56,20 +58,8 @@ const muiTheme = createMuiTheme({
     }
 })
 
-
-
+// run app
 import App from './App'
-
-import stores from './stores'
-
-bind("alt+s", () => {
-    stores.snippetStore.showSnippetModal()
-})
-
-configure({
-    enforceActions: "observed"
-})
-
 function runApp () {
     ReactDOM.render((
         <Provider {...stores}>
@@ -79,5 +69,4 @@ function runApp () {
         </Provider>
       ), document.getElementById('root'))
 }
-
 runApp()

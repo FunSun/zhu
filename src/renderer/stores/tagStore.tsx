@@ -1,18 +1,16 @@
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
 
-import BasicStore, {invokeRPC} from './basicStore'
+import {invokeRPC, notify} from './common'
 import ResourceStore from './resourceStore'
 
 export default class TagStore {
     @observable editTagModalBuffer: any = {id: "", tags: []}
     @observable editTagModalVisible: boolean = false
 
-    bs: BasicStore
     rs: ResourceStore
 
-    constructor(bs: BasicStore, rs: ResourceStore) {
-        this.bs = bs
+    constructor(rs: ResourceStore) {
         this.rs = rs
     }
 
@@ -40,14 +38,14 @@ export default class TagStore {
     updateTags = flow(function * updateTags(id: string, tags: string[]):any {
         try {
             yield invokeRPC("updateTags", id, tags)
-            this.bs.notify("更新成功")
+            notify.info("更新成功")
             let target = _.find(this.rs.resources, {id}) as any
             target.tags.replace(tags)
             // connecting elemtn only react to this.resource, not this.resource[n].tags
             // so we need this method to force update
             this.rs.resources.replace(this.rs.resources) 
         } catch(err) {
-            this.bs.notify("更新失败", "error")    
+            notify.warn("更新失败")
             console.log(err)
         }
     })

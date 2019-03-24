@@ -1,6 +1,6 @@
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
-import BasicStore, {invokeRPC} from './basicStore'
+import {invokeRPC, notify} from './common'
 
 export interface Resource {
     id: string
@@ -15,15 +15,13 @@ async function queryResource(query: string, offset: number, limit:number) {
     }
     return await invokeRPC("search", query, offset, limit)
 }
+
 export default class ResourceStore {
     @observable resources:any[] = []
     @observable query: string = ""
     offset: number
 
-    bs: BasicStore
-
-    constructor(bs: BasicStore) {
-        this.bs = bs
+    constructor() {
         this.reload()
     }
 
@@ -54,9 +52,9 @@ export default class ResourceStore {
             let res = yield queryResource(this.query, 0, 24)
             this.resources.replace(res)
             this.offset = this.resources.length
-            this.bs.notify("加载成功")
+            notify.info("加载成功")
         } catch(err) {
-            this.bs.notify("加载失败")
+            notify.warn("加载失败")
             console.log(err)
         }
     })
@@ -68,9 +66,9 @@ export default class ResourceStore {
                 return a.id === b.id
             }))
             this.offset = this.resources.length
-            this.bs.notify("加载成功")
+            notify.info("加载成功")
         } catch(err) {
-            this.bs.notify("加载失败")    
+            notify.warn("加载失败")    
             console.log(err)
         }
     })
@@ -81,17 +79,10 @@ export default class ResourceStore {
             this.resources.replace(_.filter(this.resources, (o) => {
                 return o.id !== id
             }))
-            this.bs.notify("删除成功", "info")
+            notify.info("删除成功")
         } catch(err) {
-            this.bs.notify("删除失败", "error")
+            notify.warn("删除失败")
             console.log(err)
         }
     })
-
-    processSafeMode(q: string) {
-        if (!this.bs.safeMode && !_.includes(q, '_safe')) {
-            q += " _safe"
-        }
-        return q
-    }
 }

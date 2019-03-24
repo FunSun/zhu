@@ -1,16 +1,15 @@
-import BasicStore from './basicStore'
+import {getStore} from './common'
 import ResourceStore from './resourceStore'
 import SettingStore from './settingStore'
 import SnippetStore from './snippetStore'
 import TagStore from './tagStore'
-let basicStore = new BasicStore()
-let settingStore = new SettingStore(basicStore)
-let resourceStore = new ResourceStore(basicStore)
-let snippetStore = new SnippetStore(basicStore)
-let tagStore = new TagStore(basicStore, resourceStore)
+let settingStore = new SettingStore()
+let resourceStore = new ResourceStore()
+let snippetStore = new SnippetStore()
+let tagStore = new TagStore(resourceStore)
 
 export default {
-    basicStore,
+    basicStore: getStore(),
     resourceStore,
     settingStore,
     snippetStore,

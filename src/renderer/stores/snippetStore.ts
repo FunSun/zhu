@@ -1,18 +1,13 @@
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
-import BasicStore, {invokeRPC} from './basicStore'
+import {invokeRPC, notify} from './common'
 
 export default class SnippetStore {
     @observable visible: boolean = false
     @observable content: string = ""
     @observable id: string = ""
 
-    bs: BasicStore
     saved: boolean
-
-    constructor(bs: BasicStore) {
-        this.bs = bs
-    }
 
     @action
     showSnippetModal() {
@@ -41,17 +36,17 @@ export default class SnippetStore {
             try {
                 let res = yield invokeRPC("addPageX", content, tags)
                 this.id = res.id
-                this.bs.notify("添加成功")
+                notify.info("添加成功")
             } catch(err) {
-                this.bs.notify("添加失败", "error")    
+                notify.warn("添加失败", "error")
                 console.log(err)
             }
         } else {
             try {
                 yield invokeRPC("updatePageX", this.id, content, tags)
-                this.bs.notify("添加成功")
+                notify.info("添加成功")
             } catch(err) {
-                this.bs.notify("添加失败", "error")
+                notify.warn("添加失败", "error")
                 console.log(err)
             }
         }

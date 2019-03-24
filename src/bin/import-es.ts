@@ -1,5 +1,5 @@
 // logger as a builtin
-import {replaceConsoleLog} from '../main/server/logger'
+import {replaceConsoleLog} from '../main/lib/logger'
 
 replaceConsoleLog()
 

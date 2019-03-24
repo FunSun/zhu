@@ -1,7 +1,6 @@
 import React from 'react'
 import * as _ from 'lodash'
 
-(window as any).React = React
 let _orginPlot:any = null
 function getOriginPlot(): any {
     if (!_orginPlot) {

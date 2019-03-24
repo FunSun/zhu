@@ -7,7 +7,7 @@ import PageX from '../components/PageX'
 import ResourceStore from "../stores/resourceStore"
 import TagStore from "../stores/tagStore"
 import SnippetStore from "../stores/snippetStore"
-import BasicStore from "../stores/basicStore"
+import {BasicStore} from "../stores/common"
 
 const DeleteResourceConfirmTitle = "确认删除?"
 const DeleteResourceConfirmDesc = "你确定要删除这个条目吗?"
@@ -47,30 +47,6 @@ function bindPreview(props:{
         default:
             rows = [<div>{resource.type}</div>]
     }
-    // switch (resource.type) {
-    //     case 'zhihu':
-    //         return <ZhihuPreview key={resource.id} onLabel={onLabel} {...resource}></ZhihuPreview>
-    //     case 'blog':
-    //     return <BlogPreview 
-    //         key={resource.id} 
-    //         onLabel={onLabel} {...resource}
-    //         onClick={()=>{us.showBlogView(resource)}}
-    //     ></BlogPreview>
-    //     case 'link':
-    //         return <LinkPreview key={resource.id} onLabel={onLabel} {...resource}></LinkPreview>
-    //     case 'comment':
-    //         return <CommentPreview key={resource.id} onLabel={onLabel} {...resource}></CommentPreview>
-    //     case 'snippet':
-    //         return <SnippetPreview key={resource.id} onEdit={()=>{us.editSnippet(resource.id, resource.content)}} onLabel={onLabel} {...resource}></SnippetPreview>
-    //     case 'article':
-    //         return <ArticlePreview 
-    //             key={resource.id} 
-    //             onEdit={()=> {es.editArticle(resource.id, resource.content)}} 
-    //             onClick={()=>{us.showArticleView(resource)}} 
-    //             {...resource}
-    //             onLabel={onLabel} title={resource.title} 
-    //         ></ArticlePreview>
-    // }
     return <Preview key={resource.id} rows={rows} actions={actions} created={resource.created}></Preview>
 }
 
