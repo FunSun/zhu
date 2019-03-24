@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2019-03-24
+### Changed
+- 修复无法导致无法打包相关问题， 
+- 真正产出可以不依赖开发环境，可以独立运行的包
+
 ## [2.0.0] - 2019-03-24
 ### Changed
 - 将数据存储转移到main进程

@@ -87,7 +87,13 @@ async function initHttp() {
 
     app.post('/rpc', handleRPC)
     let port = getPort()
-    app.listen(port, () => logger("main").info(`Example app listening on port ${port}!`))
+    return new Promise((receive, reject) => {
+        app.listen(port, () => {
+            logger("main").info(`Example app listening on port ${port}!`)
+            receive()
+        })
+    })
+    
 }
 
 export async function init() {

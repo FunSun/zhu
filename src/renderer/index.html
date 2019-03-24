@@ -11,6 +11,8 @@
 <body>
   <div id='root'></div>
   <script type="text/javascript" src="renderer.js"></script>
+  <!--因为createPlotyComponent依赖与全局变量window.React， 而这个是在renderer.js里设置的, 所以先引用renderer.js-->
+  <script src="https://unpkg.com/react-plotly.js@latest/dist/create-plotly-component.js"></script>
 </body>
 
 </html>

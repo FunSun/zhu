@@ -1,8 +1,8 @@
 {
-  "name": "zhu-ui",
-  "productName": "Zhu UI",
+  "name": "zhu",
+  "productName": "Zhu",
   "main": "build/electron/main.js",
-  "version": "1.20.4",
+  "version": "2.1.0",
   "description": "Archiver of content",
   "license": "MIT",
   "private": true,
@@ -12,8 +12,8 @@
   },
   "scripts": {},
   "build": {
-    "appId": "rocks.letus.zhu-ui",
-    "productName": "zhu-ui",
+    "appId": "rocks.letus.zhu",
+    "productName": "zhu",
     "files": [
       "./build/**/*"
     ],
@@ -21,6 +21,7 @@
       "target": "zip"
     }
   },
+  "postinstall": "electron-builder install-app-deps",
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
@@ -28,10 +29,6 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
-    "electron": "^4.1.1",
-    "electron-better-ipc": "^0.1.2",
-    "electron-log": "^2.2.13",
-    "electron-store": "^1.3.0",
     "express": "^4.16.4",
     "flexsearch": "^0.6.22",
     "katex": "^0.10.0-rc.1",
@@ -45,13 +42,10 @@
     "pouchdb-authentication": "^1.1.3",
     "pouchdb-find": "^7.0.0",
     "react": "^16.8.0-alpha.0",
-    "react-ace": "^6.2.0",
     "react-dom": "^16.8.0-alpha.0",
-    "react-plotly.js": "^2.2.0",
     "slate": "^0.44.9",
     "slate-plain-serializer": "^0.6.33",
-    "slate-react": "^0.21.15",
-    "sucrase": "^3.5.0"
+    "slate-react": "^0.21.15"
   },
   "devDependencies": {
     "@semantic-ui-react/event-stack": "^3.0.1",
@@ -71,7 +65,8 @@
     "@types/slate": "^0.43.8",
     "@types/slate-plain-serializer": "^0.6.1",
     "@types/slate-react": "^0.20.3",
-    "electron-packager": "^12.2.0",
+    "electron": "^4.0.3",
+    "electron-builder": "^20.39.0",
     "electron-rebuild": "^1.8.4",
     "fuse-box": "^3.6.0",
     "jest": "^24.5.0",

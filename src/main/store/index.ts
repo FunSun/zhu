@@ -37,6 +37,14 @@ export class Store {
 
     async initDB() {
         this.db = new PouchDB(settings.getLocalDB(), {adapter: "leveldb", revs_limit: 10})
+        let idxs = await this.db.getIndexes()
+        if (idxs.indexes.length === 1) {
+            await this.db.createIndex({
+                index: {
+                    "fields": ["created", "type"]
+                }
+            })
+        }
         await this.syncToRemote()
         logger("store.initDB").info("init succeed")
     }

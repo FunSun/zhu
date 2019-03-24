@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require("electron")
-import { join } from "path"
+import { join, dirname } from "path"
 import { format } from "url"
 
 // default dimensions
@@ -12,7 +12,7 @@ export const DIMENSIONS = { width: 600, height: 400, minWidth: 600, minHeight: 4
  * @param showDelay How long in ms before showing the window after the renderer is ready.
  * @return The main BrowserWindow.
  */
-export function createMainWindow(appPath: string, showDelay: number = 100) {
+export function createMainWindow(showDelay: number = 100) {
 
   // create our main window
   const window = new BrowserWindow({
@@ -28,7 +28,7 @@ export function createMainWindow(appPath: string, showDelay: number = 100) {
     autoHideMenuBar: true,
     // backgroundColor: '#fff',
     vibrancy: "light",
-    transparent: true,
+    transparent: false,
     title: app.getName(),
     webPreferences: {
       backgroundThrottling: false,
@@ -37,15 +37,14 @@ export function createMainWindow(appPath: string, showDelay: number = 100) {
   })
 
   window.maximize()  
-  window.loadURL(
-    format({
-      pathname: join(appPath, "build/electron/index.html"),
-      protocol: "file:",
-      slashes: true,
-    }),
-  )
-  window.loadURL(appPath)
-  window.show()
+  let target = format({
+    pathname: join(dirname(require.main.filename), "index.html"),
+    protocol: "file:",
+    slashes: true,
+  })
+  logger("window").info(target)
+  window.loadURL(target)
+   window.show()
   window.focus()
 
   return window
