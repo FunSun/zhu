@@ -2,8 +2,9 @@ import React from "react"
 import { makeStyles, createStyles } from '@material-ui/styles'
 import { Theme } from '@material-ui/core/styles'
 import * as _ from 'lodash'
+import PageX from './PageX'
 
-import {Chip} from '@material-ui/core'
+import {Chip, Collapse} from '@material-ui/core'
 
 const useStyles = makeStyles((theme:Theme) => createStyles({
     frame: {
@@ -161,6 +162,14 @@ export function EditAction (props: EditActionProps) {
     return <span className={classes.action} onClick={props.onEdit}>编辑</span>
 }
 
+export function ExpandedAction(props: {
+    expanded: boolean
+    toggle: () => void
+}) {
+    let classes = useStyles()
+    return <span className={classes.action} onClick={props.toggle}>{props.expanded?"折叠":"展开"}</span>
+}
+
 interface LabelActionProps {
     onLabel: () => void
 }
@@ -212,4 +221,22 @@ export function LinkRow(props:LinkRowProps) {
         <span className={classes.favicon}>{favicon}</span>
         <span>{title}</span>
     </h2>)
+}
+
+interface LinkRowProps {
+    from: string
+    favicon: string
+    title: string
+}
+export function PageXRow(props: {
+    expanded: boolean
+    content: string
+}) {
+    return <Collapse
+        in={props.expanded}
+        collapsedHeight="66px"
+    >
+        <PageX content={props.content}></PageX>    
+    </Collapse>
+    
 }

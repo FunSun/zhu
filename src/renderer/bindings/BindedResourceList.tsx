@@ -1,69 +1,58 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bindWith} from './base'
 import ResourceList from '../components/ResourceList'
-import {Preview, EditAction, LabelAction, DeleteAction, LinkRow} from '../components/Previews'
-import PageX from '../components/PageX'
-import ResourceStore from "../stores/resourceStore"
-import TagStore from "../stores/tagStore"
-import SnippetStore from "../stores/snippetStore"
-import {BasicStore} from "../stores/common"
+import {Preview, EditAction, LabelAction, DeleteAction, LinkRow, PageXRow, ExpandedAction} from '../components/Previews'
+import {observer} from 'mobx-react-lite'
+import useResourceStr from "../stores/resource"
+import useTagStr from "../stores/tag"
+import useSnippetStr from "../stores/snippet"
+import useBasicStr from '../stores/basic'
 
 const DeleteResourceConfirmTitle = "确认删除?"
 const DeleteResourceConfirmDesc = "你确定要删除这个条目吗?"
 
-function bindPreview(props:{
-    basicStore: BasicStore
-    resourceStore: ResourceStore,
-    tagStore: TagStore
-    snippetStore: SnippetStore
-}, resource:any) {
-    let bs = props.basicStore
-    let rs = props.resourceStore
-    let ts = props.tagStore
-    let rows = null
-    // onTag={() => {rs.addTagToQuery(resource.tags)}}
-    let actions = [
-        <LabelAction onLabel={() => {ts.showEditTagModal(resource.id, resource.tags)}}></LabelAction>,
-        <DeleteAction onDelete={() => {
-            bs.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
-                rs.deleteResource(resource.id)
-            })
-        }}></DeleteAction>
-    ]
-
-    switch(resource.type) {
-        case 'link':
-            rows = [<LinkRow 
-                favicon={resource.favicon}
-                from={resource.from}
-                title={resource.title}
-            ></LinkRow>]
-            break
-        case 'pagex':
-            rows = [<PageX content={resource.content}></PageX>]
-            actions.unshift(<EditAction onEdit={() => {props.snippetStore.editSnippet(resource.id, resource.content)}}></EditAction>)
-            break
-        default:
-            rows = [<div>{resource.type}</div>]
-    }
-    return <Preview key={resource.id} rows={rows} actions={actions} created={resource.created}></Preview>
-}
-
-export default bindWith(["basicStore", "resourceStore", "tagStore", "snippetStore"], (props:{
-    resourceStore: ResourceStore,
-    tagStore: TagStore,
-    snippetStore: SnippetStore
-}) => {
+export default observer(() => {
     // explicit declare dependency on inner structure
-    let resources = props.resourceStore.resources
+    let bs = useBasicStr()
+    let rs = useResourceStr()
+    let ts = useTagStr()
+    let ss = useSnippetStr()
+    let resources = rs.resources
     resources.length
-    console.log(resources[0])
-    props.resourceStore.resources.length
-    let onScrollToEnd = () => {props.resourceStore.loadMore()}
+    let onScrollToEnd = () => {rs.loadMore()}
 
-    let previews = _.map(resources, bindPreview.bind(null, props))
-
+    let previews = _.map(resources, (resource) => {
+        let rows = null
+        // onTag={() => {rs.addTagToQuery(resource.tags)}}
+        let actions = [
+            <LabelAction key="label" onLabel={() => {ts.showEditTagModal(resource.id, resource.tags)}}></LabelAction>,
+            <DeleteAction key="delete" onDelete={() => {
+                bs.showConfirmAlert(DeleteResourceConfirmTitle, DeleteResourceConfirmDesc, () => {
+                    rs.deleteResource(resource.id)
+                })
+            }}></DeleteAction>
+        ]
+    
+        switch(resource.type) {
+            case 'link':
+                rows = [<LinkRow 
+                    key={resource.id}
+                    favicon={resource.favicon}
+                    from={resource.from}
+                    title={resource.title}
+                ></LinkRow>]
+                break
+            case 'pagex':
+                let expanded = !!resource.expanded
+                rows = [<PageXRow key={resource.id} expanded={expanded} content={resource.content}></PageXRow>]
+                actions.unshift(<EditAction key="edit" onEdit={() => {ss.editSnippet(resource.id, resource.content)}}></EditAction>)
+                actions.push(<ExpandedAction key="expanded" expanded={expanded} toggle={()=> rs.toggle(resource.id)}></ExpandedAction>)
+                break
+            default:
+                rows = [<div key={resource.id}>{resource.type}</div>]
+        }
+        return <Preview key={resource.id} rows={rows} actions={actions} created={resource.created}></Preview>        
+    })
     return (<ResourceList
         onScrollToEnd={onScrollToEnd}
     >{previews}</ResourceList>)

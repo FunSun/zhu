@@ -1,8 +1,8 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bindWith} from './base'
 import SnippetModal from '../components/SnippetModal'
-import SnippetStore from '../stores/snippetStore'
+import useSnippetStr from '../stores/snippet'
+import { observer } from "mobx-react-lite"
 
 function parseText(v: string) {
     let content = v
@@ -17,12 +17,8 @@ function parseText(v: string) {
     return {content, tags}
 }
 
-interface bindProps {
-    snippetStore: SnippetStore
-}
-
-export default bindWith(["snippetStore"], (props:bindProps) => {
-    let store = props.snippetStore
+export default observer(()=> {
+    let store = useSnippetStr()
 
     let onClose = () => {store.hideSnippetModal()}
     let onSubmit = (v:string) => {
@@ -30,13 +26,10 @@ export default bindWith(["snippetStore"], (props:bindProps) => {
         store.submitSnippet(content, tags)
     }
 
-
     return <SnippetModal
         visible={store.visible}
         content={store.content}
         onClose={onClose}
         onSubmit={onSubmit}
     ></SnippetModal>
-
 })
-

@@ -1,13 +1,11 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bindWith} from './base'
 import EditTagModal from '../components/EditTagModal'
-import TagStore from '../stores/tagStore'
+import useTagStr from '../stores/tag'
+import { observer } from "mobx-react-lite"
 
-export default bindWith(['tagStore'], (props: {
-    tagStore: TagStore
-}) => {
-    let ts = props.tagStore
+export default observer(() => {
+    let ts = useTagStr()
     return <EditTagModal
         tags={ts.editTagModalBuffer.tags}
         visible={ts.editTagModalVisible}
@@ -15,4 +13,3 @@ export default bindWith(['tagStore'], (props: {
         onSubmit={(tags) => {ts.updateTags(ts.editTagModalBuffer.id, tags); ts.hideEditTagModal()}}
     ></EditTagModal>
 })
-

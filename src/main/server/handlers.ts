@@ -15,9 +15,9 @@ router.set("addPageX", async(content:string, tags:string[]) => {
     let id = getUUID()
     let pagex = new PageX(id, content)
     pagex.tags = _.map(tags, (o)=> {return new Tag(o)})
-    await store.addPageX(pagex)
-    logger("add pagex").info("id is", id)
-    return {id}
+    let doc = await store.addPageX(pagex)
+    logger("add pagex").info("id is", doc.id)
+    return doc
 })
 
 router.set("updatePageX", async(id:string, content:string, tags:string[]) => {
@@ -39,6 +39,11 @@ router.set("search", async(query:string, offset:number, limit:number) => {
 router.set("updateTags", async(id:string, tags: string[]) => {
     let store = await getStore()
     await store.updateTags(id, _.map(tags, (o)=> {return new Tag(o)}))
+})
+
+router.set("deleteResource", async(id:string) => {
+    let store = await getStore()
+    await store.deleteResource(id)
 })
 
 export {router}

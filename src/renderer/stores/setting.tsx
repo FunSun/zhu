@@ -1,7 +1,8 @@
+import {createContext, useContext} from 'react'
 import { observable, action} from 'mobx'
 import * as _ from 'lodash'
 
-export default class SettingStore {
+export class SettingStore {
     @observable settingModalVisible: boolean = false
     
     @action
@@ -14,3 +15,9 @@ export default class SettingStore {
         this.settingModalVisible = false
     }    
 }
+
+let store = new SettingStore()
+export {store}
+let ctx = createContext(store)
+export default function () { return useContext(ctx)}
+

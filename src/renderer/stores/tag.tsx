@@ -1,10 +1,11 @@
+import {createContext, useContext} from 'react'
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
+import {store as rstore, ResourceStore} from './resource'
 
-import {invokeRPC, notify} from './common'
-import ResourceStore from './resourceStore'
+import {invokeRPC, notify} from './basic'
 
-export default class TagStore {
+export class TagStore {
     @observable editTagModalBuffer: any = {id: "", tags: []}
     @observable editTagModalVisible: boolean = false
 
@@ -50,3 +51,10 @@ export default class TagStore {
         }
     })
 }
+
+let store = new TagStore(rstore)
+export {store}
+let ctx = createContext(store)
+export default function () { return useContext(ctx)}
+
+

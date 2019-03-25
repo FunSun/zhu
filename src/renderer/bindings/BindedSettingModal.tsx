@@ -1,11 +1,7 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bindWith} from './base'
-import SettingStore from "../stores/settingStore"
+import { observer } from "mobx-react-lite"
 
-export default bindWith(['settingStore'], (props: {
-    settingStore: SettingStore
-}) => {
+export default observer(() => {
     return <div></div>
 })
-

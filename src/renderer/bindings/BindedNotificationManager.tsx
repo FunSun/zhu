@@ -1,13 +1,12 @@
 import React from "react"
 import * as _ from 'lodash'
-import {bindWith} from './base'
 import NotificationManager from '../components/NotificationManager'
-import {BasicStore} from "../stores/common"
+import  useBasicStr from "../stores/basic"
+import { observer } from "mobx-react-lite"
 
-export default bindWith(['basicStore'], (props:{
-    basicStore: BasicStore
-}) => {
-    let bs = props.basicStore
+export default observer(() => {
+    let bs = useBasicStr()
     return <NotificationManager {...bs.notifyBuffer}></NotificationManager>
 })
+
 

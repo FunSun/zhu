@@ -137,7 +137,7 @@ export class Store {
         await this.db.put(anyDoc)
     }
 
-    async addPageX(pagex: PageX): Promise<void> {
+    async addPageX(pagex: PageX): Promise<any> {
         logger("addPageX").debug(pagex.created)
         await this.db.put({
             _id: pagex.id,
@@ -147,7 +147,13 @@ export class Store {
             type: "pagex"
         })
         await this.idx.add(pagex.id, pagex.content)
+        let doc = (await this.db.get(pagex.id)) as any
+        doc['id'] = doc['_id']
+        delete doc['_id']
+        delete doc['_rev']
+        return doc
     }
+
     async updatePageXContent(id: string, content: string):Promise<void> {
         let doc = await this.db.get(id)
         let anyDoc = doc as any

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2019-03-26
+### Changed
+- 重构代码, 使用context-api和mobx-react-lite
+- 修复编辑一个pagex, 退出， 点击右上角, 还是这个pagex(应该是一个新建的snippet)
+- 修复了删除崩溃的问题
+- 修复了保存不更新列表中对应项的问题
+- 新增的pagex, 放在列表首位
+
 ## [2.2.0] - 2019-03-25
 ### Changed
 - 重构代码

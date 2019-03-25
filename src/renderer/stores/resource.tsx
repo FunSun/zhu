@@ -1,6 +1,7 @@
-import { observable, action, flow } from 'mobx'
+import {createContext, useContext} from 'react'
+import { observable, action, flow, extendObservable } from 'mobx'
 import * as _ from 'lodash'
-import {invokeRPC, notify} from './common'
+import {invokeRPC, notify} from './basic'
 
 export interface Resource {
     id: string
@@ -16,7 +17,7 @@ async function queryResource(query: string, offset: number, limit:number) {
     return await invokeRPC("search", query, offset, limit)
 }
 
-export default class ResourceStore {
+export class ResourceStore {
     @observable resources:any[] = []
     @observable query: string = ""
     offset: number
@@ -45,6 +46,18 @@ export default class ResourceStore {
     @action
     updateQuery(query: string) {
         this.query = query
+    }
+
+    @action
+    toggle(id: string) {
+
+        let target = _.find(this.resources, (o) => {return o.id === id})
+        if (target.expanded === undefined) {
+            extendObservable(target, {
+                expanded: false
+            })
+        }
+        target["expanded"] = !target["expanded"]
     }
         
     reload = flow(function * reload ():any {
@@ -75,7 +88,7 @@ export default class ResourceStore {
 
     deleteResource = flow(function *deleteResource(id:string):any {
         try {
-            yield invokeRPC("delteResource", id)
+            yield invokeRPC("deleteResource", id)
             this.resources.replace(_.filter(this.resources, (o) => {
                 return o.id !== id
             }))
@@ -86,3 +99,9 @@ export default class ResourceStore {
         }
     })
 }
+
+let store = new ResourceStore()
+export {store}
+let ctx = createContext(store)
+export default function () { return useContext(ctx)}
+

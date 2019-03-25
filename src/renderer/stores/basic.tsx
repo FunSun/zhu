@@ -1,3 +1,4 @@
+import {createContext, useContext} from 'react'
 import { observable, action, flow } from 'mobx'
 import * as _ from 'lodash'
 import axios from 'axios'
@@ -36,14 +37,10 @@ export class BasicStore {
 
 }
 
-let _store:BasicStore = null
-export function getStore(): BasicStore {
-    if (!_store) {
-        _store = new BasicStore()
-    }
-    return _store
-
-}
+let store = new BasicStore()
+export {store}
+let ctx = createContext(store)
+export default function () { return useContext(ctx)}
 
 export async function invokeRPC(method: string, ...args: any[]):Promise<any> {
     let port = (global as any).port
@@ -56,11 +53,10 @@ export async function invokeRPC(method: string, ...args: any[]):Promise<any> {
 }
 
 function doNotify(lvl:string, msg: string) {
-    getStore().notify(msg, lvl)
+    store.notify(msg, lvl)
 }
 
 export const notify = {
     warn: doNotify.bind(null, "warn"),
     info: doNotify.bind(null, "info")
 }
-

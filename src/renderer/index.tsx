@@ -1,7 +1,7 @@
 // This is the entry point for the renderer process.
 import { webFrame, shell, remote } from "electron"
 import * as ReactDOM from 'react-dom'
-import * as React from 'react'
+import React from 'react'
 
 // default 
 function preset() {
@@ -29,17 +29,16 @@ function preset() {
 preset()
 
 // store
-import { Provider } from 'mobx-react'
 import { configure } from 'mobx'
-import stores from './stores'
 configure({
     enforceActions: "observed"
 })
 
 // keybindings
 import { bind } from 'mousetrap'
+import {store as snippetStore} from './stores/snippet'
 bind("alt+s", () => {
-    stores.snippetStore.showSnippetModal()
+    snippetStore.showSnippetModal()
 })
 
 // theme
@@ -62,11 +61,9 @@ const muiTheme = createMuiTheme({
 import App from './App'
 function runApp () {
     ReactDOM.render((
-        <Provider {...stores}>
-            <ThemeProvider theme={muiTheme}>         
-            <App />
-            </ThemeProvider>
-        </Provider>
+        <ThemeProvider theme={muiTheme}>
+        <App />
+        </ThemeProvider>
       ), document.getElementById('root'))
 }
 runApp()
