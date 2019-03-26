@@ -1,4 +1,4 @@
-import {PageX, Tag, getUUID} from '../models'
+import {PageX, getUUID} from '../models'
 import {getStore} from '../store'
 import _ from 'lodash'
 
@@ -14,7 +14,7 @@ router.set("addPageX", async(content:string, tags:string[]) => {
     let store = await getStore()
     let id = getUUID()
     let pagex = new PageX(id, content)
-    pagex.tags = _.map(tags, (o)=> {return new Tag(o)})
+    pagex.tags = tags
     let doc = await store.addPageX(pagex)
     logger("add pagex").info("id is", doc.id)
     return doc
@@ -38,7 +38,7 @@ router.set("search", async(query:string, offset:number, limit:number) => {
 
 router.set("updateTags", async(id:string, tags: string[]) => {
     let store = await getStore()
-    await store.updateTags(id, _.map(tags, (o)=> {return new Tag(o)}))
+    await store.updateTags(id, tags)
 })
 
 router.set("deleteResource", async(id:string) => {

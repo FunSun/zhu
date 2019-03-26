@@ -1,8 +1,6 @@
 import React from "react"
 import { makeStyles } from '@material-ui/styles'
 import { Dialog, DialogContent, } from '@material-ui/core'
-import SlateEditor from "./SlateEditor"
-
 
 const useStyles = makeStyles({
     dialog: {
@@ -15,9 +13,8 @@ const useStyles = makeStyles({
 
 interface Props  {
     visible: boolean
-    content: string
-    onSubmit(content:string):void
     onClose():void
+    children: React.ReactChild
 }
 
 export default function (props: Props) {
@@ -31,8 +28,7 @@ export default function (props: Props) {
         maxWidth="md"
     >
         <DialogContent className={classes.dialog}>
-            <SlateEditor value={props.content} onSave={props.onSubmit}></SlateEditor>
+            {props.children}
         </DialogContent>
     </Dialog>
 }
-

@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.3.0] - 2019-03-27
+### Changed
+- 关闭窗口触发数据同步
+- 数据同步间隔可配置
+- 暂时关闭canvas
+- 编辑区未保存的输入在，在编辑其他资源之前，会暂存
+- 放弃层级式tag方案
 
 ## [2.2.1] - 2019-03-26
 ### Changed

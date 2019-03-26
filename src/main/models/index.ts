@@ -4,23 +4,9 @@ export enum Types {
     Link = 'link',
 }
 
-export class Tag {
-    name: string
-    parent: Tag
-    children: Tag[]
-
-    constructor(name: string) {
-        this.name = name
-    }
-
-    toString(): string {
-        return this.name
-    }
-}
-
 export class Resource {
     id: string
-    tags: Tag[]
+    tags: string[]
     created: Date
     constructor(id: string) {
         this.id = id

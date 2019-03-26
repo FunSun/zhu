@@ -1,6 +1,6 @@
 import * as PouchDB from 'pouchdb'
 import * as flexsearch from  'flexsearch'
-import {Tag, PageX, Link} from '../models'
+import {PageX, Link} from '../models'
 import * as PouchdbFind from 'pouchdb-find'
 import * as _ from 'lodash'
 import * as settings from '../setting'
@@ -37,8 +37,10 @@ function filterDocs(docs: any[]): any[] {
 
 export class Store {
         db: PouchDB.Database
+        remoteDB: any
         idx: flexsearch.Index
         syncStatus: SyncStatus = SyncStatus.NoSync
+        isQuit: boolean = false
 
     async init() {
         await this.initDB()
@@ -55,24 +57,35 @@ export class Store {
                 }
             })
         }
-        await this.syncToRemote()
-        logger("store.initDB").info("init succeed")
-    }
 
-    async syncToRemote() {
         let remoteDBSetting = settings.getRemoteDB()
         if (!remoteDBSetting) {
             return
         }
+        this.remoteDB = new PouchDB(remoteDBSetting["addr"]) as any
+        await this.remoteDB.logIn(remoteDBSetting["user"], remoteDBSetting["passwd"])
+        await this.syncToRemote()
         this.syncStatus = SyncStatus.Syncing
-        let remoteDB = new PouchDB(remoteDBSetting["addr"]) as any
-        let res = await remoteDB.logIn(remoteDBSetting["user"], remoteDBSetting["passwd"])
-        logger("store.syncToRemote").debug(res)
+        logger("store.initDB").info("init succeed")
         setInterval(() => {
-            this.db.sync(remoteDB).
-            then(() => {logger("syncing").info("success sync")}).
-            catch((err) => {logger("syncing").error(err)})
-        }, 20000)
+            if (this.isQuit) {
+                logger("store").info("abort sync because thereis lastSync")
+                return
+            }
+            this.syncToRemote()
+        }, settings.getSyncInterval()* 1000)
+    }
+
+    async syncToRemote() {
+        await this.db.sync(this.remoteDB).
+        then(() => {logger("syncing").info("success sync")}).
+        catch((err) => {logger("syncing").error(err)})
+    }
+
+    async lastSync() {
+        this.isQuit = true
+        await this.syncToRemote()
+        logger("syncing").info("last synce sucess")
     }
 
     async initIndex() {
@@ -130,10 +143,10 @@ export class Store {
             return res
         }))
     }
-    async updateTags(id: string, tags:Tag[]):Promise<void> {
+    async updateTags(id: string, tags:string[]):Promise<void> {
         let doc = await this.db.get(id)
         let anyDoc = doc as any
-        anyDoc.tags = _.map(tags, (tag) => {return tag.name}) 
+        anyDoc.tags = tags 
         await this.db.put(anyDoc)
     }
 
@@ -143,7 +156,7 @@ export class Store {
             _id: pagex.id,
             content: pagex.content,
             created: pagex.created,
-            tags: _.map(pagex.tags, (o) => {return o.name}),
+            tags: pagex.tags,
             type: "pagex"
         })
         await this.idx.add(pagex.id, pagex.content)
@@ -179,7 +192,7 @@ export class Store {
             favicon: link.favicon,
             title: link.title,
             created: link.created,
-            tags: _.map(link.tags, (o) => {return o.name}),
+            tags: link.tags,
             type: "link"
         })
         await this.idx.add(link.id, link.title)

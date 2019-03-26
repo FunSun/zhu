@@ -3,15 +3,22 @@ import * as _ from 'lodash'
 import {createContext, useContext} from 'react'
 import {invokeRPC, notify} from './basic'
 import {store as rs} from './resource'
+import Plain from 'slate-plain-serializer'
+import * as slate from 'slate'
 
 export class SnippetStore {
     @observable visible: boolean = false
     @observable content: string = ""
     @observable id: string = ""
+    cache:slate.Value = null
 
     @action
     showSnippetModal() {
         this.visible = true
+    }
+
+    updateCache(value: slate.Value) {
+        this.cache = value
     }
 
     @action
@@ -19,12 +26,17 @@ export class SnippetStore {
         if (this.id !== "") {
             this.id = ""
             this.content = ""
+            this.cache = null
         }
         this.visible = true
     }
 
     @action
     hideSnippetModal() {
+        if (this.cache) {
+            this.content = Plain.serialize(this.cache)
+            this.cache = null
+        }
         this.visible = false
     }
 
@@ -33,6 +45,7 @@ export class SnippetStore {
         if (this.id !== id) {
             this.id  = id
             this.content = content
+            this.cache = null
         }
         this.visible = true
     }

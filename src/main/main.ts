@@ -22,5 +22,30 @@ app.on("ready", () => {
   main().catch((err) => {logger("main").warn(err)})
 })
 
-// fires when all windows are closed
-app.on("window-all-closed", app.quit)
+enum QuitStatus {
+  PrepareQuit,
+  HandleQuit,
+  CanQuit
+}
+let quitStatus:QuitStatus = QuitStatus.PrepareQuit
+
+app.on("before-quit", (e) => {
+  if (quitStatus === QuitStatus.CanQuit) {
+    logger("main").info("quit")
+    return
+  }
+  e.preventDefault()
+  if (quitStatus == QuitStatus.HandleQuit) {
+    logger("main").info("extra quit request")
+    return
+  }
+  
+  quitStatus = QuitStatus.HandleQuit
+  logger("main").info("graceful quit start")  
+  store.getStore().then((s) => {return s.lastSync()}).then(() => {
+    logger("main").info("graceful quit finished")
+    quitStatus = QuitStatus.CanQuit
+    app.quit()
+  })
+})
+ 

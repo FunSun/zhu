@@ -24,6 +24,10 @@ export function getNSFW(): boolean {
     return conf["NSFW"]
 }
 
+export function getSyncInterval(): number {
+    return conf["sync-interval"]
+}
+
 export async function init() {
     let target = null
     if (fs.existsSync("./settings.json")) {

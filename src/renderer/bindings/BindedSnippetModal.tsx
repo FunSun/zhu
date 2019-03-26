@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import SnippetModal from '../components/SnippetModal'
 import useSnippetStr from '../stores/snippet'
 import { observer } from "mobx-react-lite"
+import SlateEditor from "../components/SlateEditor"
 
 function parseText(v: string) {
     let content = v
@@ -28,8 +29,12 @@ export default observer(()=> {
 
     return <SnippetModal
         visible={store.visible}
-        content={store.content}
         onClose={onClose}
-        onSubmit={onSubmit}
-    ></SnippetModal>
+    >
+        <SlateEditor 
+            onSave={onSubmit}
+            value={store.content}
+            onChange={(v) => {store.updateCache(v)}}
+        ></SlateEditor>
+    </SnippetModal>
 })

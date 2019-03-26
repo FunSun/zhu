@@ -6,6 +6,7 @@ import * as slate from 'slate'
 
 interface Props {
     value: string
+    onChange(val: slate.Value):void
     onSave(content: string):void
 }
 
@@ -14,8 +15,13 @@ export default function (props: Props) {
     useMemo(() => {
         setVal(Plain.deserialize(props.value))
     }, [props.value])
+    const onChange = (value:slate.Value) => {
+        props.onChange(value)
+        setVal(value)
+    }
+    
     let keyboardHandler = useKeyHandler(props)
-    return <Editor renderEditor={(p, editor, next)=> { editor.focus(); return next()} } style={{fontSize: 14}} placeholder="" value={val} onKeyDown={keyboardHandler} onChange={({value})=>{setVal(value)}}></Editor>    
+    return <Editor renderEditor={(p, editor, next)=> { editor.focus(); return next()} } style={{fontSize: 14}} placeholder="" value={val} onKeyDown={keyboardHandler} onChange={({value})=>{onChange(value)}}></Editor>    
 }
 
 function useKeyHandler(props:Props):any {

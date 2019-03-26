@@ -760,7 +760,8 @@ export default function (props: Props) {
                     if (block.meta === 'latex') {
                       return <Latex>{block.content.join('\n')}</Latex>
                     } else if (block.meta==='canvas') {
-                      return <Canvas ctx={ctx} dsl={block.content.join('\n')}></Canvas>
+                      <div>canvas to be implement</div>
+                      // return <Canvas ctx={ctx} dsl={block.content.join('\n')}></Canvas>
                     } else if (block.meta==='plot') {
                       return <Plot>{block.content.join('\n')}</Plot>
                     }
