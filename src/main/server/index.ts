@@ -1,4 +1,4 @@
-import {Link, Tag, hashCode} from '../models'
+import {Link, hashCode} from '../models'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
@@ -63,9 +63,7 @@ async function initHttp() {
     
     app.post('/resources/link', (req, res, next) => {
         let body = JSON.parse(req.body.toString()) as any
-        let tags = _.map((body.tags) || [], (o) => {
-            return new Tag(o)
-        })
+        let tags = body.tags
         getStore().then((store) => {
             let link = new Link(hashCode(body.url), body.title, body.from, body.favicon)
             link.tags = tags

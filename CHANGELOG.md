@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.3.1] - 2019-03-28
+### Changed
+- 修复给常见提供接口部分模块的错误
+
 ## [2.3.0] - 2019-03-27
 ### Changed
 - 关闭窗口触发数据同步
