@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.2] - 2019-04-01
+### Changed
+- 修复了给插件增加链接的结构没有保存url的重大bug
+
 ## [2.3.1] - 2019-03-28
 ### Changed
 - 修复给常见提供接口部分模块的错误

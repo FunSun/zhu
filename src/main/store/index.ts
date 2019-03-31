@@ -182,6 +182,7 @@ export class Store {
 
     async linkExist(from: string):Promise<boolean> {
         let res = await this.db.find({selector: {from: from}})
+        logger("linkExist").debug(res.docs.length>0)
         return res.docs.length > 0
     }
 

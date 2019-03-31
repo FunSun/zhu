@@ -65,7 +65,7 @@ async function initHttp() {
         let body = JSON.parse(req.body.toString()) as any
         let tags = body.tags
         getStore().then((store) => {
-            let link = new Link(hashCode(body.url), body.title, body.from, body.favicon)
+            let link = new Link(hashCode(body.url), body.title, body.url, body.favicon)
             link.tags = tags
             return store.addLink(link)
         }).then((result) => {
