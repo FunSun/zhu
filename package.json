@@ -2,7 +2,7 @@
   "name": "zhu",
   "productName": "Zhu",
   "main": "build/electron/main.js",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Archiver of content",
   "license": "MIT",
   "private": true,
