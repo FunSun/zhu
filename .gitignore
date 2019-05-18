@@ -17,3 +17,6 @@ luis
 settings.json
 zhu/
 zhu-mrview*
+.zhu
+.cache
+config.json

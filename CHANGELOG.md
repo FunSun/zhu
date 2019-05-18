@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0-beta] - 2019-05-18
+### Changed
+- 重新设计
+
 ## [2.3.3] - 2019-04-02
 ### Changed
 - use tcl-based broker

@@ -2,10 +2,10 @@
   "compilerOptions": {
       "baseUrl": ".",
       "paths": { "*": ["types/*"] },
-      "outDir": "build",
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
+    "jsx": "react",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -14,7 +14,7 @@
     "noImplicitAny": true,
     "sourceMap": true
   },
-  "include": ["src", "types"],
+  "include": ["src", "fuse.ts", "types"],
   "exclude": [
     "node_modules"
   ]
