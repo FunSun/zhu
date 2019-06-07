@@ -27,8 +27,18 @@ async function main() {
   let webSvc = new WebService(confSvc, pgSvc, linkSvc)
   await webSvc.init()
   logger("main").info("init finished")
+  process.on('SIGTERM', async () => {
+    logger("main").info("begin graceful quit")
+    await kvSvc.lastSync()
+    logger("main").info("end graceful quit")
+    process.exit()
+  })
 }
 
 main().catch((err) => {
   logger("main").error(err)
+})
+
+process.on('SIGTERM', () => {
+  
 })

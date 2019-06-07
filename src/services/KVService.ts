@@ -107,8 +107,21 @@ export default class KVService {
         await this.syncToRemote()
         log.info("first init succeed")
         setInterval(() => {
+            if (this.isQuit) {
+                return
+            }
             this.syncToRemote()
         }, this.confSvc.getConf("sync-interval")* 1000)
+    }
+
+    async lastSync() {
+        this.isQuit = true
+        let remoteDBSetting = this.confSvc.getConf("remote-db")
+        if (!remoteDBSetting) {
+            return
+        }
+        await this.syncToRemote()
+        log.info("last sync succeed")
     }
 
     async syncToRemote() {

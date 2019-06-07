@@ -67,7 +67,7 @@ function toggleRef(ref:any, editor:Editor) {
 }
 
 function doCopy(editor: Editor) {
-    (global as any).clipboard.writeText(serializeNode(editor.value.fragment))
+    navigator.clipboard.writeText(serializeNode(editor.value.fragment))
 }
 
 function serializeNode(node:any):any {
@@ -115,8 +115,9 @@ function deserialize(str:string):any {
 }
 
 function doPaste(editor:Editor) {
-    let text = (global as any).clipboard.readText()
-    editor.insertFragment(deserialize(text))
+    navigator.clipboard.readText().then((text) => {
+        editor.insertFragment(deserialize(text))
+    })
 }
 
 interface MoveAction {

@@ -4,6 +4,8 @@ import * as _ from 'lodash'
 function tokenize(str:string){
     str = str.replace(/([^\x00-\x7F])/g, " $1 ")
     str = str.replace(/([0-9a-zA-Z]+)/g, " $1 ")
+    str = _.toLower(str)
+    str.replace(/[!@#$%^&*()-_=+{}\[\]\\|;:'"/?<>,.]/g, " ")
     return _.filter(str.split(" "), (o) => {return o!=="" && o !== " "})
 }
 
