@@ -5,23 +5,11 @@ import * as _ from 'lodash'
 import {BasicBlockType, PageBlock} from '../lib/pagex'
 import Latex from  './Latex'
 import {Collapse} from '@material-ui/core'
-import markdownStyle from './markdownStyle'
 
 const useStyles = makeStyles((theme:Theme) => createStyles({
   root: {
-    width: '100%',
-    marginLeft: 24,
-    marginRight: 24,
-    marginTop: 16,
-    '& > article': {
-      overflowY: 'auto',
-      width: '98%',
-      marginLeft: 16,
-      height: '100%',
-      '::-webkit-scrollbar': {
-        display: 'none'
-      }
-    }
+    paddingTop: 8,  
+    paddingBottom: 8
   },
   favicon: {
     width: 16,
@@ -29,14 +17,26 @@ const useStyles = makeStyles((theme:Theme) => createStyles({
     marginRight: 10
   },
   frame: {
-    backgroundColor: '#ffffff',
-    boxShadow: theme.shadows[1],
-    width: 800,
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '1px',
+    borderLeftColor: '#ffffff',
+    paddingLeft: 13,
+    position: 'relative',
+    width: 1003,
     boxSizing: 'border-box',
-    marginBottom: 8,
+    backgroundColor: '#ffffff',
+    '&:hover': {
+      borderLeftColor: '#e2e2e2',
+    },
+    '&:hover section': {
+      display: 'block'
+    }
   },
   actions: {
-    marginLeft: 16
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'none'
   },
   action: {
     boxSizing: 'border-box',
@@ -62,8 +62,17 @@ const useStyles = makeStyles((theme:Theme) => createStyles({
   },
   link_heading: {
     fontSize: '18 !important',
-    marginTop:-4,
-    marginBottom: -4
+    borderRadius: 5,
+    borderWidth: 2,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderStyle: 'solid',
+    backgroundColor: '#e2e2e2',
+    borderColor: '#e2e2e2',
+    maxWidth: 640,
+    display: 'inline-block'
   },
   link_anchor: {
     color: '#1a1a1a !important',
@@ -72,8 +81,13 @@ const useStyles = makeStyles((theme:Theme) => createStyles({
       color: '#175199 !important',
       textDecoration: 'none !important'
     }
+  },
+  fold: {
+    backgroundColor: '#e4f0fb'
+  },
+  expand: {
+    backgroundColor: '#ffffff'
   }
-
 }))
 
 function blockToReact(block:PageBlock, classes: any):React.ReactElement {
@@ -84,29 +98,33 @@ function blockToReact(block:PageBlock, classes: any):React.ReactElement {
       } 
       return <pre><code>{block.data.raw}</code></pre>
     case BasicBlockType.Heading:
-      return React.createElement('h'+block.data.lvl.toString(), {}, block.data.title)
+      return React.createElement('h'+block.data.lvl.toString(), {style: {maxWidth: 640}}, block.data.title)
     case BasicBlockType.Paragraph:
-      return <p>
+      return <p style={{maxWidth: 640, overflowWrap: 'break-word'}}>
       { _.flatMap((block.data as string).split("\n"), (o) => {return [<span>{o}</span>,<br></br>]})}
       </p>
     case BasicBlockType.ThermaticBreak:
-      return <hr></hr>
+      return <div></div>
     case 'link': 
       let data = block.data
       let favicon = (<img src={data.favicon}></img>)
       let title = (<a className={classes.link_anchor} href={data.from} target='_blank' title={data.title}>{data.title}</a>)
-      return (<h4 className={classes.link_heading}>
-          <span className={classes.favicon}>{favicon}</span>
+      return (<div className={classes.link_heading} >
+          <span className={classes.favicon} style={{paddingTop: 8}}>{favicon}</span>
           <span>{title}</span>
-      </h4>)
+      </div>)
     case 'tags':
       return <div></div>
+    case 'img': {
+      let data = block.data  
+      return <img src={data.url}></img>
+    }
     default: 
       return <pre><code>{JSON.stringify(block.data)}</code></pre>
   }
 }
 
-export default function (props:{
+export default function Page (props:{
   blocks: PageBlock[]
   expanded: boolean
   onEdit: () => void
@@ -114,26 +132,35 @@ export default function (props:{
   created: number
 }) {
   let classes = useStyles()
+  let needExpand = (props.blocks.length > 3)
+  let actions = [<span className={classes.action} onClick={props.onEdit}>编辑</span>]
+  if (needExpand) {
+    actions.push(<span className={classes.action} onClick={props.toggle}>{props.expanded?"折叠":"展开"}</span>)
+
+  }
+  let expanded = !needExpand || props.expanded
+  let combinedStyle = ""
+  if (!expanded) {
+    combinedStyle = `${classes.root} ${classes.fold}`
+  } else {
+    combinedStyle = `${classes.root} ${classes.expand}`
+  }
+  
   return (
-    <div className={classes.frame}>
+    <div className={classes.frame} >
       <Collapse
-          in={props.expanded}
+          in={expanded}
           collapsedHeight="66px"
       >
-        <div className={classes.root}>
-          <style type="text/css">
-            {markdownStyle}
-          </style>
-          <article className="markdown-body">
+        <div className={combinedStyle}>
+          <article>
             {_.map(props.blocks, (block)=> blockToReact(block, classes))}
           </article>
         </div>
       </Collapse>
-      <div className={classes.actions}>
-        <span className={classes.action} onClick={props.onEdit}>编辑</span>
-        <span className={classes.action} onClick={props.toggle}>{props.expanded?"折叠":"展开"}</span>
-        <span className={classes.time}>{props.created?(new Date(props.created).toLocaleString()):""}</span>
-      </div>
+      <section className={classes.actions}>
+        {actions}
+      </section>
     </div>
   )
 }

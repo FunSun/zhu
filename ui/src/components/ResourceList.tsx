@@ -6,7 +6,7 @@ interface Props {
     onScrollToEnd():void
 }
 
-export default function (props:Props) {
+export default function ResourceList (props:Props) {
     const ref = useRef(null)
     const signaled = useRef(false)
     const [height, setHeight] = useState(window.innerHeight - 64)
@@ -41,8 +41,10 @@ export default function (props:Props) {
         }
     }, [ref.current])
 
-    return (<div ref={ref} style={{overflowY: 'scroll', width:'100%', height: height, paddingTop: 30, paddingBottom:30, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        {props.children}
+    return (<div ref={ref} style={{overflowY: 'scroll', width:'100%', height: height, paddingTop: 30, paddingBottom:30}}>
+        <div style={{width: 1024, margin:'0 auto'}}>
+            {props.children}
+        </div>
     </div>)
 
 }

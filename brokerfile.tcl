@@ -3,6 +3,12 @@ task build {
     interact
 } "typescript -> javascript"
 
+task dev-ui {
+    cd ui
+    spawn npx ts-node fuse ui
+    interact
+}
+
 task build-ui {
     cd ui
     global env

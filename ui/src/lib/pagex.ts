@@ -5,6 +5,7 @@ export enum BasicBlockType {
     Heading = '#',
     FencedBlock= '```',
     Paragraph = 'p',
+    Image = 'img',
 }
 
 export interface PageBlock {
@@ -101,12 +102,35 @@ function parseParagraph(lines: string[], ln: number): [PageXBlock, number] {
     }, i]
 }
 
+function parseImage(lines: string[], ln: number): [PageXBlock, number] {
+    let line = lines[ln]
+    let reg = /^!\[(.*)\]\((.*)\)$/
+    let res = reg.exec(line)
+    if (!res || res.length < 3) {
+        console.log(`malformed syntax for parseImage: ${line}`)
+        return [{
+            type: BasicBlockType.Paragraph,
+            data: line + '\n',
+            ln: [ln, ln],
+        }, ln+1]
+    }
+    return [{
+        type: BasicBlockType.Image,
+        data: {
+            "title": res[1],
+            "url": res[2]
+        },
+        ln: [ln, ln],
+    }, ln+1]
+}
+
 const blockParsers:[RegExp, BlockParser][] = [
     [/^[ \t]*$/, parseBlankLine],
     [/^[ \t]/, parseParagraph],
     [/^#+[ \t]/, parseATXHeadings],
     [/^---/, parseThematicBreak],
     [/^```/, parseFencedBlock],
+    [/^!\[/, parseImage],
     [/^.*$/, parseParagraph]
 ]
 
@@ -130,7 +154,7 @@ export function parse(input: string): PageXBlock[] {
             ln = next
         }
     } catch (err) {
-        console.log(`parser error in line: ${ln+1} content: ${input}`)
+        console.log(`parser error in line: ${ln+1} content: ${input} err:${err}`)
     }
     return blocks
 }
@@ -146,6 +170,8 @@ export function stringify(blocks: PageBlock[]):string {
             return '---'
             case '```':
             return '```' + block.data.meta + '\n' + block.data.raw + '\n```'
+            case 'img': 
+            return `![${block.data.title}](${block.data.url})`
             default: 
             return '```' + block.type + '\n' + JSON.stringify(block.data) + '\n```'
         }

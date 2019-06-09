@@ -43,7 +43,7 @@ let ctx = createContext(store)
 export default function () { return useContext(ctx)}
 
 export async function invokeRPC(method: string, ...args: any[]):Promise<any> {
-    let res = await axios.post(`/rpc`, {method, args})
+    let res = await axios.post(`http://localhost:8070/rpc`, {method, args})
     let data = res.data
     if (data.error) {
         throw data.error

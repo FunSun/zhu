@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2019-06-09
+### Changed
+- 调整ui
+- 修复保存不更新对应的view
+- 增加图片类型
+- 修复编辑器剪贴板
+- 搜索｀今天｀自动转换成当天日期字符串
+- docker镜像用东八区
+
 ## [3.0.0] - 2019-06-07
 ### Changed
 - 处理graceful quit

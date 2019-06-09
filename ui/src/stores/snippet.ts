@@ -75,7 +75,7 @@ export class SnippetStore {
                 yield invokeRPC("page.update", this.id, blocks)
                 notify.info("更新成功")
                 let target = _.find(rs.resources, (o) => {return o.id === this.id})
-                target.blocks.replace(blocks)
+                target.blocks = blocks
             } catch(err) {
                 notify.warn("添加失败", "error")
                 console.log(err)

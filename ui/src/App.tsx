@@ -13,7 +13,7 @@ import {
 let styles = createStyles({
     root: {
         width:'100%',
-        backgroundColor: '#efefef',
+        backgroundColor: '#ffffff',
     }
 })
 
