@@ -8,6 +8,7 @@ import SearchService from './services/SearchService'
 import PageService from './services/PageService'
 import LinkService from './services/LinkService'
 import WebService from './services/WebService'
+import SlackBotService from './services/SlackBotService'
 
 export async function init() {
 }
@@ -26,6 +27,8 @@ async function main() {
   await linkSvc.init()
   let webSvc = new WebService(confSvc, pgSvc, linkSvc)
   await webSvc.init()
+  let slackSvc = new SlackBotService(pgSvc)
+  await slackSvc.init()
   logger("main").info("init finished")
   process.on('SIGTERM', async () => {
     logger("main").info("begin graceful quit")
