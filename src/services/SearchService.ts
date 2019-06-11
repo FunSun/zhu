@@ -42,4 +42,13 @@ export default class SearchService {
         return ids as string[]
     }
 
+    async clear(): Promise<void> {
+        let oldIdx = this.idx
+        oldIdx.destroy()
+        this.idx = flexsearch.create({
+            encode: false,
+            tokenize: tokenize,
+            async: true
+        })
+    }
 }

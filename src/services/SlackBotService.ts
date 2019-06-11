@@ -32,6 +32,11 @@ export default class WebService {
     
     handleSlackNotify(req:express.Request, res:express.Response, next:express.NextFunction) {
         let body = req.body as any
+        if (body.text === "收到") {
+            res.status(200).send("")
+            next()
+            return
+        }
         this.pgSvc.add([{
             type: 'p',
             data: body.text

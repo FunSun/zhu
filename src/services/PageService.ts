@@ -73,6 +73,13 @@ export default class PageService {
     constructor(private kvSvc:KVService, private schSvc:SearchService) {}
     
     async init() {
+        await this.reindex()
+        setInterval(()=> {this.reindex()}, 10*60*1000)
+    }
+
+    async reindex() {
+        logger("pgSvc").info("start reindex")
+        await this.schSvc.clear()
         let docs = await this.kvSvc.getAllByType("page")
         let pages = _.map(docs, docToPage)
         pages = _.reverse(_.sortBy(pages, (page) => {return page.modified}))
@@ -80,6 +87,7 @@ export default class PageService {
             this.schSvc.add(page.id, getFullText(page), getTags(page))
         })
         this.ids = _.map(pages, (page)=> {return page.id})
+        logger("pgSvc").info("finish reindex")
     }
 
     async add(blocks: Block[]):Promise<Page> {

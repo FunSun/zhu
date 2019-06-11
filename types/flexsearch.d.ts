@@ -4,6 +4,7 @@ export interface Index {
     update(id:string, text: string):void
     search(query:string):Promise<any>
     remove(id:string):void
+    destroy():void
 }
 
 export function create():Index
